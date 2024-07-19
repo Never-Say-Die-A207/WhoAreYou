@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -40,7 +41,16 @@ public class FriendService {
         friendRepository.delete(findFriend);
     }
 
-    public List<Friend> findFriends(int userId){
-        return friendRepository.findAllById(userId);
+    public List<FriendResponseDto> findFriends(int userId){
+        List<Friend> friends = friendRepository.findAllById(userId);
+
+        List<FriendResponseDto> friendResponseDtoList = new ArrayList<>();
+        for(Friend friend : friends){
+            FriendResponseDto dto = new FriendResponseDto();
+            dto.setFriendResponseDto(friend);
+            friendResponseDtoList.add(dto);
+        }
+
+        return friendResponseDtoList;
     }
 }

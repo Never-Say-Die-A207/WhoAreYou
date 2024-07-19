@@ -33,17 +33,11 @@ public class FriendController {
         if(userId == null)
             return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
 
-        List<Friend> friends = friendService.findFriends(userId);
-        if(friends.isEmpty())
+        List<FriendResponseDto> friendResponseDtoList = friendService.findFriends(userId);
+        if(friendResponseDtoList.isEmpty())
             return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 
-        List<FriendResponseDto> friendResponseDtoList = new ArrayList<>();
-        for(Friend friend : friends){
-            FriendResponseDto dto = new FriendResponseDto();
-            dto.setFriendResponseDto(friend);
-            friendResponseDtoList.add(dto);
-        }
-        return new ResponseEntity<List<FriendResponseDto>>(friendResponseDtoList, HttpStatus.OK);
+        return new ResponseEntity<>(friendResponseDtoList, HttpStatus.OK);
     }
 
     @PostMapping("")
