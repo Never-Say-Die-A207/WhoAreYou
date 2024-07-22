@@ -37,28 +37,6 @@ function VideoComponent({ track, participantIdentity, local = false }) {
                 if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
                     const landmarks = results.multiFaceLandmarks[0];
                     setLandmarks(landmarks); // landmarks 상태 업데이트
-                    // connect(canvasCtx, landmarks, Facemesh.FACEMESH_TESSELATION, {
-                    //     color: '#C0C0C070',
-                    //     lineWidth: 1,
-                    // });
-                    // connect(canvasCtx, landmarks, Facemesh.FACEMESH_RIGHT_EYE, {
-                    //     color: '#FF3030',
-                    // });
-                    // connect(canvasCtx, landmarks, Facemesh.FACEMESH_RIGHT_EYEBROW, {
-                    //     color: '#FF3030',
-                    // });
-                    // connect(canvasCtx, landmarks, Facemesh.FACEMESH_LEFT_EYE, {
-                    //     color: '#30FF30',
-                    // });
-                    // connect(canvasCtx, landmarks, Facemesh.FACEMESH_LEFT_EYEBROW, {
-                    //     color: '#30FF30',
-                    // });
-                    // connect(canvasCtx, landmarks, Facemesh.FACEMESH_FACE_OVAL, {
-                    //     color: '#E0E0E0',
-                    // });
-                    // connect(canvasCtx, landmarks, Facemesh.FACEMESH_LIPS, {
-                    //     color: '#E0E0E0',
-                    // });
                 }
             });
 
@@ -98,8 +76,8 @@ function VideoComponent({ track, participantIdentity, local = false }) {
                 <p>{participantIdentity + (local ? " (You)" : "")}</p>
             </div>
             <video ref={videoElement} id={track.sid} style={{ display: 'none' }}></video>
-            <canvas ref={canvasRef} className="output_canvas" width="1280" height="720" style={{ transform: 'scaleX(-1)' }}></canvas> {/* 캔버스 해상도 높이기 */}
-            <RedFox landmarks={landmarks} />
+            <canvas ref={canvasRef} className="output_canvas" width="1280" height="720" style={{ transform: 'scaleX(-1)', display: 'none' }}></canvas>
+            <RedFox landmarks={landmarks} videoElement={videoElement} />
         </div>
     );
 }

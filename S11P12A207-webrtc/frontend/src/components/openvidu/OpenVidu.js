@@ -12,8 +12,10 @@ import VideoComponent from './VideoComponent';
 import VideoComponentLocal from './VideoComponentLocal';
 import AudioComponent from './AudioComponent';
 
-let APPLICATION_SERVER_URL = '';
-let LIVEKIT_URL = '';
+let APPLICATION_SERVER_URL = "";
+let LIVEKIT_URL = "";
+// let APPLICATION_SERVER_URL = "https://40f8-211-192-210-82.ngrok-free.app/";
+// let LIVEKIT_URL = "ws://localhost:7880/";
 configureUrls();
 
 function configureUrls() {
@@ -114,6 +116,13 @@ function OpenVidu() {
                 participantName: participantName
             })
         });
+
+        // const response = await fetch(APPLICATION_SERVER_URL + "facechat/matching/" + participantName, {
+        //     headers: {
+        //         'ngrok-skip-browser-warning': 'skip-browser-warning'
+        //     }
+        // }
+        // );
 
         if (!response.ok) {
             const error = await response.json();
