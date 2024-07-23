@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import api from '../api/api';
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({ onClose }) => {
     const navigate = useNavigate();
     const [form, setForm] = useState({
         email: '',
@@ -22,6 +22,10 @@ const Login = () => {
         });
     };
 
+    const onLogin = () => {
+        navigate('/signup');
+    };
+
     const onSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -35,15 +39,19 @@ const Login = () => {
     };
 
     return (
-        <div>
-            <h1>로그인</h1>
-            <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
-                <label htmlFor='email'>아이디</label>
-                <input type='email' id='email' value={email} onChange={onChange} placeholder='아이디를 입력하세요.'></input>
-                <label htmlFor='password'>비밀번호</label>
-                <input type='password' id='password' value={password} onChange={onChange} placeholder='비밀번호를 입력하세요.'></input>
-                <button type='submit'>로그인</button>
-            </form>
+        <div className="modal">
+            <div className="modal-content">
+                <span className="close" onClick={onClose}>&times;</span>
+                <h1>로그인</h1>
+                <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+                    <label htmlFor='email'>아이디</label>
+                    <input type='email' id='email' value={email} onChange={onChange} placeholder='아이디를 입력하세요.'></input>
+                    <label htmlFor='password'>비밀번호</label>
+                    <input type='password' id='password' value={password} onChange={onChange} placeholder='비밀번호를 입력하세요.'></input>
+                    <button type='submit'>로그인</button>
+                </form>
+                <button onClick={onLogin}>회원가입</button>
+            </div>
         </div>
     );
 };
