@@ -5,8 +5,9 @@ import React, { useRef, useEffect, useState } from 'react';
 import * as Facemesh from '@mediapipe/face_mesh';
 import * as cam from '@mediapipe/camera_utils';
 import RedFox from "./RedFox";
+import SpiderMan from "./SpiderMan";
 
-function VideoComponent({ track, participantIdentity, local = false }) {
+function VideoComponent({ track, participantIdentity, local=false,}) {
     const videoElement = useRef(null);
     const canvasRef = useRef(null);
     const connect = window.drawConnectors;
@@ -76,8 +77,11 @@ function VideoComponent({ track, participantIdentity, local = false }) {
                 <p>{participantIdentity + (local ? " (You)" : "")}</p>
             </div>
             <video ref={videoElement} id={track.sid} style={{ display: 'none' }}></video>
+            {/* display none */}
             <canvas ref={canvasRef} className="output_canvas" width="1280" height="720" style={{ transform: 'scaleX(-1)', display: 'none' }}></canvas>
             <RedFox landmarks={landmarks} videoElement={videoElement} />
+            {/* {mask === 'redfox' && <RedFox landmarks={landmarks} videoElement={videoElement} />}
+            {mask === 'spiderman' && <SpiderMan landmarks={landmarks} videoElement={videoElement} />} */}
         </div>
     );
 }

@@ -19,9 +19,9 @@ const ShapeComponent = React.memo(({ landmarks, indices, color }) => {
       indices.forEach((index, i) => {
         const { x, y } = landmarks[index];
         if (i === 0) {
-          shape.moveTo((x * 4 - 2), -(y * 2.2 + 0.38));
+          shape.moveTo((x * 4 - 2), -(y * 2.2 -1.1));
         } else {
-          shape.lineTo((x * 4 - 2), -(y * 2.2 + 0.38));
+          shape.lineTo((x * 4 - 2), -(y * 2.2 -1.1));
         }
       });
 
@@ -49,7 +49,7 @@ const LineComponent = React.memo(({ landmarks, indices, color, lineWidth }) => {
     if (landmarks) {
       const points = indices.map(index => {
         const { x, y } = landmarks[index];
-        return new THREE.Vector3((x * 4 - 2), -(y * 2.2 + 0.38), 0.1); // Z축 위치를 약간 앞으로 이동
+        return new THREE.Vector3((x * 4 - 2), -(y * 2.2-1.1), 0.1); // Z축 위치를 약간 앞으로 이동
       });
 
       const positions = new Float32Array(points.length * 3);
@@ -81,10 +81,11 @@ const VideoTexture = ({ videoRef }) => {
       texture.minFilter = THREE.LinearFilter;
       texture.magFilter = THREE.LinearFilter;
       texture.format = THREE.RGBFormat;
+      texture.colorSpace = THREE.SRGBColorSpace;
       const geometry = new THREE.PlaneGeometry(4, 2.25); // 크기를 조정합니다
       const material = new THREE.MeshBasicMaterial({ map: texture });
       const mesh = new THREE.Mesh(geometry, material);
-      mesh.position.y = -1.5;
+      mesh.position.y = 0;
       scene.add(mesh);
 
       return () => {
@@ -116,20 +117,20 @@ const RedFox = ({ landmarks, videoElement }) => {
   return (
     <div className="canvas-container" style={{ position: 'relative', width: '100%', height: '100%' }}>
       <Canvas
-        camera={{ position: [0, 0, 5], fov: 55 }}
+        camera={{ position: [0, 0, 5], fov: 25.4 }}
         style={{
           position: 'absolute',
           top: '0',
-          left: '50%',
-          transform: 'translate(-50%, -60%) scaleX(-1)',
-          width: '640px',
-          height: '480px',
+          left: '0',
+          transform: 'scaleX(-1)',
+          width: '100%',
+          height: '100%',
           zIndex: 10,
         }}
         
       >
         <ambientLight intensity={0} />
-        <pointLight position={[10, 10, 10]} />
+        <pointLight position={[10, 10, 10]}/>
         <VideoTexture videoRef={videoElement} />
         {landmarks && (
           <>
@@ -150,9 +151,9 @@ const RedFox = ({ landmarks, videoElement }) => {
           </>
 
         )}
-        <EffectComposer multisampling={0}>
+        {/* <EffectComposer multisampling={0}>
           <Bloom intensity={0.2} luminanceThreshold={0.8} luminanceSmoothing={0.4} height={80} />
-        </EffectComposer>
+        </EffectComposer> */}
       </Canvas>
     </div>
   );
