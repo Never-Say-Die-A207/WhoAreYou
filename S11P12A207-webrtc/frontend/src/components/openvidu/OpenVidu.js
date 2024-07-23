@@ -18,7 +18,7 @@ let APPLICATION_SERVER_URL = "";
 let LIVEKIT_URL = "";
 // let APPLICATION_SERVER_URL = "https://grown-donkey-awfully.ngrok-free.app/";
 // let LIVEKIT_URL = "wss://myapp-yqvsqxqi.livekit.cloud/";
-// configureUrls();
+configureUrls();
 
 function configureUrls() {
     if (!APPLICATION_SERVER_URL) {
