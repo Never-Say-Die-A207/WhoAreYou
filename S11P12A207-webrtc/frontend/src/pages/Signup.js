@@ -46,7 +46,7 @@ const Signup = () => {
 
 
     return (
-        <div>
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', justifyContent: 'center' }}>
             <h1>회원가입</h1>
             <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
                 <label htmlFor='email'>아이디</label>
