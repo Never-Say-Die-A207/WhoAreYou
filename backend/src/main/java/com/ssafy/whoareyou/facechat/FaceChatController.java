@@ -1,51 +1,58 @@
 package com.ssafy.whoareyou.facechat;
 
 import io.livekit.server.AccessToken;
-import io.livekit.server.WebhookReceiver;
-import livekit.LivekitWebhook;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("/facechat")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
+@RequiredArgsConstructor
 public class FaceChatController {
     private final FaceChatService faceChatService;
 
-    @Value("${livekit.api.key}")
-    private String LIVEKIT_API_KEY;
-
-    @Value("${livekit.api.secret}")
-    private String LIVEKIT_API_SECRET;
-
-    @GetMapping("/matching/{userId}")
-    public ResponseEntity<?> createToken(@PathVariable("userId") Integer userId){
+    @PostMapping("/")
+    public ResponseEntity<?> firstEnter(@RequestBody FaceChatRequest params){
+        Integer userId = params.getUserId();
+        String mask = params.getMask();
 
         if(userId == null)
             return new ResponseEntity<Void> (HttpStatus.BAD_REQUEST);
 
-        AccessToken token = faceChatService.createToken(userId);
+        AccessToken token = faceChatService.getFirstToken(userId, mask);
         if(token == null)
-            return new ResponseEntity<Void> (HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Void> (HttpStatus.INTERNAL_SERVER_ERROR);
 
         return new ResponseEntity<Map<String, String>> (Map.of("token", token.toJwt()), HttpStatus.OK);
     }
 
-//    @PostMapping(value = "/webhook", consumes = "application/webhook+json")
-//    public ResponseEntity<String> receiveWebhook(@RequestHeader("Authorization") String authHeader, @RequestBody String body) {
-//        WebhookReceiver webhookReceiver = new WebhookReceiver(LIVEKIT_API_KEY, LIVEKIT_API_SECRET);
-//        try {
-//            LivekitWebhook.WebhookEvent event = webhookReceiver.receive(body, authHeader);
-//            System.out.println("LiveKit Webhook: " + event.toString());
-//        } catch (Exception e) {
-//            System.err.println("Error validating webhook event: " + e.getMessage());
-//        }
-//        return ResponseEntity.ok("ok");
-//    }
+    @PatchMapping("/")
+    public ResponseEntity<?> nonFirstEnter(@RequestBody FaceChatRequest params){
+        Integer userId = params.getUserId();
+        String mask = params.getMask();
+
+        if(userId == null)
+            return new ResponseEntity<Void> (HttpStatus.BAD_REQUEST);
+
+        Integer faceChatId = faceChatService.removeUser(userId);
+        AccessToken token = faceChatService.getOtherToken(userId, mask, faceChatId);
+        if(token == null)
+            return new ResponseEntity<Void> (HttpStatus.INTERNAL_SERVER_ERROR);
+
+        return new ResponseEntity<Map<String, String>> (Map.of("token", token.toJwt()), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<?> quit(@PathVariable("userId") Integer userId){
+        if(userId == null)
+            return new ResponseEntity<Void> (HttpStatus.BAD_REQUEST);
+
+        faceChatService.removeUser(userId);
+
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
 }

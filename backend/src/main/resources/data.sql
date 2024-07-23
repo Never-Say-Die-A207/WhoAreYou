@@ -1,4 +1,4 @@
-insert into user (id, matching_num, email, gender, name, nickname)
+insert into user (id, total_matching_count, email, gender, name, nickname)
 values (1, 0, "email1", "male", "name1", "nickname1"),
 (2, 0, "email2", "female", "name2", "nickname2"),
 (3, 0, "email3", "male", "name3", "nickname3"),

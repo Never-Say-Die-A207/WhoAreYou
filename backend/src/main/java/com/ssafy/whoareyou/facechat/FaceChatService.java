@@ -2,18 +2,17 @@ package com.ssafy.whoareyou.facechat;
 
 import com.ssafy.whoareyou.user.User;
 import com.ssafy.whoareyou.user.UserRepository;
-import io.livekit.server.*;
-import livekit.LivekitModels;
-import livekit.LivekitWebhook;
+import io.livekit.server.AccessToken;
+import io.livekit.server.RoomJoin;
+import io.livekit.server.RoomName;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import retrofit2.Call;
-
-import java.time.LocalDateTime;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class FaceChatService {
     private final FaceChatRepository faceChatRepository;
 
@@ -21,52 +20,88 @@ public class FaceChatService {
 
     @Value("(${livekit.server.url)")
     private String LIVEKIT_SERVER_URL;
-
     @Value("${livekit.api.key}")
     private String LIVEKIT_API_KEY;
-
     @Value("${livekit.api.secret}")
     private String LIVEKIT_API_SECRET;
 
-    public AccessToken createToken(Integer userId) {
-        AccessToken accessToken = new AccessToken(LIVEKIT_API_KEY, LIVEKIT_API_SECRET);
+    //WebhookReceiver webhookReceiver = new WebhookReceiver("apiKey", "secret");
+    //RoomServiceClient roomServiceClient = RoomServiceClient.create(LIVEKIT_SERVER_URL, LIVEKIT_API_KEY, LIVEKIT_API_SECRET);
 
+    public AccessToken getFirstToken(Integer userId, String mask) {
+        User user = userRepository.findOne(userId);
+        FaceChat faceChat;
+
+        if(user.getGender().equals("male"))
+            faceChat = user.getFaceChatAsMale();
+        else
+            faceChat = user.getFaceChatAsFemale();
+
+        if(faceChat == null){
+            faceChat = getAvailableFaceChat(user, null);
+            if(faceChat == null){
+                faceChat = createFaceChat(user, mask);
+            }
+            else{
+                faceChat.joinUser(user, mask);
+                faceChatRepository.save(faceChat);
+            }
+        }
+
+        return generateToken(user.getNickname(), String.valueOf(faceChat.getId()));
+    }
+
+    public AccessToken getOtherToken(Integer userId, String mask, Integer lastFaceChatId){
         User user = userRepository.findOne(userId);
 
-        String name = user.getName();
-
-        accessToken.setName(name);
-        accessToken.setIdentity(name);
-
-        String roomName = getEmptyRoom(user);
-
-        //RoomServiceClient roomServiceClient = RoomServiceClient.create(LIVEKIT_SERVER_URL, LIVEKIT_API_KEY, LIVEKIT_API_SECRET);
-        accessToken.addGrants(new RoomJoin(true), new RoomName(roomName));
-
-        return accessToken;
-    }
-
-    //방만들기
-    //성별을 기반으로 유저를 찾는다
-    public String getEmptyRoom(User user) {
-        String gender = user.getGender();
-
-        FaceChat room = faceChatRepository.findRoomByGender(gender);
-        if(room == null){
-            room = FaceChat.createRoom(user);
-            faceChatRepository.save(room);
+        FaceChat faceChat = getAvailableFaceChat(user, lastFaceChatId);
+        if(faceChat == null){
+            faceChat = createFaceChat(user, mask);
         }
         else{
-            faceChatRepository.deleteRoom(room);
+            faceChat.joinUser(user, mask);
+            faceChatRepository.save(faceChat);
         }
 
-        return String.valueOf(room.getId());
+        return generateToken(user.getNickname(), String.valueOf(faceChat.getId()));
     }
 
-//방 관리
-//    public void manageRoom(){
-//        WebhookReceiver webhookReceiver = new WebhookReceiver("apiKey", "secret");;
-//        LivekitWebhook.WebhookEvent webhookEvent = webhookReceiver.receive("postBody", "authHeader");
-//        webhookEvent.ro
-//    }
+    public Integer removeUser(Integer userId){
+        User user = userRepository.findOne(userId);
+
+        FaceChat faceChat = faceChatRepository.findCurrentFaceChat(user);
+
+        Boolean noOneLeft = faceChat.removeUser(user);
+        if(noOneLeft){
+            faceChatRepository.delete(faceChat);
+            return null;
+        }
+
+        return faceChat.getId();
+    }
+
+    @Transactional(readOnly = true)
+    public FaceChat getAvailableFaceChat(User user, Integer lastFaceChatId) {
+        try{
+            return faceChatRepository.findFirstFaceChatByGender(user.getGender(), lastFaceChatId);
+        } catch(Exception e){
+            return null;
+        }
+    }
+
+    public FaceChat createFaceChat(User user, String mask) {
+        FaceChat faceChat = FaceChat.createFaceChat(user, mask);
+        faceChatRepository.save(faceChat);
+
+        return faceChat;
+    }
+
+
+    private AccessToken generateToken(String username, String faceChatId){
+        AccessToken accessToken = new AccessToken(LIVEKIT_API_KEY, LIVEKIT_API_SECRET);
+        accessToken.setName(username);
+        accessToken.setIdentity(username);
+        accessToken.addGrants(new RoomJoin(true), new RoomName(faceChatId));
+        return accessToken;
+    }
 }

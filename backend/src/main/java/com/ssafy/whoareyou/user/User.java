@@ -1,6 +1,6 @@
 package com.ssafy.whoareyou.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.ssafy.whoareyou.facechat.FaceChat;
 import com.ssafy.whoareyou.friend.Friend;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -19,8 +19,15 @@ public class User {
     private String name;
     private String nickname;
     private String gender;
-    private int matchingNum;
+    private int totalMatchingCount;
+    private String type;
 
     @OneToMany(mappedBy = "from", cascade = CascadeType.ALL)
     private List<Friend> friends = new ArrayList<>();
+
+    @OneToOne(mappedBy = "male", fetch = FetchType.LAZY)
+    private FaceChat faceChatAsMale;
+
+    @OneToOne(mappedBy = "female", fetch = FetchType.LAZY)
+    private FaceChat faceChatAsFemale;
 }

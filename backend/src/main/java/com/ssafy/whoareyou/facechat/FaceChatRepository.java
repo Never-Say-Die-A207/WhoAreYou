@@ -1,37 +1,66 @@
 package com.ssafy.whoareyou.facechat;
 
+import com.ssafy.whoareyou.user.User;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.NonUniqueResultException;
+import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-@Transactional
 public class FaceChatRepository {
     private final EntityManager em;
 
-    @Transactional(readOnly = true)
-    public FaceChat findRoomByGender(String gender) {
-        List<FaceChat> findRooms = em.createQuery("select fc from FaceChat fc"
-                        + " join fc.host h on h.gender != :gender order by fc.createdAt", FaceChat.class)
-                .setParameter("gender", gender)
-                .getResultList();
-
-        if(findRooms.isEmpty())
-            return null;
+    public void save(FaceChat faceChat) {
+        if(faceChat.getId() == null)
+            em.persist(faceChat);
         else
-            return findRooms.get(0);
+            em.merge(faceChat);
     }
 
-    public void save(FaceChat room) {
-        em.persist(room);
+    public void delete(FaceChat faceChat) {
+        em.remove(faceChat);
     }
 
-    public void deleteRoom(FaceChat room) {
-        em.remove(room);
+    public FaceChat findFirstFaceChatByGender(String gender, Integer lastFaceChatId) throws NoResultException {
+        String queryString = "select fc from FaceChat fc where fc." + gender + " is null";
+        if(lastFaceChatId != null){
+            queryString += " and fc.id != :lastId";
+        }
+        queryString += " order by fc.createdAt";
+        TypedQuery<FaceChat> query = em.createQuery(queryString, FaceChat.class);
+        if(lastFaceChatId != null)
+            query.setParameter("lastId", lastFaceChatId);
+        return query
+                .setFirstResult(0)
+                .setMaxResults(1)
+                .getSingleResult();
     }
+
+    public FaceChat findCurrentFaceChat(User user) throws NoResultException, NonUniqueResultException {
+        return em.createQuery("select fc from FaceChat fc where fc." + user.getGender() + " = :user", FaceChat.class)
+                .setParameter("user", user)
+                .getSingleResult();
+    }
+
+//    public FaceChat findFirstFaceChatWithoutMale(Integer lastFaceChatId) {
+//        return em.createQuery("select fc from FaceChat fc" +
+//                        " where fc.male is null"  +
+//                        " order by fc.createdAt", FaceChat.class)
+//                .setFirstResult(0)
+//                .setMaxResults(1)
+//                .getSingleResult();
+//    }
+//
+//    public FaceChat findFirstFaceChatWithoutFemale(Integer lastFaceChatId) {
+//        return em.createQuery("select fc from FaceChat fc" +
+//                        " where fc.female is null"  +
+//                        " order by fc.createdAt", FaceChat.class)
+//                .setFirstResult(0)
+//                .setMaxResults(1)
+//                .getSingleResult();
+//    }
+
 }
