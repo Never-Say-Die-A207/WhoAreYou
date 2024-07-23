@@ -8,14 +8,14 @@ import RedFox from "./RedFox";
 import SpiderMan from "./SpiderMan";
 
 function VideoComponent({ track, participantIdentity, local=false,}) {
-    const videoElement = useRef(null);
+    const videoElement2 = useRef(null);
     const canvasRef = useRef(null);
     const connect = window.drawConnectors;
     const [landmarks, setLandmarks] = useState(null);
 
     useEffect(() => {
-        if (videoElement.current) {
-            track.attach(videoElement.current);
+        if (videoElement2.current) {
+            track.attach(videoElement2.current);
 
             const faceMesh = new FaceMesh({
                 locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
@@ -33,7 +33,7 @@ function VideoComponent({ track, participantIdentity, local=false,}) {
                 canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
                 // 비디오 프레임을 캔버스에 그리기
-                canvasCtx.drawImage(videoElement.current, 0, 0, canvasElement.width, canvasElement.height);
+                canvasCtx.drawImage(videoElement2.current, 0, 0, canvasElement.width, canvasElement.height);
 
                 if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
                     const landmarks = results.multiFaceLandmarks[0];
@@ -41,9 +41,9 @@ function VideoComponent({ track, participantIdentity, local=false,}) {
                 }
             });
 
-            const camera = new cam.Camera(videoElement.current, {
+            const camera = new cam.Camera(videoElement2.current, {
                 onFrame: async () => {
-                    await faceMesh.send({ image: videoElement.current });
+                    await faceMesh.send({ image: videoElement2.current });
                 },
                 width: 1280, // 해상도 높이기
                 height: 720, // 해상도 높이기
@@ -61,8 +61,8 @@ function VideoComponent({ track, participantIdentity, local=false,}) {
             const canvasElement = canvasRef.current;
             const canvasCtx = canvasElement.getContext('2d');
 
-            if (videoElement.current) {
-                canvasCtx.drawImage(videoElement.current, 0, 0, canvasElement.width, canvasElement.height);
+            if (videoElement2.current) {
+                canvasCtx.drawImage(videoElement2.current, 0, 0, canvasElement.width, canvasElement.height);
             }
 
             requestAnimationFrame(renderFrame);
@@ -76,10 +76,10 @@ function VideoComponent({ track, participantIdentity, local=false,}) {
             <div className="participant-data">
                 <p>{participantIdentity + (local ? " (You)" : "")}</p>
             </div>
-            <video ref={videoElement} id={track.sid} style={{ display: 'none' }}></video>
+            <video ref={videoElement2} id={track.sid} style={{ display: 'none' }}></video>
             {/* display none */}
             <canvas ref={canvasRef} className="output_canvas" width="1280" height="720" style={{ transform: 'scaleX(-1)', display: 'none' }}></canvas>
-            <RedFox landmarks={landmarks} videoElement={videoElement} />
+            <RedFox landmarks={landmarks} videoElement={videoElement2} />
             {/* {mask === 'redfox' && <RedFox landmarks={landmarks} videoElement={videoElement} />}
             {mask === 'spiderman' && <SpiderMan landmarks={landmarks} videoElement={videoElement} />} */}
         </div>

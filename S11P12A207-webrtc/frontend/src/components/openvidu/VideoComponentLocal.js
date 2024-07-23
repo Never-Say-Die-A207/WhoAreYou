@@ -7,7 +7,7 @@ import * as cam from '@mediapipe/camera_utils';
 import RedFox from "./RedFox";
 import SpiderMan from "./SpiderMan";
 
-function VideoComponentLocal({ track, participantIdentity, local, }) {
+function VideoComponentLocal({ track, participantIdentity, local}) {
     const videoElement = useRef(null);
     const canvasRef = useRef(null);
     const connect = window.drawConnectors;

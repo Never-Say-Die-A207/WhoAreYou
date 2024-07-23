@@ -11,12 +11,14 @@ import './OpenVidu.css';
 import VideoComponent from './VideoComponent';
 import VideoComponentLocal from './VideoComponentLocal';
 import AudioComponent from './AudioComponent';
+import RoomBottom from './RoomBottom';
+
 
 let APPLICATION_SERVER_URL = "";
 let LIVEKIT_URL = "";
-// let APPLICATION_SERVER_URL = "https://40f8-211-192-210-82.ngrok-free.app/";
-// let LIVEKIT_URL = "ws://localhost:7880/";
-configureUrls();
+// let APPLICATION_SERVER_URL = "https://grown-donkey-awfully.ngrok-free.app/";
+// let LIVEKIT_URL = "wss://myapp-yqvsqxqi.livekit.cloud/";
+// configureUrls();
 
 function configureUrls() {
     if (!APPLICATION_SERVER_URL) {
@@ -106,6 +108,21 @@ function OpenVidu() {
      * access to the endpoints.
      */
     async function getToken(roomName, participantName) {
+        // const mask = {
+        //     'userId': participantName,
+        //     'mask': ''
+        // };
+    
+        // const response = await fetch(APPLICATION_SERVER_URL + 'facechat/', {
+        //         method: 'POST',
+        //         headers: {
+        //             "Content-Type": "application/json",
+        //             'ngrok-skip-browser-warning': 'skip-browser-warning'
+        //         },
+        //         body: JSON.stringify(mask)
+        //     }
+        // );
+    
         const response = await fetch(APPLICATION_SERVER_URL + 'token', {
             method: 'POST',
             headers: {
@@ -116,13 +133,6 @@ function OpenVidu() {
                 participantName: participantName
             })
         });
-
-        // const response = await fetch(APPLICATION_SERVER_URL + "facechat/matching/" + participantName, {
-        //     headers: {
-        //         'ngrok-skip-browser-warning': 'skip-browser-warning'
-        //     }
-        // }
-        // );
 
         if (!response.ok) {
             const error = await response.json();
@@ -205,7 +215,7 @@ function OpenVidu() {
                         )}
                     </div>
                     <div className='room-bottom'>
-
+                        <RoomBottom></RoomBottom>
                     </div>
                 </div>
             )}

@@ -4,7 +4,8 @@
     aspect-ratio: 16/9;
     /* border-radius: 6px; */
     overflow: hidden;
-    margin-left: 20px;
+    /* margin-left: 20px; */
+    /* margin: 10px */
 }
 
 .video-container-local video {
