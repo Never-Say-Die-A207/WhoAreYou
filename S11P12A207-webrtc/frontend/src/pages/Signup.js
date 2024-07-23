@@ -24,6 +24,15 @@ const Signup = () => {
         });
     };
 
+    const onRadioChange = (e) => {
+        const value = e.target.value;
+        console.log(value)
+        setForm({
+            ...form,
+            gender: value
+        });
+    };
+
     const onSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -48,11 +57,17 @@ const Signup = () => {
                 <input type='password' id='password' value={password} onChange={onChange}></input>
                 <label htmlFor='checkpassword'>비밀번호 확인</label>
                 <input type='password' id='checkpassword' value={checkpassword} onChange={onChange}></input>
-                <label htmlFor='gender'>성별</label>
-                <select id='gender' value={gender} onChange={onChange}>
-                    <option>남</option>
-                    <option>여</option>
-                </select>
+                <label htmlFor='radio'>성별</label>
+                <div id='radio' style={{ display: 'flex', flexDirection: 'row', gap: '10px' }}>
+                    <p style={{ margin: 0 }}>
+                        <input type='radio' id='gender' value='남' checked={gender === '남'} onChange={onRadioChange} />
+                        남
+                    </p>
+                    <p style={{ margin: 0 }}>
+                        <input type='radio' id='gender' value='여' checked={gender === '여'} onChange={onRadioChange} />
+                        여
+                    </p>
+                </div>
                 <button type='submit'>회원가입</button>
             </form>
         </div>
