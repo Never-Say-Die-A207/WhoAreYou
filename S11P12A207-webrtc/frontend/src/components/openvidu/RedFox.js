@@ -19,9 +19,9 @@ const ShapeComponent = React.memo(({ landmarks, indices, color }) => {
       indices.forEach((index, i) => {
         const { x, y } = landmarks[index];
         if (i === 0) {
-          shape.moveTo((x * 4 - 2), -(y * 2.2 -1.1));
+          shape.moveTo((x * 4 - 2), -(y * 2.2 - 1.1));
         } else {
-          shape.lineTo((x * 4 - 2), -(y * 2.2 -1.1));
+          shape.lineTo((x * 4 - 2), -(y * 2.2 - 1.1));
         }
       });
 
@@ -49,7 +49,7 @@ const LineComponent = React.memo(({ landmarks, indices, color, lineWidth }) => {
     if (landmarks) {
       const points = indices.map(index => {
         const { x, y } = landmarks[index];
-        return new THREE.Vector3((x * 4 - 2), -(y * 2.2-1.1), 0.1); // Z축 위치를 약간 앞으로 이동
+        return new THREE.Vector3((x * 4 - 2), -(y * 2.2 - 1.1), 0.1); // Z축 위치를 약간 앞으로 이동
       });
 
       const positions = new Float32Array(points.length * 3);
@@ -127,11 +127,11 @@ const RedFox = ({ landmarks, videoElement }) => {
           height: '100%',
           zIndex: 10,
         }}
-        
+
       >
         <ambientLight intensity={0} />
-        <pointLight position={[10, 10, 10]}/>
-        <VideoTexture videoRef={videoElement} />
+        <pointLight position={[10, 10, 10]} />
+
         {landmarks && (
           <>
             <ShapeComponent landmarks={landmarks} indices={faceOutlineIndices1} color="white" />
@@ -151,6 +151,11 @@ const RedFox = ({ landmarks, videoElement }) => {
           </>
 
         )}
+        {landmarks && (<>
+          <VideoTexture videoRef={videoElement} />
+        </>)}
+
+
         {/* <EffectComposer multisampling={0}>
           <Bloom intensity={0.2} luminanceThreshold={0.8} luminanceSmoothing={0.4} height={80} />
         </EffectComposer> */}

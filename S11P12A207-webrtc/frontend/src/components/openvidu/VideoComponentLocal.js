@@ -1,5 +1,5 @@
 import { LocalVideoTrack, RemoteVideoTrack } from "livekit-client";
-import "./VideoComponent.css";
+import "./VideoComponentLocal.css";
 import { FaceMesh } from '@mediapipe/face_mesh';
 import React, { useRef, useEffect, useState } from 'react';
 import * as Facemesh from '@mediapipe/face_mesh';
@@ -72,12 +72,13 @@ function VideoComponentLocal({ track, participantIdentity, local, }) {
     }, []);
 
     return (
-        <div id={"camera-" + participantIdentity} className="video-container">
+        <div id={"camera-" + participantIdentity} className="video-container-local">
             <div className="participant-data">
                 <p>{participantIdentity + (local ? " (You)" : "")}</p>
             </div>
             <video ref={videoElement} id={track.sid} style={{ display: 'none' }}></video>
             {/* dispaly있음 */}
+ 
             <canvas ref={canvasRef} className="output_canvas" width="1280" height="720" style={{ transform: 'scaleX(-1)', position: 'absolute', left:'0'}}></canvas>
             {/* <RedFox landmarks={landmarks} videoElement={videoElement} /> */}
             <SpiderMan landmarks={landmarks} videoElement={videoElement}/>

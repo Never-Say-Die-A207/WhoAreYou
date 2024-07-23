@@ -204,6 +204,9 @@ function OpenVidu() {
                             )
                         )}
                     </div>
+                    <div className='room-bottom'>
+
+                    </div>
                 </div>
             )}
         </>
