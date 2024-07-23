@@ -1,9 +1,7 @@
 package com.ssafy.whoareyou.facechat;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.ssafy.whoareyou.user.User;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,9 +17,14 @@ public class FaceChat {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    private LocalDateTime startedAt;
+    @OneToOne
+    @JoinColumn(name="host_id")
+    private User host;
 
-    private int maleId;
-
-    private int femaleId;
+    public static FaceChat createRoom(User user){
+        FaceChat room = new FaceChat();
+        room.setHost(user);
+        room.setCreatedAt(LocalDateTime.now());
+        return room;
+    }
 }
