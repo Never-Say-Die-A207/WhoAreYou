@@ -14,10 +14,12 @@ import AudioComponent from './AudioComponent';
 import RoomBottom from './RoomBottom';
 import FaceRecognition from './FaceRecognition';
 
+
 let APPLICATION_SERVER_URL = "";
 let LIVEKIT_URL = "";
 configureUrls();
  //openvidu
+
 function configureUrls() {
     if (!APPLICATION_SERVER_URL) {
         if (window.location.hostname === 'localhost') {
@@ -56,6 +58,8 @@ function OpenVidu() {
                     ...prev,
                     { trackPublication: publication, participantIdentity: participant.identity }
                 ]);
+                const body = getRoomInfo(participantName)
+                console.log(body)
             }
         );
 
@@ -85,32 +89,49 @@ function OpenVidu() {
         setRemoteTracks([]);
     }
 
-    async function getToken(roomName, participantName) {
-        // const mask_data = {
-        //     'userId': participantName,
-        //     'mask': ''
-        // };
-
-        // const response = await fetch(APPLICATION_SERVER_URL + 'facechat/', {
-        //         method: 'POST',
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //             'ngrok-skip-browser-warning': 'skip-browser-warning'
-        //         },
-        //         body: JSON.stringify(mask_data)
-        //     }
-        // );
-
-        const response = await fetch(APPLICATION_SERVER_URL + 'token', {
-            method: 'POST',
+    async function getRoomInfo(participantName){
+        var requestURL = APPLICATION_SERVER_URL + 'facechat/info/' + participantName;
+        const response = await fetch(requestURL, {
             headers: {
-                'Content-Type': 'application/json'
+                'ngrok-skip-browser-warning': 'skip-browser-warning'
             },
-            body: JSON.stringify({
-                roomName: roomName,
-                participantName: participantName
-            })
         });
+    
+        const body = await response.json();
+        return body;
+    }
+
+    //마스크 이름 넣기 주석 
+    async function getToken(Mask, participantName) {        
+
+        //다른 사람 통신 주석
+        const mask_data = {
+            'userId': participantName,
+            'mask': Mask,
+        };
+
+        const response = await fetch(APPLICATION_SERVER_URL + 'facechat/', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    'ngrok-skip-browser-warning': 'skip-browser-warning'
+                },
+                body: JSON.stringify(mask_data)
+            }
+        );
+
+ 
+        
+        // const response = await fetch(APPLICATION_SERVER_URL + 'token', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({
+        //         roomName: roomName,
+        //         participantName: participantName
+        //     })
+        // });
 
         if (!response.ok) {
             const error = await response.json();
@@ -192,7 +213,7 @@ function OpenVidu() {
                             )
                         )}
                     </div>
-                    <FaceRecognition setExpressionData={setExpressionData} /> {/* Add FaceRecognition component */}
+                    <FaceRecognition setExpressionData={setExpressionData} /> Add FaceRecognition component
                     <div className='room-bottom'>
                         <RoomBottom expressionData={expressionData} /> {/* Pass expressionData to RoomBottom */}
                     </div>
