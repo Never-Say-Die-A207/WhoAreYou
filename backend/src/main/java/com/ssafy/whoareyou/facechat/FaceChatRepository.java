@@ -45,22 +45,4 @@ public class FaceChatRepository {
                 .getSingleResult();
     }
 
-//    public FaceChat findFirstFaceChatWithoutMale(Integer lastFaceChatId) {
-//        return em.createQuery("select fc from FaceChat fc" +
-//                        " where fc.male is null"  +
-//                        " order by fc.createdAt", FaceChat.class)
-//                .setFirstResult(0)
-//                .setMaxResults(1)
-//                .getSingleResult();
-//    }
-//
-//    public FaceChat findFirstFaceChatWithoutFemale(Integer lastFaceChatId) {
-//        return em.createQuery("select fc from FaceChat fc" +
-//                        " where fc.female is null"  +
-//                        " order by fc.createdAt", FaceChat.class)
-//                .setFirstResult(0)
-//                .setMaxResults(1)
-//                .getSingleResult();
-//    }
-
 }

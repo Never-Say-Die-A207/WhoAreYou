@@ -1,7 +1,10 @@
 package com.ssafy.whoareyou.facechat;
 
 import io.livekit.server.AccessToken;
+import io.livekit.server.WebhookReceiver;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +16,10 @@ import java.util.Map;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequiredArgsConstructor
 public class FaceChatController {
+    private static final Logger log = LoggerFactory.getLogger(FaceChatController.class);
     private final FaceChatService faceChatService;
+
+    private final WebhookReceiver webhookReceiver = new WebhookReceiver("apiKey", "secret");
 
     @PostMapping("/")
     public ResponseEntity<?> firstEnter(@RequestBody FaceChatRequest params){
@@ -35,7 +41,7 @@ public class FaceChatController {
         Integer userId = params.getUserId();
         String mask = params.getMask();
 
-        if(userId == null)
+        if(userId == null)  
             return new ResponseEntity<Void> (HttpStatus.BAD_REQUEST);
 
         Integer faceChatId = faceChatService.removeUser(userId);
@@ -54,5 +60,15 @@ public class FaceChatController {
         faceChatService.removeUser(userId);
 
         return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @GetMapping("/info/{userId}")
+    public ResponseEntity<?> getFaceChatInfo(@PathVariable("userId") Integer userId){
+        if(userId == null)
+            return new ResponseEntity<Void> (HttpStatus.BAD_REQUEST);
+
+        FaceChatInfoResponse infoResponse = faceChatService.getInfo(userId);
+
+        return new ResponseEntity<Map<String, Object>>(Map.of("info", infoResponse),HttpStatus.OK);
     }
 }

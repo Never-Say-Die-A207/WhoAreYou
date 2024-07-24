@@ -80,4 +80,9 @@ public class FaceChat {
 
         return false;
     }
+
+    public void updateMatchingCount() {
+        this.male.increaseMatchingCount();
+        this.female.increaseMatchingCount();
+    }
 }

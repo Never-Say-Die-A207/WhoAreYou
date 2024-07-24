@@ -30,4 +30,8 @@ public class User {
 
     @OneToOne(mappedBy = "female", fetch = FetchType.LAZY)
     private FaceChat faceChatAsFemale;
+
+    public void increaseMatchingCount(){
+        totalMatchingCount++;
+    }
 }
