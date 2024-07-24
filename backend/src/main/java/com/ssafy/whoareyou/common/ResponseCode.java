@@ -8,8 +8,6 @@ public interface ResponseCode {
     String DUPLICATE_EMAIL = "DE";
 
     String SIGN_IN_FAIL = "SF";
-    String CERTIFICATION_FAIL = "CF";
 
-    String MAIL_FAIL = "MF";
     String DATABASE_ERROR = "DBE";
 }
