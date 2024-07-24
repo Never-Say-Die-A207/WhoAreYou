@@ -17,7 +17,7 @@ import FaceRecognition from './FaceRecognition';
 let APPLICATION_SERVER_URL = "";
 let LIVEKIT_URL = "";
 configureUrls();
-
+ //openvidu
 function configureUrls() {
     if (!APPLICATION_SERVER_URL) {
         if (window.location.hostname === 'localhost') {
