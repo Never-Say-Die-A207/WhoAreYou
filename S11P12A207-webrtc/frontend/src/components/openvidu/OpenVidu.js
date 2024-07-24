@@ -84,12 +84,13 @@ function OpenVidu() {
     async function leaveRoom() {
         // Leave the room by calling 'disconnect' method over the Room object
         // Stop local video and audio tracks
-        window.location.reload();
+
         await room?.disconnect();
         // Reset the state
         setRoom(undefined);
         setLocalTrack(undefined);
         setRemoteTracks([]);
+        window.location.reload();
     }
 
     async function getRoomInfo(participantName){
@@ -216,13 +217,12 @@ function OpenVidu() {
                             )
                         )}
                     </div>
-
-                    {<FaceRecognition setExpressionData={setExpressionData} /> }
-
                     <div className='room-bottom'>
-                        {/* <RoomBottom expressionData={expressionData} /> */}
+                    <FaceRecognition setExpressionData={setExpressionData} /> 
+                        <RoomBottom expressionData={expressionData} />
                     </div>
                 </div>
+                
             )}
         </>
     );

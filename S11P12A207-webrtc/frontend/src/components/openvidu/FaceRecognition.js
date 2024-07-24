@@ -106,23 +106,21 @@ const FaceRecognition = ({ setExpressionData }) => {
   }, [isModelLoaded, setExpressionData]);
 
   return (
-    <div className='myapp'>
+    <div className=''>
       <h1>Face Recognition using WebRTC</h1>
-      <div className='appvide'>
-        <div className='video-wrapper'>
+      <div className=''>
+        <div className=''>
           <video 
             ref={videoRef}
             style={{ display: 'none' }}
-            className={'video-feed'}
-            autoPlay
-            muted
+            className=""
+
           />
           <canvas 
             ref={canvasRef} 
             style={{ display: 'none' }}
-            width="720" 
-            height="560" 
-            className="appcanvas">
+
+            className="">
           </canvas>
         </div>
       </div>
