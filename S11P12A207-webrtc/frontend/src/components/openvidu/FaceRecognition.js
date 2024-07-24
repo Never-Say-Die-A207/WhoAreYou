@@ -112,12 +112,14 @@ const FaceRecognition = ({ setExpressionData }) => {
         <div className='video-wrapper'>
           <video 
             ref={videoRef}
+            style={{ display: 'none' }}
             className={'video-feed'}
             autoPlay
             muted
           />
           <canvas 
             ref={canvasRef} 
+            style={{ display: 'none' }}
             width="720" 
             height="560" 
             className="appcanvas">
