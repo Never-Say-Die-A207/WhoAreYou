@@ -216,9 +216,9 @@ function OpenVidu() {
                             )
                         )}
                     </div>
-                    <FaceRecognition setExpressionData={setExpressionData} /> Add FaceRecognition component
+                    {/* <FaceRecognition setExpressionData={setExpressionData} /> */}
                     <div className='room-bottom'>
-                        <RoomBottom expressionData={expressionData} /> {/* Pass expressionData to RoomBottom */}
+                        <RoomBottom expressionData={expressionData} />
                     </div>
                 </div>
             )}

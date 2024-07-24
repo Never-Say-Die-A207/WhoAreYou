@@ -118,7 +118,7 @@ const RedFox = ({ landmarks, videoElement }) => {
     const faceline13 = [52, 108, 337, 282]
     const faceOutlineIndices = [10, 338, 297, 332, 284, 251, 389, 356, 454, 323, 361, 288, 397, 365, 379, 378, 400, 377, 152, 148, 176, 149, 150, 136, 172, 58, 132, 93, 234, 127, 162, 21, 54, 103, 67, 109, 10];
     return (
-    <div className="canvas-container" style={{ position: 'relative', width: '100%', height: '100%' }}>
+    <div className="canvas-container" style={{ width: '100%', height: '100%' }}>
       <Canvas
         camera={{ position: [0, 0, 5], fov: 25.4 }}
         style={{
