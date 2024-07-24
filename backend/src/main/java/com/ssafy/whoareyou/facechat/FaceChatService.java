@@ -18,15 +18,12 @@ public class FaceChatService {
 
     private final UserRepository userRepository;
 
-    @Value("(${livekit.server.url)")
-    private String LIVEKIT_SERVER_URL;
+//    @Value("(${livekit.server.url)")
+//    private String LIVEKIT_SERVER_URL;
     @Value("${livekit.api.key}")
     private String LIVEKIT_API_KEY;
     @Value("${livekit.api.secret}")
     private String LIVEKIT_API_SECRET;
-
-    //WebhookReceiver webhookReceiver = new WebhookReceiver("apiKey", "secret");
-    //RoomServiceClient roomServiceClient = RoomServiceClient.create(LIVEKIT_SERVER_URL, LIVEKIT_API_KEY, LIVEKIT_API_SECRET);
 
     public AccessToken getFirstToken(Integer userId, String mask) {
         User user = userRepository.findOne(userId);
@@ -60,6 +57,7 @@ public class FaceChatService {
         }
         else{
             faceChat.joinUser(user, mask);
+            faceChat.updateMatchingCount();
             faceChatRepository.save(faceChat);
         }
 
@@ -78,6 +76,22 @@ public class FaceChatService {
         }
 
         return faceChat.getId();
+    }
+
+    public FaceChatInfoResponse getInfo(Integer userId) {
+        User user = userRepository.findOne(userId);
+
+        FaceChat currentFaceChat = faceChatRepository.findCurrentFaceChat(user);
+
+        FaceChatInfoResponse infoResponse = new FaceChatInfoResponse();
+        infoResponse.setId(currentFaceChat.getId());
+        if (user.getGender().equals("male"))
+            infoResponse.setMask(currentFaceChat.getFemaleMask());
+        else
+            infoResponse.setMask(currentFaceChat.getMaleMask());
+        infoResponse.setStartedAt(currentFaceChat.getStartedAt());
+
+        return infoResponse;
     }
 
     @Transactional(readOnly = true)
