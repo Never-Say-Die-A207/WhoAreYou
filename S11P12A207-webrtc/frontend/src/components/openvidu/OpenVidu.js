@@ -216,9 +216,11 @@ function OpenVidu() {
                             )
                         )}
                     </div>
+
                     {<FaceRecognition setExpressionData={setExpressionData} /> }
+
                     <div className='room-bottom'>
-                        <RoomBottom expressionData={expressionData} />
+                        {/* <RoomBottom expressionData={expressionData} /> */}
                     </div>
                 </div>
             )}

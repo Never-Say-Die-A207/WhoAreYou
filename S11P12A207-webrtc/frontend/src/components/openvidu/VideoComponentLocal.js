@@ -79,7 +79,7 @@ function VideoComponentLocal({ track, participantIdentity, local}) {
             <div className="participant-data">
                 <p>{participantIdentity + (local ? " (You)" : "")}</p>
             </div>
-            <video ref={videoElement} id={track.sid} style={{  transform: 'scaleX(-1)', }}></video>
+            <video ref={videoElement} id={track.sid} style={{transform: 'scaleX(-1)'}}></video>
             {/* dispaly있음 */}
  
             {/* <canvas ref={canvasRef} className="output_canvas" width="1280" height="720" style={{ transform: 'scaleX(-1)', position: 'absolute', left:'0'}}></canvas> */}
