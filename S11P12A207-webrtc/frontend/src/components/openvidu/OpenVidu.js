@@ -15,15 +15,10 @@ import RoomBottom from './RoomBottom';
 import FaceRecognition from './FaceRecognition';
 
 
-
-// 주석 다른 사람 통신
-var APPLICATION_SERVER_URL = "https://grown-donkey-awfully.ngrok-free.app/";
-var LIVEKIT_URL = "wss://myapp-yqvsqxqi.livekit.cloud/";
-
-
-// let APPLICATION_SERVER_URL = "";
-// let LIVEKIT_URL = "";
-// configureUrls();
+let APPLICATION_SERVER_URL = "";
+let LIVEKIT_URL = "";
+configureUrls();
+ //openvidu
 
 function configureUrls() {
     if (!APPLICATION_SERVER_URL) {
