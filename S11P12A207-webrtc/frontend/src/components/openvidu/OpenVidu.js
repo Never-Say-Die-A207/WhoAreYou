@@ -15,6 +15,9 @@ import RoomBottom from './RoomBottom';
 import FaceRecognition from './FaceRecognition';
 
 
+// var APPLICATION_SERVER_URL = "https://grown-donkey-awfully.ngrok-free.app/";
+// var LIVEKIT_URL = "wss://myapp-yqvsqxqi.livekit.cloud/";
+
 let APPLICATION_SERVER_URL = "";
 let LIVEKIT_URL = "";
 configureUrls();
@@ -105,33 +108,33 @@ function OpenVidu() {
     async function getToken(Mask, participantName) {        
 
         //다른 사람 통신 주석
-        const mask_data = {
-            'userId': participantName,
-            'mask': Mask,
-        };
+        // const mask_data = {
+        //     'userId': participantName,
+        //     'mask': Mask,
+        // };
 
-        const response = await fetch(APPLICATION_SERVER_URL + 'facechat/', {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                    'ngrok-skip-browser-warning': 'skip-browser-warning'
-                },
-                body: JSON.stringify(mask_data)
-            }
-        );
+        // const response = await fetch(APPLICATION_SERVER_URL + 'facechat/', {
+        //         method: 'POST',
+        //         headers: {
+        //             "Content-Type": "application/json",
+        //             'ngrok-skip-browser-warning': 'skip-browser-warning'
+        //         },
+        //         body: JSON.stringify(mask_data)
+        //     }
+        // );
 
  
         
-        // const response = await fetch(APPLICATION_SERVER_URL + 'token', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({
-        //         roomName: roomName,
-        //         participantName: participantName
-        //     })
-        // });
+        const response = await fetch(APPLICATION_SERVER_URL + 'token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                roomName: roomName,
+                participantName: participantName
+            })
+        });
 
         if (!response.ok) {
             const error = await response.json();
