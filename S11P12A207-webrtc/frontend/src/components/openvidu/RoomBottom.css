@@ -1,32 +1,67 @@
 .room-bottom-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    /* background-color: #333; */
-    /* padding: 10px; */
-    margin-top: 5px;
-  }
-  
-  .bottom-button {
-    background-color: #4CAF50;
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  
-  .bottom-button:hover {
-    background-color: #45a049;
-  }
-  
-  .bottom-image {
-    width: 400px;
-    margin: 0 10px;  /* Adjust the margin as needed */
-  }
-  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+  margin-top: 5px;
+}
+
+/* Joy (기쁨) */
+.room-bottom-container.joy {
+  background-color: rgb(249, 217, 10);
+}
+
+/* Sadness (슬픔) */
+.room-bottom-container.sadness {
+  border-color: rgb(53, 53, 203);
+}
+
+/* Anger (분노) */
+.room-bottom-container.anger {
+  border-color: rgb(207, 36, 36);
+}
+
+/* Disgust (혐오) */
+.room-bottom-container.disgust {
+  border-color: rgb(31, 167, 31);
+}
+
+/* Embrassment (당황) */
+.room-bottom-container.embrassment {
+  border-color: rgb(228, 29, 99);
+}
+
+/* Fear (두려움) */
+.room-bottom-container.fear {
+  border-color: rgb(141, 34, 141);
+}
+
+/* Ennui (무관심 또는 시큰둥함) */
+.room-bottom-container.ennui {
+  border-color: rgb(87, 15, 188);
+}
+
+/* Add other required CSS here... */
+.bottom-button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.bottom-button:hover {
+  background-color: #45a049;
+}
+
+.bottom-image {
+  width: 400px;
+  margin: 0 10px;  /* Adjust the margin as needed */
+}
