@@ -20,6 +20,7 @@ import FaceRecognition from './FaceRecognition';
 
 let APPLICATION_SERVER_URL = "";
 let LIVEKIT_URL = "";
+
 configureUrls();
  //openvidu
 
