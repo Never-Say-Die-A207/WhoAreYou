@@ -7,7 +7,7 @@ import * as cam from '@mediapipe/camera_utils';
 import RedFox from "./RedFox";
 import SpiderMan from "./SpiderMan";
 
-function VideoComponent({ track, participantIdentity, local=false,}) {
+function VideoComponent({ track, participantIdentity, local = false, }) {
     const videoElement2 = useRef(null);
     const canvasRef = useRef(null);
     const connect = window.drawConnectors;
@@ -28,13 +28,14 @@ function VideoComponent({ track, participantIdentity, local=false,}) {
             });
 
             faceMesh.onResults((results) => {
-                const canvasElement = canvasRef.current;
-                const canvasCtx = canvasElement.getContext('2d');
-                canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+                if (canvasRef.current) {
+                    const canvasElement = canvasRef.current;
+                    const canvasCtx = canvasElement.getContext('2d');
+                    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
-                // 비디오 프레임을 캔버스에 그리기
-                canvasCtx.drawImage(videoElement2.current, 0, 0, canvasElement.width, canvasElement.height);
-
+                    // 비디오 프레임을 캔버스에 그리기
+                    canvasCtx.drawImage(videoElement2.current, 0, 0, canvasElement.width, canvasElement.height);
+                }
                 if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
                     const landmarks = results.multiFaceLandmarks[0];
                     setLandmarks(landmarks); // landmarks 상태 업데이트
@@ -58,13 +59,14 @@ function VideoComponent({ track, participantIdentity, local=false,}) {
 
     useEffect(() => {
         const renderFrame = () => {
+            if (canvasRef.current) {
             const canvasElement = canvasRef.current;
             const canvasCtx = canvasElement.getContext('2d');
-
+            
             if (videoElement2.current) {
                 canvasCtx.drawImage(videoElement2.current, 0, 0, canvasElement.width, canvasElement.height);
             }
-
+        }
             requestAnimationFrame(renderFrame);
         };
 

@@ -75,13 +75,32 @@ function OpenVidu() {
     }
 
     async function leaveRoom() {
+        // Leave the room by calling 'disconnect' method over the Room object
+        // Stop local video and audio tracks
+        window.location.reload();
         await room?.disconnect();
+        // Reset the state
         setRoom(undefined);
         setLocalTrack(undefined);
         setRemoteTracks([]);
     }
 
     async function getToken(roomName, participantName) {
+        // const mask_data = {
+        //     'userId': participantName,
+        //     'mask': ''
+        // };
+
+        // const response = await fetch(APPLICATION_SERVER_URL + 'facechat/', {
+        //         method: 'POST',
+        //         headers: {
+        //             "Content-Type": "application/json",
+        //             'ngrok-skip-browser-warning': 'skip-browser-warning'
+        //         },
+        //         body: JSON.stringify(mask_data)
+        //     }
+        // );
+
         const response = await fetch(APPLICATION_SERVER_URL + 'token', {
             method: 'POST',
             headers: {
