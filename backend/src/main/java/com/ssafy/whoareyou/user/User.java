@@ -21,6 +21,9 @@ public class User {
     @Column(nullable = false, length = 255)
     private String email;
 
+    @Column(length = 255)
+    private String password;
+
     @Column(nullable = false, length = 20)
     private String name;
 
@@ -38,6 +41,7 @@ public class User {
 
     public User(SignUpRequestDto dto){
         this.email = dto.getEmail();
+        this.password = dto.getPassword();
         this.name = dto.getName();
         this.nickname = dto.getNickname();
         this.gender = dto.getGender();
