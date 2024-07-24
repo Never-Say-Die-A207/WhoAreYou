@@ -1,5 +1,6 @@
 package com.ssafy.whoareyou.user;
 
+import com.ssafy.whoareyou.dto.request.auth.SignUpRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,5 +34,14 @@ public class User {
     private int totalMatchingCount;
 
     @Column(nullable = false, length = 10)
-    private String type;
+    private String type; //"general", "kakao", "naver"
+
+    public User(SignUpRequestDto dto){
+        this.email = dto.getEmail();
+        this.name = dto.getName();
+        this.nickname = dto.getNickname();
+        this.gender = dto.getGender();
+        this.totalMatchingCount = 0;
+        this.type = "general";
+    }
 }
