@@ -28,13 +28,15 @@ function VideoComponentLocal({ track, participantIdentity, local}) {
             });
 
             faceMesh.onResults((results) => {
+                if (canvasRef.current) {
                 const canvasElement = canvasRef.current;
                 const canvasCtx = canvasElement.getContext('2d');
+                
                 canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
                 // 비디오 프레임을 캔버스에 그리기
                 canvasCtx.drawImage(videoElement.current, 0, 0, canvasElement.width, canvasElement.height);
-
+                }
                 if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
                     const landmarks = results.multiFaceLandmarks[0];
                     setLandmarks(landmarks); // landmarks 상태 업데이트
@@ -58,13 +60,14 @@ function VideoComponentLocal({ track, participantIdentity, local}) {
 
     useEffect(() => {
         const renderFrame = () => {
+            if (canvasRef.current) {
             const canvasElement = canvasRef.current;
             const canvasCtx = canvasElement.getContext('2d');
 
             if (videoElement.current) {
                 canvasCtx.drawImage(videoElement.current, 0, 0, canvasElement.width, canvasElement.height);
             }
-
+        }
             requestAnimationFrame(renderFrame);
         };
 
