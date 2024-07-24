@@ -12,12 +12,10 @@ import VideoComponent from './VideoComponent';
 import VideoComponentLocal from './VideoComponentLocal';
 import AudioComponent from './AudioComponent';
 import RoomBottom from './RoomBottom';
+import FaceRecognition from './FaceRecognition';
 
-//git test
 let APPLICATION_SERVER_URL = "";
 let LIVEKIT_URL = "";
-// let APPLICATION_SERVER_URL = "https://grown-donkey-awfully.ngrok-free.app/";
-// let LIVEKIT_URL = "wss://myapp-yqvsqxqi.livekit.cloud/";
 configureUrls();
 
 function configureUrls() {
@@ -42,17 +40,15 @@ function OpenVidu() {
     const [room, setRoom] = useState(undefined);
     const [localTrack, setLocalTrack] = useState(undefined);
     const [remoteTracks, setRemoteTracks] = useState([]);
+    const [expressionData, setExpressionData] = useState({ borderClass: '', imageSrc: null }); // New state for expression data
 
     const [participantName, setParticipantName] = useState('Participant' + Math.floor(Math.random() * 100));
     const [roomName, setRoomName] = useState('Test Room');
 
     async function joinRoom() {
-        // Initialize a new Room object
         const room = new Room();
         setRoom(room);
 
-        // Specify the actions when events take place in the room
-        // On every new Track received...
         room.on(
             RoomEvent.TrackSubscribed,
             (_track, publication, participant) => {
@@ -63,19 +59,13 @@ function OpenVidu() {
             }
         );
 
-        // On every Track destroyed...
         room.on(RoomEvent.TrackUnsubscribed, (_track, publication) => {
             setRemoteTracks((prev) => prev.filter((track) => track.trackPublication.trackSid !== publication.trackSid));
         });
 
         try {
-            // Get a token from your application server with the room name and participant name
             const token = await getToken(roomName, participantName);
-
-            // Connect to the room with the LiveKit URL and the token
             await room.connect(LIVEKIT_URL, token);
-
-            // Publish your camera and microphone
             await room.localParticipant.enableCameraAndMicrophone();
             setLocalTrack(room.localParticipant.videoTrackPublications.values().next().value.videoTrack);
         } catch (error) {
@@ -95,19 +85,6 @@ function OpenVidu() {
         setRemoteTracks([]);
     }
 
-    /**
-     * --------------------------------------------
-     * GETTING A TOKEN FROM YOUR APPLICATION SERVER
-     * --------------------------------------------
-     * The method below request the creation of a token to
-     * your application server. This prevents the need to expose
-     * your LiveKit API key and secret to the client side.
-     *
-     * In this sample code, there is no user control at all. Anybody could
-     * access your application server endpoints. In a real production
-     * environment, your application server must identify the user to allow
-     * access to the endpoints.
-     */
     async function getToken(roomName, participantName) {
         // const mask_data = {
         //     'userId': participantName,
@@ -215,8 +192,9 @@ function OpenVidu() {
                             )
                         )}
                     </div>
+                    <FaceRecognition setExpressionData={setExpressionData} /> {/* Add FaceRecognition component */}
                     <div className='room-bottom'>
-                        <RoomBottom></RoomBottom>
+                        <RoomBottom expressionData={expressionData} /> {/* Pass expressionData to RoomBottom */}
                     </div>
                 </div>
             )}
