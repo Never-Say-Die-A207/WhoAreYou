@@ -1,0 +1,28 @@
+spring:
+  jpa:
+    properties:
+      dialect: org.hibernate.dialect.MySQL8Dialect
+      format_sql: true
+      show_sql: true
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: create
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 1234
+    url: jdbc:mysql://localhost:3306/chat_test
+  sql:
+    init:
+      mode: always
+
+logging:
+  level:
+    org.hibernate.orm.jdbc.bind: trace
+
+livekit:
+  api:
+    key: APIXAD86V8PHHZ2
+    secret: Bi1l6R02usl4OirnJ1LMfPHaZuaGeaT8aAp41WzLXyf
+  server:
+    url: wss://myapp-yqvsqxqi.livekit.cloud

@@ -3,18 +3,20 @@ package com.ssafy.whoareyou.chat.service;
 import com.ssafy.whoareyou.chat.dto.SearchTargetChatRoom;
 import com.ssafy.whoareyou.chat.dto.SendingMessage;
 import com.ssafy.whoareyou.chat.entity.Chat;
-import com.ssafy.whoareyou.chat.entity.Friend;
+import com.ssafy.whoareyou.friend.entity.Friend;
 import com.ssafy.whoareyou.chat.entity.ChatRoom;
-import com.ssafy.whoareyou.chat.entity.User;
 import com.ssafy.whoareyou.chat.repository.ChatJpaRepository;
 import com.ssafy.whoareyou.chat.repository.ChatRoomJpaRepository;
-import com.ssafy.whoareyou.chat.repository.FriendJpaRepository;
-import com.ssafy.whoareyou.chat.repository.UserJpaRepository;
+import com.ssafy.whoareyou.friend.repository.FriendJpaRepository;
+import com.ssafy.whoareyou.user.repository.UserJpaRepository;
+import com.ssafy.whoareyou.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ChatRoomService {
@@ -28,6 +30,7 @@ public class ChatRoomService {
         int userId2 = dto.getUserId2();
 
         Optional<ChatRoom> chatRoom = chatRoomJpaRepository.findByUserIds(userId1, userId2);
+        log.info("log: "+ chatRoom.get());
         List<Chat> chats = chatJpaRepository.findByRoomId(chatRoom.get().getId());
 
         List<SendingMessage> sendingMessages = new LinkedList<>();

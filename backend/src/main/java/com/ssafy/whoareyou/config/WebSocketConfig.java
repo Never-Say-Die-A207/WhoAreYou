@@ -1,4 +1,4 @@
-package com.ssafy.whoareyou.chat.config;
+package com.ssafy.whoareyou.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

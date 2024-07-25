@@ -1,6 +1,6 @@
-package com.ssafy.whoareyou.chat.repository;
+package com.ssafy.whoareyou.user.repository;
 
-import com.ssafy.whoareyou.chat.entity.User;
+import com.ssafy.whoareyou.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

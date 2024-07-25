@@ -1,4 +1,4 @@
-package com.ssafy.whoareyou.facechat;
+package com.ssafy.whoareyou.facechat.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

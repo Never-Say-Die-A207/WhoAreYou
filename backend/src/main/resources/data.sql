@@ -8,4 +8,6 @@ values (1, 0, "email1", "male", "name1", "nickname1"),
 (7, 0, "email7", "male", "name7", "nickname7"),
 (8, 0, "email8", "female", "name8", "nickname8"),
 (9, 0, "email9", "male", "name9", "nickname9"),
-(10, 0, "email10", "female", "name10", "nickname10");
+(10, 0, "email10", "female", "name10", "nickname10"),
+(11, 0, "email9", "male", "name9", "황태건"),
+(12, 0, "email10", "female", "name10", "조성욱");

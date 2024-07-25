@@ -1,7 +1,8 @@
 package com.ssafy.whoareyou.facechat;
 
-import com.ssafy.whoareyou.entity.User;
-import com.ssafy.whoareyou.user.UserRepository;
+import com.ssafy.whoareyou.user.entity.User;
+import com.ssafy.whoareyou.facechat.service.FaceChatService;
+import com.ssafy.whoareyou.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

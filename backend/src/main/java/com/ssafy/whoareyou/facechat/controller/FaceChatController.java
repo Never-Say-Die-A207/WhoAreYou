@@ -1,5 +1,8 @@
-package com.ssafy.whoareyou.facechat;
+package com.ssafy.whoareyou.facechat.controller;
 
+import com.ssafy.whoareyou.facechat.dto.FaceChatInfoResponse;
+import com.ssafy.whoareyou.facechat.dto.FaceChatRequest;
+import com.ssafy.whoareyou.facechat.service.FaceChatService;
 import io.livekit.server.AccessToken;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

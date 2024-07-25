@@ -1,6 +1,6 @@
-package com.ssafy.whoareyou.user;
+package com.ssafy.whoareyou.user.repository;
 
-import com.ssafy.whoareyou.entity.User;
+import com.ssafy.whoareyou.user.entity.User;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

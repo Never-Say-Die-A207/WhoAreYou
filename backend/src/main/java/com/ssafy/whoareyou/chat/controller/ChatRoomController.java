@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/chat-rooms")
 @RequiredArgsConstructor
 public class ChatRoomController {
-    static int cnt = 1;
+    static int cnt = 11;
     private final ChatRoomService service;
 
     /**

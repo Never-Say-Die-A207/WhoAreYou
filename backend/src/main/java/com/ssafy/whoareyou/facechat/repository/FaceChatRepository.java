@@ -1,8 +1,8 @@
-package com.ssafy.whoareyou.facechat;
+package com.ssafy.whoareyou.facechat.repository;
 
-import com.ssafy.whoareyou.entity.FaceChat;
-import com.ssafy.whoareyou.entity.History;
-import com.ssafy.whoareyou.entity.User;
+import com.ssafy.whoareyou.facechat.entity.FaceChat;
+import com.ssafy.whoareyou.facechat.entity.History;
+import com.ssafy.whoareyou.user.entity.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.NonUniqueResultException;

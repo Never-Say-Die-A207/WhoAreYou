@@ -1,5 +1,8 @@
-package com.ssafy.whoareyou.entity;
+package com.ssafy.whoareyou.user.entity;
 
+import com.ssafy.whoareyou.friend.entity.Friend;
+import com.ssafy.whoareyou.facechat.entity.History;
+import com.ssafy.whoareyou.facechat.entity.FaceChat;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,20 +23,22 @@ public class User {
     private int totalMatchingCount;
     private String type;
 
-    @OneToMany(mappedBy = "male", cascade = CascadeType.REMOVE)
-    private List<Friend> friendsAsMale = new ArrayList<>();
-
-    @OneToMany(mappedBy = "female", cascade = CascadeType.REMOVE)
-    private List<Friend> friendsAsFemale = new ArrayList<>();
-
-    public void addFriend(Friend friend) {
-        if(this.gender.equals("male")) {
-            this.friendsAsMale.add(friend);
-        }
-        else {
-            this.friendsAsFemale.add(friend);
-        }
-    }
+//    @OneToMany(mappedBy = "male", cascade = CascadeType.REMOVE)
+//    private List<Friend> friendsAsMale = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "female", cascade = CascadeType.REMOVE)
+//    private List<Friend> friendsAsFemale = new ArrayList<>();
+//
+//    public void addFriend(Friend friend) {
+//        if(this.gender.equals("male")) {
+//            this.friendsAsMale.add(friend);
+//        }
+//        else {
+//            this.friendsAsFemale.add(friend);
+//        }
+//    }
+    @OneToMany(mappedBy = "user")
+    private List<Friend> friends;
 
     @OneToOne(mappedBy = "male", fetch = FetchType.LAZY)
     private FaceChat faceChatAsMale;

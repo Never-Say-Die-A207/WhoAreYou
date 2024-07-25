@@ -1,5 +1,6 @@
-package com.ssafy.whoareyou.entity;
+package com.ssafy.whoareyou.facechat.entity;
 
+import com.ssafy.whoareyou.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 

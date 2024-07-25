@@ -1,9 +1,11 @@
-package com.ssafy.whoareyou.facechat;
+package com.ssafy.whoareyou.facechat.service;
 
-import com.ssafy.whoareyou.entity.FaceChat;
-import com.ssafy.whoareyou.entity.User;
-import com.ssafy.whoareyou.entity.History;
-import com.ssafy.whoareyou.user.UserRepository;
+import com.ssafy.whoareyou.facechat.entity.FaceChat;
+import com.ssafy.whoareyou.user.entity.User;
+import com.ssafy.whoareyou.facechat.entity.History;
+import com.ssafy.whoareyou.facechat.dto.FaceChatInfoResponse;
+import com.ssafy.whoareyou.facechat.repository.FaceChatRepository;
+import com.ssafy.whoareyou.user.repository.UserRepository;
 import io.livekit.server.AccessToken;
 import io.livekit.server.RoomJoin;
 import io.livekit.server.RoomName;
