@@ -8,8 +8,8 @@ import com.ssafy.whoareyou.chat.entity.ChatRoom;
 import com.ssafy.whoareyou.chat.repository.ChatJpaRepository;
 import com.ssafy.whoareyou.chat.repository.ChatRoomJpaRepository;
 import com.ssafy.whoareyou.friend.repository.FriendJpaRepository;
-import com.ssafy.whoareyou.user.repository.UserJpaRepository;
 import com.ssafy.whoareyou.user.entity.User;
+import com.ssafy.whoareyou.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class ChatRoomService {
-    private final UserJpaRepository userJpaRepository;
+    private final UserRepository userJpaRepository;
     private final ChatRoomJpaRepository chatRoomJpaRepository;
     private final ChatJpaRepository chatJpaRepository;
     private final FriendJpaRepository friendJpaRepository;

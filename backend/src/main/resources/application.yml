@@ -37,3 +37,16 @@ server:
   port: 4040
 
 secret-key: ThisStatementIsJwtSecretKeyDoNotUseThisStatement
+
+livekit:
+  api:
+    key: APIXAD86V8PHHZ2
+    secret: Bi1l6R02usl4OirnJ1LMfPHaZuaGeaT8aAp41WzLXyf
+  server:
+    url: wss://myapp-yqvsqxqi.livekit.cloud
+
+
+logging:
+  level:
+    org.hibernate.orm.jdbc.bind: trace
+

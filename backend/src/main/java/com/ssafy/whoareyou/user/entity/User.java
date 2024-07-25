@@ -3,15 +3,18 @@ package com.ssafy.whoareyou.user.entity;
 import com.ssafy.whoareyou.dto.request.auth.SignUpRequestDto;
 import com.ssafy.whoareyou.facechat.entity.FaceChat;
 import com.ssafy.whoareyou.facechat.entity.History;
+import com.ssafy.whoareyou.friend.entity.Friend;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name="user")
@@ -52,6 +55,9 @@ public class User {
     @OneToMany(mappedBy = "id")
     private List<History> recentFaceChats = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<Friend> friends;
+
     public User(SignUpRequestDto dto){
         this.email = dto.getEmail();
         this.password = dto.getPassword();
@@ -69,5 +75,9 @@ public class User {
         this.gender = gender;
         this.totalMatchingCount = 0;
         this.type = type;
+    }
+
+    public void increaseMatchingCount(){
+        totalMatchingCount++;
     }
 }

@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -30,55 +32,56 @@ public class FaceChatService {
     private String LIVEKIT_API_SECRET;
 
     public AccessToken getToken(Integer userId, String mask) {
-        User user = userRepository.findOne(userId);
+        Optional<User> user = userRepository.findById(userId);
         FaceChat faceChat;
 
-        if(user.getGender().equals("male"))
-            faceChat = user.getFaceChatAsMale();
+        if(user.get().getGender().equals("male"))
+            faceChat = user.get().getFaceChatAsMale();
         else
-            faceChat = user.getFaceChatAsFemale();
+            faceChat = user.get().getFaceChatAsFemale();
 
         if(faceChat == null){
-            faceChat = getAvailableFaceChat(user, null);
+            faceChat = getAvailableFaceChat(user.get(), null);
             if(faceChat == null){
-                faceChat = createFaceChat(user, mask);
+                faceChat = createFaceChat(user.get(), mask);
             }
             else{
-                faceChat.joinUser(user, mask);
+                faceChat.joinUser(user.get(), mask);
                 createHistoryForBoth(faceChat);
                 faceChatRepository.saveFaceChatOrHistory(faceChat);
             }
         }
 
-        return generateToken(user.getNickname(), String.valueOf(faceChat.getId()));
+        return generateToken(user.get().getNickname(), String.valueOf(faceChat.getId()));
     }
 
     public AccessToken getFirstToken(Integer userId, String mask) {
-        User user = userRepository.findOne(userId);
+        Optional<User> user = userRepository.findById(userId);
         FaceChat faceChat;
 
-        if(user.getGender().equals("male"))
-            faceChat = user.getFaceChatAsMale();
+        if(user.get().getGender().equals("male"))
+            faceChat = user.get().getFaceChatAsMale();
         else
-            faceChat = user.getFaceChatAsFemale();
+            faceChat = user.get().getFaceChatAsFemale();
 
         if(faceChat == null){
-            faceChat = getAvailableFaceChat(user, null);
+            faceChat = getAvailableFaceChat(user.get(), null);
             if(faceChat == null){
-                faceChat = createFaceChat(user, mask);
+                faceChat = createFaceChat(user.get(), mask);
             }
             else{
-                faceChat.joinUser(user, mask);
+                faceChat.joinUser(user.get(), mask);
                 createHistoryForBoth(faceChat);
                 faceChatRepository.saveFaceChatOrHistory(faceChat);
             }
         }
 
-        return generateToken(user.getNickname(), String.valueOf(faceChat.getId()));
+        return generateToken(user.get().getNickname(), String.valueOf(faceChat.getId()));
     }
 
     public AccessToken getOtherToken(Integer userId, String mask, Integer lastFaceChatId){
-        User user = userRepository.findOne(userId);
+        Optional<User> userOpt = userRepository.findById(userId);
+        User user = userOpt.get();
 
         FaceChat faceChat = getAvailableFaceChat(user, lastFaceChatId);
         if(faceChat == null){
@@ -94,7 +97,8 @@ public class FaceChatService {
     }
 
     public Integer removeUser(Integer userId){
-        User user = userRepository.findOne(userId);
+        Optional<User> userOpt = userRepository.findById(userId);
+        User user = userOpt.get();
 
         FaceChat faceChat = faceChatRepository.findCurrentFaceChat(user);
 
@@ -109,7 +113,8 @@ public class FaceChatService {
     }
 
     public FaceChatInfoResponse getInfo(Integer userId) {
-        User user = userRepository.findOne(userId);
+        Optional<User> userOpt = userRepository.findById(userId);
+        User user = userOpt.get();
 
         FaceChat currentFaceChat = faceChatRepository.findCurrentFaceChat(user);
 
