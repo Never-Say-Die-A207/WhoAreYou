@@ -1,4 +1,4 @@
-package com.ssafy.whoareyou.user;
+package com.ssafy.whoareyou.user.service;
 
 import com.ssafy.whoareyou.dto.request.auth.EmailCheckRequestDto;
 import com.ssafy.whoareyou.dto.request.auth.SignInRequestDto;

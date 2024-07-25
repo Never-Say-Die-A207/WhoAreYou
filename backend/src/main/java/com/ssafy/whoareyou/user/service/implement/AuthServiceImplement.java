@@ -1,4 +1,4 @@
-package com.ssafy.whoareyou.user;
+package com.ssafy.whoareyou.user.service.implement;
 
 import com.ssafy.whoareyou.dto.request.auth.EmailCheckRequestDto;
 import com.ssafy.whoareyou.dto.request.auth.SignInRequestDto;
@@ -8,6 +8,9 @@ import com.ssafy.whoareyou.dto.response.auth.EmailCheckResponseDto;
 import com.ssafy.whoareyou.dto.response.auth.SignInResponseDto;
 import com.ssafy.whoareyou.dto.response.auth.SignUpResponseDto;
 import com.ssafy.whoareyou.provider.JwtProvider;
+import com.ssafy.whoareyou.user.entity.User;
+import com.ssafy.whoareyou.user.repository.UserRepository;
+import com.ssafy.whoareyou.user.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,7 +21,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class AuthServiceImplement implements AuthService{
+public class AuthServiceImplement implements AuthService {
 
     private final UserRepository userRepository;
 

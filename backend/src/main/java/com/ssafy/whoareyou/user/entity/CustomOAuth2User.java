@@ -1,4 +1,4 @@
-package com.ssafy.whoareyou.user;
+package com.ssafy.whoareyou.user.entity;
 
 import java.util.Collection;
 import java.util.Map;

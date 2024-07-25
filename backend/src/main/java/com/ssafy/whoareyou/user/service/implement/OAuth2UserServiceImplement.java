@@ -1,4 +1,4 @@
-package com.ssafy.whoareyou.user;
+package com.ssafy.whoareyou.user.service.implement;
 
 import java.util.Map;
 
@@ -9,9 +9,9 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.whoareyou.user.CustomOAuth2User;
-import com.ssafy.whoareyou.user.User;
-import com.ssafy.whoareyou.user.UserRepository;
+import com.ssafy.whoareyou.user.entity.CustomOAuth2User;
+import com.ssafy.whoareyou.user.entity.User;
+import com.ssafy.whoareyou.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 

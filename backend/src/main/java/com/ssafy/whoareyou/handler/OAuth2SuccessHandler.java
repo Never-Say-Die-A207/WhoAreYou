@@ -4,7 +4,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import com.ssafy.whoareyou.user.CustomOAuth2User;
+import com.ssafy.whoareyou.user.entity.CustomOAuth2User;
 import com.ssafy.whoareyou.provider.JwtProvider;
 
 import java.io.IOException;

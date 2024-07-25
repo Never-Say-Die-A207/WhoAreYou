@@ -16,9 +16,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.ssafy.whoareyou.user.User;
+import com.ssafy.whoareyou.user.entity.User;
 import com.ssafy.whoareyou.provider.JwtProvider;
-import com.ssafy.whoareyou.user.UserRepository;
+import com.ssafy.whoareyou.user.repository.UserRepository;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
