@@ -48,4 +48,13 @@ public class User {
         this.totalMatchingCount = 0;
         this.type = "general";
     }
+
+    public User(String email, String name, String nickname, String gender, String type){
+        this.email = email;
+        this.name = name;
+        this.nickname = nickname;
+        this.gender = gender;
+        this.totalMatchingCount = 0;
+        this.type = type;
+    }
 }
