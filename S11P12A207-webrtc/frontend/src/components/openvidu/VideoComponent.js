@@ -1,17 +1,18 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { FaceMesh } from '@mediapipe/face_mesh';
 import * as cam from '@mediapipe/camera_utils';
-import RedFox from "./RedFox";
+import RedFoxRemote from "./RedFoxRemote";
 import FaceRecognition from './FaceRecognition';
 import './VideoComponent.css';
-import SpiderMan from './SpiderMan';
+import SpiderManRemote from './SpiderManRemote';
 
 function VideoComponent({ track, participantIdentity, setExpressionData, local = false, maskRemote }) {
   const videoElement2 = useRef(null);
   const [landmarks, setLandmarks] = useState(null);
+  const cameraRef = useRef(null); // Camera reference to stop it later
 
   useEffect(() => {
-    if (videoElement2.current) {
+    if (videoElement2.current && track) {
       track.attach(videoElement2.current);
 
       const faceMesh = new FaceMesh({
@@ -33,16 +34,24 @@ function VideoComponent({ track, participantIdentity, setExpressionData, local =
 
       const camera = new cam.Camera(videoElement2.current, {
         onFrame: async () => {
-          await faceMesh.send({ image: videoElement2.current });
+          if (videoElement2.current) {
+            await faceMesh.send({ image: videoElement2.current });
+          }
         },
         width: 1280,
         height: 720,
       });
       camera.start();
+      cameraRef.current = camera;
     }
 
     return () => {
-      track.detach();
+      if (track) {
+        track.detach();
+      }
+      if (cameraRef.current) {
+        cameraRef.current.stop();
+      }
     };
   }, [track]);
 
@@ -52,9 +61,9 @@ function VideoComponent({ track, participantIdentity, setExpressionData, local =
         <p>{participantIdentity + (local ? " (You)" : "")}</p>
       </div>
       <video ref={videoElement2} id={track.sid} style={{ display: 'none' }} />
-      {/* <RedFox landmarks={landmarks} videoElement={videoElement2} /> */}
-      {maskRemote === 'RedFox' && <RedFox landmarks={landmarks} videoElement={videoElement2} />}
-    {maskRemote === 'SpiderMan' && <SpiderMan landmarks={landmarks} videoElement={videoElement2} />}
+      <RedFoxRemote landmarks={landmarks} videoElement={videoElement2} />
+      {/* {maskRemote === 'RedFox' && <RedFoxRemote landmarks={landmarks} videoElement={videoElement2} />}
+      {maskRemote === 'SpiderMan' && <SpiderManRemote landmarks={landmarks} videoElement={videoElement2} />} */}
       <FaceRecognition videoElement={videoElement2} setExpressionData={setExpressionData} />
     </div>
   );
