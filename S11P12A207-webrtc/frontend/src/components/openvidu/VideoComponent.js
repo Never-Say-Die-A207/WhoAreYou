@@ -4,8 +4,9 @@ import * as cam from '@mediapipe/camera_utils';
 import RedFox from "./RedFox";
 import FaceRecognition from './FaceRecognition';
 import './VideoComponent.css';
+import SpiderMan from './SpiderMan';
 
-function VideoComponent({ track, participantIdentity, setExpressionData, local = false }) {
+function VideoComponent({ track, participantIdentity, setExpressionData, local = false, maskRemote }) {
   const videoElement2 = useRef(null);
   const [landmarks, setLandmarks] = useState(null);
 
@@ -51,7 +52,9 @@ function VideoComponent({ track, participantIdentity, setExpressionData, local =
         <p>{participantIdentity + (local ? " (You)" : "")}</p>
       </div>
       <video ref={videoElement2} id={track.sid} style={{ display: 'none' }} />
-      <RedFox landmarks={landmarks} videoElement={videoElement2} />
+      {/* <RedFox landmarks={landmarks} videoElement={videoElement2} /> */}
+      {maskRemote === 'RedFox' && <RedFox landmarks={landmarks} videoElement={videoElement2} />}
+    {maskRemote === 'SpiderMan' && <SpiderMan landmarks={landmarks} videoElement={videoElement2} />}
       <FaceRecognition videoElement={videoElement2} setExpressionData={setExpressionData} />
     </div>
   );

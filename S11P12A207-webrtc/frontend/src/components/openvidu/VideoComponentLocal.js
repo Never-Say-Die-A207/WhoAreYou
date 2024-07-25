@@ -7,7 +7,7 @@ import * as cam from '@mediapipe/camera_utils';
 import RedFox from "./RedFox";
 import SpiderMan from "./SpiderMan";
 
-function VideoComponentLocal({ track, participantIdentity, local}) {
+function VideoComponentLocal({ track, participantIdentity, local, mask}) {
     const videoElement = useRef(null);
     const canvasRef = useRef(null);
     const connect = window.drawConnectors;
@@ -83,10 +83,11 @@ function VideoComponentLocal({ track, participantIdentity, local}) {
             {/* dispaly있음 */}
  
             <canvas ref={canvasRef} className="output_canvas" width="1280" height="720" style={{ transform: 'scaleX(-1)', position: 'absolute', left:'0'}}></canvas>
+          
             {/* <RedFox landmarks={landmarks} videoElement={videoElement} /> */}
-            <SpiderMan landmarks={landmarks} videoElement={videoElement}/>
-            {/* {mask === 'redfox' && <RedFox landmarks={landmarks} videoElement={videoElement} />}
-            {mask === 'spiderman' && <SpiderMan landmarks={landmarks} videoElement={videoElement} />} */}
+            {/* <SpiderMan landmarks={landmarks} videoElement={videoElement}/> */}
+            {mask === 'RedFox' && <RedFox landmarks={landmarks} videoElement={videoElement} />}
+            {mask === 'SpiderMan' && <SpiderMan landmarks={landmarks} videoElement={videoElement} />}
         </div>
     );
 }

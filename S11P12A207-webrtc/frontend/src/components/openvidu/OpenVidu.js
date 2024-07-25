@@ -51,6 +51,13 @@ function OpenVidu() {
     const [participantName, setParticipantName] = useState('Participant' + Math.floor(Math.random() * 100));
     const [roomName, setRoomName] = useState('Test Room');
 
+    const [mask, setMask] = useState('RedFox');
+    const [maskRemote, setMaskRemote] = useState('');
+
+    function changeLoaclMaskValue(e) {
+        setMask(e.target.value)
+    };
+
     async function joinRoom() {
         const room = new Room();
         setRoom(room);
@@ -72,7 +79,7 @@ function OpenVidu() {
         });
 
         try {
-            const token = await getToken(roomName, participantName);
+            const token = await getToken(mask, participantName);
             await room.connect(LIVEKIT_URL, token);
             await room.localParticipant.enableCameraAndMicrophone();
             setLocalTrack(room.localParticipant.videoTrackPublications.values().next().value.videoTrack);
@@ -103,42 +110,32 @@ function OpenVidu() {
         });
     
         const body = await response.json();
+        console.log('상대방 마스크 정보')
+        console.log(body)
+        setMaskRemote(body.info.mask);
         return body;
     }
 
     //마스크 이름 넣기 주석 
-    async function getToken(Mask, participantName) {        
-
-        //다른 사람 통신 주석
-        // const mask_data = {
-        //     'userId': participantName,
-        //     'mask': Mask,
-        // };
-
-        // const response = await fetch(APPLICATION_SERVER_URL + 'facechat/', {
-        //         method: 'POST',
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //             'ngrok-skip-browser-warning': 'skip-browser-warning'
-        //         },
-        //         body: JSON.stringify(mask_data)
-        //     }
-        // );
-
-        const bodydata = {
+    async function getToken(mask, participantName) {      
+        console.log('내 마스크 정보')  
+        console.log(mask)
+        // 다른 사람 통신 주석
+        const mask_data = {
             'userId': participantName,
-            'mask': ''
+            'mask': mask,
         };
-    
+
         const response = await fetch(APPLICATION_SERVER_URL + 'facechat/', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
                     'ngrok-skip-browser-warning': 'skip-browser-warning'
                 },
-                body: JSON.stringify(bodydata)
+                body: JSON.stringify(mask_data)
             }
-        )
+        );
+
         
         // const response = await fetch(APPLICATION_SERVER_URL + 'token', {
         //     method: 'POST',
@@ -194,6 +191,19 @@ function OpenVidu() {
                                     required
                                 />
                             </div>
+                            <div>
+                            <label htmlFor='mask-name'>마스크 변경</label>
+                                <select
+                                    id='mask-name'
+                                    className='form-control'
+                                    value={mask}
+                                    onChange={changeLoaclMaskValue}
+                                >
+                                    {/* <option value='' defaultValue='마스크 선택'>마스크 선택</option> */}
+                                    <option value='RedFox'>RedFox</option>
+                                    <option value="SpiderMan">SpiderMan</option>
+                                </select>
+                            </div>
                             <button
                                 className='btn btn-lg btn-success'
                                 type='submit'
@@ -214,7 +224,7 @@ function OpenVidu() {
           </div>
           <div id='layout-container'>
             {localTrack && (
-              <VideoComponentLocal track={localTrack} participantIdentity={participantName} local={true} />
+              <VideoComponentLocal track={localTrack} participantIdentity={participantName} local={true} mask={mask}/>
             )}
             {remoteTracks.map((remoteTrack) =>
               remoteTrack.trackPublication.kind === 'video' ? (
@@ -223,7 +233,9 @@ function OpenVidu() {
                   track={remoteTrack.trackPublication.videoTrack}
                   participantIdentity={remoteTrack.participantIdentity}
                   setExpressionData={setExpressionData} // setExpressionData 전달
+                  maskRemote = {maskRemote}
                 />
+                
               ) : (
                 <AudioComponent
                   key={remoteTrack.trackPublication.trackSid}
