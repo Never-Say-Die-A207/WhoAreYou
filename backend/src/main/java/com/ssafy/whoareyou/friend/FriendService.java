@@ -1,6 +1,9 @@
 package com.ssafy.whoareyou.friend;
 
-import com.ssafy.whoareyou.user.User;
+import com.ssafy.whoareyou.entity.FaceChat;
+import com.ssafy.whoareyou.entity.Friend;
+import com.ssafy.whoareyou.entity.User;
+import com.ssafy.whoareyou.facechat.FaceChatRepository;
 import com.ssafy.whoareyou.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,47 +13,55 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class FriendService {
-    private final UserRepository userRepository;
     private final FriendRepository friendRepository;
+    private final FaceChatRepository faceChatRepository;
+    private final UserRepository userRepository;
 
-    @Transactional
-    public Long addFriend(int fromId, int toId){
-        User from = userRepository.findOne(fromId);
-        User to = userRepository.findOne(toId);
+    public void createFriend(int faceChatId) {
+        FaceChat faceChat = faceChatRepository.findOne(faceChatId);
+        User male = faceChat.getMale();
+        User female = faceChat.getFemale();
 
-        Friend friend = Friend.createFriend(from, to);
-        from.getFriends().add(friend);
+        Friend friend = new Friend(male, faceChat.getMaleMask(), female, faceChat.getFemaleMask());
+        male.addFriend(friend);
+        female.addFriend(friend);
 
-        userRepository.save(from);
-
-        return friend.getId();
+        friendRepository.save(friend);
+        userRepository.save(male);
+        userRepository.save(female);
     }
 
-    @Transactional
-    public void deleteFriend(long friendId){
-        Friend findFriend = friendRepository.findOne(friendId);
+    @Transactional(readOnly = true)
+    public List<FriendResponse> findFriends(int userId){
+        User user = userRepository.findOne(userId);
 
-        User from = findFriend.getFrom();
-        from.getFriends().remove(findFriend);
+        List<Friend> friends = friendRepository.findAllByGender(user);
 
-        userRepository.save(from);
-
-        friendRepository.delete(findFriend);
-    }
-
-    public List<FriendResponseDto> findFriends(int userId){
-        List<Friend> friends = friendRepository.findAllById(userId);
-
-        List<FriendResponseDto> friendResponseDtoList = new ArrayList<>();
+        String myGender = user.getGender();
+        List<FriendResponse> friendResponseList = new ArrayList<>();
         for(Friend friend : friends){
-            FriendResponseDto dto = new FriendResponseDto();
-            dto.setFriendResponseDto(friend);
-            friendResponseDtoList.add(dto);
+            if(myGender.equals("male")){
+                friendResponseList.add(new FriendResponse(friend.getFemale()));
+            }
+            else
+                friendResponseList.add(new FriendResponse(friend.getMale()));
         }
 
-        return friendResponseDtoList;
+        return friendResponseList;
     }
+
+//    @Transactional
+//    public void deleteFriend(long friendId){
+//        Friend findFriend = friendRepository.findOne(friendId);
+//
+//        User from = findFriend.getFrom();
+//        from.getFriends().remove(findFriend);
+//
+//        userRepository.save(from);
+//
+//        friendRepository.delete(findFriend);
+//    }
 }

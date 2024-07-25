@@ -1,7 +1,5 @@
-package com.ssafy.whoareyou.user;
+package com.ssafy.whoareyou.entity;
 
-import com.ssafy.whoareyou.facechat.FaceChat;
-import com.ssafy.whoareyou.friend.Friend;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,14 +20,29 @@ public class User {
     private int totalMatchingCount;
     private String type;
 
-    @OneToMany(mappedBy = "from", cascade = CascadeType.ALL)
-    private List<Friend> friends = new ArrayList<>();
+    @OneToMany(mappedBy = "male", cascade = CascadeType.REMOVE)
+    private List<Friend> friendsAsMale = new ArrayList<>();
+
+    @OneToMany(mappedBy = "female", cascade = CascadeType.REMOVE)
+    private List<Friend> friendsAsFemale = new ArrayList<>();
+
+    public void addFriend(Friend friend) {
+        if(this.gender.equals("male")) {
+            this.friendsAsMale.add(friend);
+        }
+        else {
+            this.friendsAsFemale.add(friend);
+        }
+    }
 
     @OneToOne(mappedBy = "male", fetch = FetchType.LAZY)
     private FaceChat faceChatAsMale;
 
     @OneToOne(mappedBy = "female", fetch = FetchType.LAZY)
     private FaceChat faceChatAsFemale;
+
+    @OneToMany(mappedBy = "id")
+    private List<History> recentFaceChats = new ArrayList<>();
 
     public void increaseMatchingCount(){
         totalMatchingCount++;

@@ -1,6 +1,8 @@
 package com.ssafy.whoareyou.facechat;
 
-import com.ssafy.whoareyou.user.User;
+import com.ssafy.whoareyou.entity.FaceChat;
+import com.ssafy.whoareyou.entity.User;
+import com.ssafy.whoareyou.entity.History;
 import com.ssafy.whoareyou.user.UserRepository;
 import io.livekit.server.AccessToken;
 import io.livekit.server.RoomJoin;
@@ -25,6 +27,30 @@ public class FaceChatService {
     @Value("${livekit.api.secret}")
     private String LIVEKIT_API_SECRET;
 
+    public AccessToken getToken(Integer userId, String mask) {
+        User user = userRepository.findOne(userId);
+        FaceChat faceChat;
+
+        if(user.getGender().equals("male"))
+            faceChat = user.getFaceChatAsMale();
+        else
+            faceChat = user.getFaceChatAsFemale();
+
+        if(faceChat == null){
+            faceChat = getAvailableFaceChat(user, null);
+            if(faceChat == null){
+                faceChat = createFaceChat(user, mask);
+            }
+            else{
+                faceChat.joinUser(user, mask);
+                createHistoryForBoth(faceChat);
+                faceChatRepository.saveFaceChatOrHistory(faceChat);
+            }
+        }
+
+        return generateToken(user.getNickname(), String.valueOf(faceChat.getId()));
+    }
+
     public AccessToken getFirstToken(Integer userId, String mask) {
         User user = userRepository.findOne(userId);
         FaceChat faceChat;
@@ -41,7 +67,8 @@ public class FaceChatService {
             }
             else{
                 faceChat.joinUser(user, mask);
-                faceChatRepository.save(faceChat);
+                createHistoryForBoth(faceChat);
+                faceChatRepository.saveFaceChatOrHistory(faceChat);
             }
         }
 
@@ -58,7 +85,7 @@ public class FaceChatService {
         else{
             faceChat.joinUser(user, mask);
             faceChat.updateMatchingCount();
-            faceChatRepository.save(faceChat);
+            faceChatRepository.saveFaceChatOrHistory(faceChat);
         }
 
         return generateToken(user.getNickname(), String.valueOf(faceChat.getId()));
@@ -70,6 +97,7 @@ public class FaceChatService {
         FaceChat faceChat = faceChatRepository.findCurrentFaceChat(user);
 
         Boolean noOneLeft = faceChat.removeUser(user);
+
         if(noOneLeft){
             faceChatRepository.delete(faceChat);
             return null;
@@ -105,11 +133,25 @@ public class FaceChatService {
 
     public FaceChat createFaceChat(User user, String mask) {
         FaceChat faceChat = FaceChat.createFaceChat(user, mask);
-        faceChatRepository.save(faceChat);
+        faceChatRepository.saveFaceChatOrHistory(faceChat);
 
         return faceChat;
     }
 
+    public void createHistoryForBoth(FaceChat faceChat){
+        User male = faceChat.getMale();
+        User female = faceChat.getFemale();
+
+        History historyForMale = new History(male, faceChat);
+        male.getRecentFaceChats().add(historyForMale);
+        userRepository.save(male);
+        faceChatRepository.saveFaceChatOrHistory(historyForMale);
+
+        History historyForFemale = new History(female, faceChat);
+        female.getRecentFaceChats().add(historyForFemale);
+        userRepository.save(female);
+        faceChatRepository.saveFaceChatOrHistory(historyForFemale);
+    }
 
     private AccessToken generateToken(String username, String faceChatId){
         AccessToken accessToken = new AccessToken(LIVEKIT_API_KEY, LIVEKIT_API_SECRET);

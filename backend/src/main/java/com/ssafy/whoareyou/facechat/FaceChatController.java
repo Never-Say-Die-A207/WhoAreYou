@@ -1,7 +1,6 @@
 package com.ssafy.whoareyou.facechat;
 
 import io.livekit.server.AccessToken;
-import io.livekit.server.WebhookReceiver;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +17,8 @@ import java.util.Map;
 public class FaceChatController {
     private static final Logger log = LoggerFactory.getLogger(FaceChatController.class);
     private final FaceChatService faceChatService;
-
-    private final WebhookReceiver webhookReceiver = new WebhookReceiver("apiKey", "secret");
-
+    
+    //post 하나로 처리
     @PostMapping("/")
     public ResponseEntity<?> firstEnter(@RequestBody FaceChatRequest params){
         Integer userId = params.getUserId();

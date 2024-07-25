@@ -1,6 +1,5 @@
-package com.ssafy.whoareyou.facechat;
+package com.ssafy.whoareyou.entity;
 
-import com.ssafy.whoareyou.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -9,7 +8,6 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 public class FaceChat {
-
     @Id @GeneratedValue
     private Integer id;
 
