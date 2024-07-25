@@ -15,13 +15,13 @@ import RoomBottom from './RoomBottom';
 import FaceRecognition from './FaceRecognition';
 
 
-// var APPLICATION_SERVER_URL = "https://grown-donkey-awfully.ngrok-free.app/";
-// var LIVEKIT_URL = "wss://myapp-yqvsqxqi.livekit.cloud/";
+var APPLICATION_SERVER_URL = "https://grown-donkey-awfully.ngrok-free.app/";
+var LIVEKIT_URL = "wss://myapp-yqvsqxqi.livekit.cloud/";
 
-let APPLICATION_SERVER_URL = "";
-let LIVEKIT_URL = "";
+// let APPLICATION_SERVER_URL = "";
+// let LIVEKIT_URL = "";
 
-configureUrls();
+// configureUrls();
  //openvidu
 
 function configureUrls() {
@@ -125,18 +125,31 @@ function OpenVidu() {
         //     }
         // );
 
- 
+        const bodydata = {
+            'userId': participantName,
+            'mask': ''
+        };
+    
+        const response = await fetch(APPLICATION_SERVER_URL + 'facechat/', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    'ngrok-skip-browser-warning': 'skip-browser-warning'
+                },
+                body: JSON.stringify(bodydata)
+            }
+        )
         
-        const response = await fetch(APPLICATION_SERVER_URL + 'token', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                roomName: roomName,
-                participantName: participantName
-            })
-        });
+        // const response = await fetch(APPLICATION_SERVER_URL + 'token', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({
+        //         roomName: roomName,
+        //         participantName: participantName
+        //     })
+        // });
 
         if (!response.ok) {
             const error = await response.json();
@@ -192,41 +205,40 @@ function OpenVidu() {
                     </div>
                 </div>
             ) : (
-                <div id='room'>
-                    <div id='room-header'>
-                        <h2 id='room-title'>{roomName}</h2>
-                        <button className='btn btn-danger' id='leave-room-button' onClick={leaveRoom}>
-                            Leave Room
-                        </button>
-                    </div>
-                    <div id='layout-container'>
-                        {localTrack && (
-                            <VideoComponentLocal track={localTrack} participantIdentity={participantName} local={true} />
-                        )}
-                        {remoteTracks.map((remoteTrack) =>
-                            remoteTrack.trackPublication.kind === 'video' ? (
-                                <VideoComponent
-                                    key={remoteTrack.trackPublication.trackSid}
-                                    track={remoteTrack.trackPublication.videoTrack}
-                                    participantIdentity={remoteTrack.participantIdentity}
-                                />
-                            ) : (
-                                <AudioComponent
-                                    key={remoteTrack.trackPublication.trackSid}
-                                    track={remoteTrack.trackPublication.audioTrack}
-                                />
-                            )
-                        )}
-                    </div>
-                    <div className='room-bottom'>
-                    <FaceRecognition setExpressionData={setExpressionData} /> 
-                        <RoomBottom expressionData={expressionData} />
-                    </div>
-                </div>
-                
+        <div id='room'>
+          <div id='room-header'>
+            <h2 id='room-title'>{roomName}</h2>
+            <button className='btn btn-danger' id='leave-room-button' onClick={leaveRoom}>
+              Leave Room
+            </button>
+          </div>
+          <div id='layout-container'>
+            {localTrack && (
+              <VideoComponentLocal track={localTrack} participantIdentity={participantName} local={true} />
             )}
-        </>
-    );
+            {remoteTracks.map((remoteTrack) =>
+              remoteTrack.trackPublication.kind === 'video' ? (
+                <VideoComponent
+                  key={remoteTrack.trackPublication.trackSid}
+                  track={remoteTrack.trackPublication.videoTrack}
+                  participantIdentity={remoteTrack.participantIdentity}
+                  setExpressionData={setExpressionData} // setExpressionData 전달
+                />
+              ) : (
+                <AudioComponent
+                  key={remoteTrack.trackPublication.trackSid}
+                  track={remoteTrack.trackPublication.audioTrack}
+                />
+              )
+            )}
+          </div>
+          <div className='room-bottom'>
+            <RoomBottom expressionData={expressionData} />
+          </div>
+        </div>
+      )}
+    </>
+  );
 }
 
 export default OpenVidu;
