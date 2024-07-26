@@ -11,14 +11,14 @@ const [ friends, setFriends ] = useState(null);
 
     useEffect(() => {
             try {
-                const response = api.get(`/${userId}`);
-                setUserData(response.data);
+                // const response = api.get(`/${userId}`);
+                // setUserData(response.data);
             } catch (error) {
                 console.error('userData error:', error);
             };
             try {
-                const response = api.get(`/friend/list/${userId}`);
-                setFriends(response.data);
+                // const response = api.get(`/friend/list/${userId}`);
+                // setFriends(response.data);
             } catch (error) {
                 console.error('friends error:', error);
             };

@@ -21,6 +21,10 @@ const Home = () => {
         navigate('/matching')
     };
 
+    const mypage = () => {
+        navigate('/mypage')
+    };
+
     return (
         <div style={{ display: 'flex', height: '100vh' }}>
             <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -70,7 +74,7 @@ const Home = () => {
                 <Naver />
             </div>
             <div>
-                <Mypage />
+                <button onClick={mypage}>마이페이지</button>
             </div>
         </div>
     );

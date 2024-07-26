@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import Home from './pages/Home';
 import Signup from './pages/Signup';
+import Mypage from './pages/Mypage';
 import OpenVidu from './components/openvidu/OpenVidu';
 
 
@@ -13,6 +14,7 @@ function App() {
         <Route path='/' element={<Home />}/>
         <Route path='/signup' element={<Signup />}/>
         <Route path='/matching' element={<OpenVidu />}/>
+        <Route path='/mypage' element={<Mypage />} />
       </Routes>
     </div>
   );
