@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Login from './Login';
+import Naver from './Naver';
 import './Modal.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -63,6 +64,9 @@ const Home = () => {
                 >
                     매칭하기
                 </button>
+            </div>
+            <div>
+                <Naver />
             </div>
         </div>
     );
