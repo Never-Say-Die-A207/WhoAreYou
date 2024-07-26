@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Login from './Login';
 import Naver from './Naver';
+import Mypage from './Mypage';
 import './Modal.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -67,6 +68,9 @@ const Home = () => {
             </div>
             <div>
                 <Naver />
+            </div>
+            <div>
+                <Mypage />
             </div>
         </div>
     );
