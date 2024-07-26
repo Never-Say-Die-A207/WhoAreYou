@@ -11,4 +11,5 @@ import lombok.Setter;
 public class FaceChatRequest {
     private Integer userId;
     private String mask;
+    private Boolean needsChange;
 }

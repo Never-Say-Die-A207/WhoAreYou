@@ -56,10 +56,8 @@ public class ChatRoomController {
      * @return HttpStatus.OK(200)
      */
     @PostMapping("/relations/{roomId}")
-    public ResponseEntity<?> join(HttpServletRequest request, @PathVariable int roomId){
-        int userId = cnt++;//(Integer) request.getAttribute("AccessToken");
-
-        service.join(roomId, userId);
+    public ResponseEntity<?> join(@PathVariable int roomId, @RequestBody SearchTargetChatRoom dto){
+        service.join(roomId, dto);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

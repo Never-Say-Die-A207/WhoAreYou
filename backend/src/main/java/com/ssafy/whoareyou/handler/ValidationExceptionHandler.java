@@ -6,7 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.ssafy.whoareyou.dto.response.ResponseDto;
+import com.ssafy.whoareyou.user.dto.response.ResponseDto;
 
 @RestControllerAdvice
 public class ValidationExceptionHandler {

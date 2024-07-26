@@ -8,5 +8,5 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SearchTargetChatRoom {
-    int userId1, userId2;
+    int maleId, femaleId;
 }

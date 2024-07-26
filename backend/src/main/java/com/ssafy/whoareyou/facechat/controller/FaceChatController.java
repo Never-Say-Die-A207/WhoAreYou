@@ -15,7 +15,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/facechat")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+//@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequiredArgsConstructor
 public class FaceChatController {
     private static final Logger log = LoggerFactory.getLogger(FaceChatController.class);
@@ -23,35 +23,40 @@ public class FaceChatController {
     
     //post 하나로 처리
     @PostMapping("/")
-    public ResponseEntity<?> firstEnter(@RequestBody FaceChatRequest params){
+    public ResponseEntity<?> enter(@RequestBody FaceChatRequest params) {
         Integer userId = params.getUserId();
         String mask = params.getMask();
+        Boolean needsChange = params.getNeedsChange();
 
         if(userId == null)
             return new ResponseEntity<Void> (HttpStatus.BAD_REQUEST);
 
-        AccessToken token = faceChatService.getFirstToken(userId, mask);
-        if(token == null)
-            return new ResponseEntity<Void> (HttpStatus.INTERNAL_SERVER_ERROR);
+        if(needsChange == null)
+            needsChange = false;
 
-        return new ResponseEntity<Map<String, String>> (Map.of("token", token.toJwt()), HttpStatus.OK);
+        try {
+            AccessToken token = faceChatService.getToken(userId, mask, needsChange);
+            return new ResponseEntity<Map<String, String>> (Map.of("token", token.toJwt()), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<Void> (HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @PatchMapping("/")
-    public ResponseEntity<?> nonFirstEnter(@RequestBody FaceChatRequest params){
-        Integer userId = params.getUserId();
-        String mask = params.getMask();
-
-        if(userId == null)  
-            return new ResponseEntity<Void> (HttpStatus.BAD_REQUEST);
-
-        Integer faceChatId = faceChatService.removeUser(userId);
-        AccessToken token = faceChatService.getOtherToken(userId, mask, faceChatId);
-        if(token == null)
-            return new ResponseEntity<Void> (HttpStatus.INTERNAL_SERVER_ERROR);
-
-        return new ResponseEntity<Map<String, String>> (Map.of("token", token.toJwt()), HttpStatus.OK);
-    }
+//    @PatchMapping("/")
+//    public ResponseEntity<?> move(@RequestBody FaceChatRequest params){
+//        Integer userId = params.getUserId();
+//        String mask = params.getMask();
+//
+//        if(userId == null)
+//            return new ResponseEntity<Void> (HttpStatus.BAD_REQUEST);
+//
+//        try {
+//            AccessToken token = faceChatService.getToken(userId, mask, true);
+//            return new ResponseEntity<Map<String, String>> (Map.of("token", token.toJwt()), HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<Void> (HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<?> quit(@PathVariable("userId") Integer userId){

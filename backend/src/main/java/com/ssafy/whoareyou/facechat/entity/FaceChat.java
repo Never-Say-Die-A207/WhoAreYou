@@ -1,5 +1,7 @@
 package com.ssafy.whoareyou.facechat.entity;
 
+import com.ssafy.whoareyou.user.entity.Female;
+import com.ssafy.whoareyou.user.entity.Male;
 import com.ssafy.whoareyou.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -17,60 +19,70 @@ public class FaceChat {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="male_id")
-    private User male;
+    private Male male;
     private String maleMask; //나중에 별도의 클래스로 분리
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="female_id")
-    private User female;
+    private Female female;
     private String femaleMask;
 
-    public static FaceChat createFaceChat(User user, String mask){
-        FaceChat faceChat = new FaceChat();
-        if(user.getGender().equals("male")){
-            faceChat.male = user;
-            faceChat.maleMask = mask;
-            user.setFaceChatAsMale(faceChat);
-        }
-        else{
-            faceChat.female = user;
-            faceChat.femaleMask = mask;
-            user.setFaceChatAsFemale(faceChat);
-        }
-        faceChat.createdAt = LocalDateTime.now();
-        return faceChat;
-    }
+//    public static FaceChat createFaceChat(User user, String mask){
+//        FaceChat faceChat = new FaceChat();
+//        if(user instanceof Male male){
+//            faceChat.male = male;
+//            faceChat.maleMask = mask;
+//            male.setFaceChatAsMale(faceChat);
+//        }
+//        else if (user instanceof Female female){
+//            faceChat.female = female;
+//            faceChat.femaleMask = mask;
+//            female.setFaceChatAsFemale(faceChat);
+//        }
+//        faceChat.createdAt = LocalDateTime.now();
+//        return faceChat;
+//    }
 
     public void joinUser(User user, String mask){
-        if(user.getGender().equals("male")){
-            this.male = user;
+        boolean isEmptyRoom = true;
+
+        if(user instanceof Male m){
+            this.male = m;
             this.maleMask = mask;
-            user.setFaceChatAsMale(this);
+            m.setFaceChatAsMale(this);
+            if(this.getFemale() != null)
+                isEmptyRoom = false;
         }
-        else{
-            this.female = user;
+        else if (user instanceof Female f){
+            this.female = f;
             this.femaleMask = mask;
-            user.setFaceChatAsFemale(this);
+            f.setFaceChatAsFemale(this);
+            if(this.getMale() != null)
+                isEmptyRoom = false;
         }
-        this.startedAt = LocalDateTime.now();
+
+        if(isEmptyRoom)
+            this.createdAt = LocalDateTime.now();
+        else
+            this.startedAt = LocalDateTime.now();
     }
 
     public Boolean removeUser(User user){
-        if(user.getGender().equals("male")){
-            if(this.getFemale() == null)
-                return true;
-
+        if(user instanceof Male m){
             this.male = null;
             this.maleMask = null;
-            user.setFaceChatAsMale(null);
-        }
-        else{
-            if(this.getMale() == null)
-                return true;
+            m.setFaceChatAsMale(null);
 
+            if(this.getFemale() == null)
+                return true;
+        }
+        else if (user instanceof Female f){
             this.female = null;
             this.femaleMask = null;
-            user.setFaceChatAsFemale(null);
+            f.setFaceChatAsFemale(null);
+
+            if(this.getMale() == null)
+                return true;
         }
         
         //혼자 남은 참가자는 다시 매칭
@@ -81,7 +93,7 @@ public class FaceChat {
     }
 
     public void updateMatchingCount() {
-        this.male.increaseMatchingCount();
-        this.female.increaseMatchingCount();
+        this.getMale().increaseMatchingCount();
+        this.getFemale().increaseMatchingCount();
     }
 }

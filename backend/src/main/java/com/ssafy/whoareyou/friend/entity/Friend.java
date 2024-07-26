@@ -1,6 +1,8 @@
 package com.ssafy.whoareyou.friend.entity;
 
 import com.ssafy.whoareyou.chat.entity.ChatRoom;
+import com.ssafy.whoareyou.user.entity.Female;
+import com.ssafy.whoareyou.user.entity.Male;
 import com.ssafy.whoareyou.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -20,8 +22,12 @@ public class Friend {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "male_id")
+    private Male male;
+
+    @ManyToOne
+    @JoinColumn(name = "female_id")
+    private Female female;
 
     @ManyToOne
     @JoinColumn(name = "chat_room_id")
