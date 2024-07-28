@@ -1,0 +1,232 @@
+.login-page{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+
+}
+
+*, ::after, ::before{
+    box-sizing: border-box;
+}
+
+div{
+    unicode-bidi: isolate;
+    display: block;
+}
+
+.login-page .layout-header {
+    z-index: 1;
+    height: 64px;
+    width: 100%;
+    background-color: #fff;
+    border-bottom: 1px solid #ebebeb;
+}
+
+header {
+    display: block;
+    unicode-bidi: isolate;
+}
+
+.login-page .layout-body {
+    -webkit-box-flex: 1;
+    flex: 1;
+    width: 100%;
+    max-width: 1440px;
+    margin-left: auto;
+    margin-right: auto;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    
+}
+
+.login-page .layout-body .layout-aside {
+    text-align: center;
+    background-color: #f7f9fa;
+}
+
+.layout-aside img{
+    max-width: 100%;
+}
+
+img{
+    height: auto;
+    width: auto;
+    vertical-align: middle;
+    border: 0;
+    overflow: clip;
+}
+
+.form-width-sm {
+    width: 346px;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+form {
+    display: block;
+    margin-top: 0em;
+    unicode-bidi: isolate;
+}
+
+.zm-form-item {
+    position: relative;
+    margin-bottom: 24px;
+}
+
+.login-function-box {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+}
+
+.mgb-md {
+    margin-bottom: 16px;
+}
+
+.mgt-sm {
+    margin-top: 8px;
+}
+
+.zm-form-item__content {
+    position: relative;
+    font-size: inherit;
+}
+
+.zm-input{
+    position: relative;
+    font-size: 14px;
+    display: inline-block;
+    width: 100%;
+}
+
+.zm-input--xLarge .zm-input--show-label .zm-input__inner{
+    padding-top: 12px;
+    line-height: 28px;
+}
+
+.zm-input .is-empty .zm-input__inner{
+    border-color: #6e7680;
+}
+
+.zm-input--xLarge .zm-input__inner{
+    height: 48px;
+    font-size: 16px;
+}
+
+.zm-input__inner{
+    background-image: none;
+    border-radius: 8px;
+    border: 1px solid #444b53;
+    box-sizing: border-box;
+    color: #131619;
+    display: inline-block;
+    outline: none;
+    padding: 0 12px;
+    transition: cubic-bezier(0.645, 0.045, 0.355, 1);
+    width: 100%;
+    vertical-align: middle;
+}
+
+input {
+    font-family: inherit;
+    margin: 0;
+}
+
+input[type='email' i] {
+    padding-block: 1px;
+    padding-inline: 2px;
+}
+
+.zm-input__label {
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    right: 12px;
+    font-size: 16px;
+    margin-bottom: 0;
+    color: #6e7680;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition-duration: .3s;
+}
+
+
+.zm-input--xLarge .zm-input__suffix {
+    line-height: 48px;
+
+}
+
+.zm-input__suffix{
+    position: absolute;
+    height: 100%;
+    right: 5px;
+    top: 0;
+    text-align: center;
+    color: #6e7680;
+    transition: all .3s;
+    pointer-events: none;
+}
+.zm-input__suffix-inner{
+    pointer-events: all;
+}
+
+.zm-input .zm-input__clear {
+    color: #6e7680;
+    cursor: pointer;
+    transition: cubic-bezier(0.645, 0.045, 0.355, 1);
+    background-color: transparent;
+    border: none;
+    height: 20px;
+    width: 20px;
+    line-height: 20px;
+    padding: 0;
+}
+
+.zm-icon-eyes {
+    display: inline-block;
+    font-style: normal;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    vertical-align: baseline;
+}
+
+.pdb-0{
+    padding-bottom: 0;
+
+}
+.zm-buutton--link{
+    white-space: normal;
+    padding-left: 0;
+    padding-right: 0;
+    border-radius: 0;
+    color: #87CEFA;
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.zm-button-small {
+    min-width: 32px;
+    font-size: 14px;
+    line-height: 20px;
+
+}
+
+.zm-button {
+    display: inline-flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    
+}
