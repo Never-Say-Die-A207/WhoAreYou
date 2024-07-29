@@ -8,6 +8,8 @@ import com.ssafy.whoareyou.chat.entity.ChatRoom;
 import com.ssafy.whoareyou.chat.repository.ChatJpaRepository;
 import com.ssafy.whoareyou.chat.repository.ChatRoomJpaRepository;
 import com.ssafy.whoareyou.friend.repository.FriendJpaRepository;
+import com.ssafy.whoareyou.user.entity.Female;
+import com.ssafy.whoareyou.user.entity.Male;
 import com.ssafy.whoareyou.user.entity.User;
 import com.ssafy.whoareyou.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import java.util.*;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ChatRoomService {
     private final UserRepository userJpaRepository;
     private final ChatRoomJpaRepository chatRoomJpaRepository;
@@ -27,13 +30,11 @@ public class ChatRoomService {
     private final FriendJpaRepository friendJpaRepository;
 
     public List<SendingMessage> loadHistorys(SearchTargetChatRoom dto){
-        int userId1 = dto.getUserId1();
-        int userId2 = dto.getUserId2();
+        int maleId = dto.getMaleId();
+        int femaleId = dto.getFemaleId();
 
-        Optional<ChatRoom> chatRoom = chatRoomJpaRepository.findByUserIds(userId1, userId2);
-        log.info("log: "+ chatRoom.get());
-
-        List<Chat> chats = chatJpaRepository.findByRoomId(chatRoom.get().getId());
+        ChatRoom chatRoom = friendJpaRepository.findByGenderId(maleId, femaleId).get().getChatRoom();
+        List<Chat> chats = chatJpaRepository.findByRoomId(chatRoom.getId());
 
         List<SendingMessage> sendingMessages = new LinkedList<>();
         for(Chat chat : chats){
@@ -49,9 +50,9 @@ public class ChatRoomService {
         return sendingMessages;
     }
 
-    public List<Friend> getRooms(int userId){
-        return friendJpaRepository.findListByUserId(userId);
-    }
+//    public List<Friend> getRooms(int userId){
+//        return friendJpaRepository.findListByUserId(userId);
+//    }
 
     public ChatRoom get(int roomId){
         ChatRoom chatRoom = find(roomId);
@@ -65,17 +66,20 @@ public class ChatRoomService {
         return chatRoomJpaRepository.save(chatRoom);
     }
 
-    public String join(int roomId, int userId){
+    public String join(int roomId, SearchTargetChatRoom dto){
         Optional<ChatRoom> chatRoom = chatRoomJpaRepository.findById(roomId);
-        Optional<User> user = userJpaRepository.findById(userId);
+        User male = userJpaRepository.findById(dto.getMaleId()).get();
+        User female = userJpaRepository.findById(dto.getFemaleId()).get();
 
         if(chatRoom.isEmpty())
             return "비어있음";
 
-        if(friendJpaRepository.findByIds(user.get().getId(), chatRoom.get().getId()).isPresent())
+        if(chatRoomJpaRepository.findByGenderId(male.getId(), female.getId()).isPresent()) {
+            log.info("ㅋㅋ 이미 있음");
             return "이미 있음";
+        }
 
-        setRelation(chatRoom.get(), user.get());
+        setRelation(chatRoom.get(), (Male) male, (Female) female);
 
         return "친구추가 됨 ㅋㅋ";
     }
@@ -84,10 +88,10 @@ public class ChatRoomService {
         return chatRoomJpaRepository.findById(roomId).orElse(null);
     }
 
-    @Transactional
-    public void setRelation(ChatRoom chatRoom, User user){
+    public void setRelation(ChatRoom chatRoom, Male male, Female female){
         Friend friend = Friend.builder()
-                .user(user)
+                .male(male)
+                .female(female)
                 .chatRoom(chatRoom)
                 .build();
 

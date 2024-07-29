@@ -1,6 +1,8 @@
 package com.ssafy.whoareyou.friend.entity;
 
 import com.ssafy.whoareyou.chat.entity.ChatRoom;
+import com.ssafy.whoareyou.user.entity.Female;
+import com.ssafy.whoareyou.user.entity.Male;
 import com.ssafy.whoareyou.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,14 +19,17 @@ public class Friend {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false, name = "room_name")
-    private String roomName;
+    private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @ManyToOne
+    @JoinColumn(name = "male_id")
+    private Male male;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
+    @JoinColumn(name = "female_id")
+    private Female female;
+
+    @ManyToOne
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
 }

@@ -1,5 +1,7 @@
 package com.ssafy.whoareyou.facechat.entity;
 
+import com.ssafy.whoareyou.user.entity.Female;
+import com.ssafy.whoareyou.user.entity.Male;
 import com.ssafy.whoareyou.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -15,18 +17,18 @@ public class History {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "male_id")
+    private Male male;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "facechat_id")
-    private FaceChat faceChat;
+    @JoinColumn(name = "female_id")
+    private Female female;
 
     private LocalDateTime enteredAt;
 
-    public History(User user, FaceChat faceChat) {
-        this.user = user;
-        this.faceChat = faceChat;
-        this.enteredAt = LocalDateTime.now();
+    public History(Male male, Female female, LocalDateTime now) {
+        this.male = male;
+        this.female = female;
+        this.enteredAt = now;
     }
 }

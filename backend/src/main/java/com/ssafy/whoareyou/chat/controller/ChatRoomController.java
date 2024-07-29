@@ -56,18 +56,9 @@ public class ChatRoomController {
      * @return HttpStatus.OK(200)
      */
     @PostMapping("/relations/{roomId}")
-    public ResponseEntity<?> join(HttpServletRequest request, @PathVariable int roomId){
-        int userId = (Integer) request.getAttribute("userId");
-
-        service.join(roomId, userId);
+    public ResponseEntity<?> join(@PathVariable int roomId, @RequestBody SearchTargetChatRoom dto){
+        service.join(roomId, dto);
 
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @GetMapping("/")
-    public ResponseEntity<?> check(HttpServletRequest request){
-        int userId = Integer.parseInt((String) request.getAttribute("userId"));
-
-        return new ResponseEntity<>(userId, HttpStatus.OK);
     }
 }

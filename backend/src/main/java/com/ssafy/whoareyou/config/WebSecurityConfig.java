@@ -68,7 +68,6 @@ public class WebSecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
-
     }
 
     @Bean
@@ -83,9 +82,7 @@ public class WebSecurityConfig {
         source.registerCorsConfiguration("/**", corsConfiguration);
 
         return source;
-
     }
-
 }
 
 class FailedAuthenticationEntryPoint implements AuthenticationEntryPoint {
