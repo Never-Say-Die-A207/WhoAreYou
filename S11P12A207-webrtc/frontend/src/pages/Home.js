@@ -29,9 +29,7 @@ const Home = () => {
     return (
         <div className='login-page'>
 
-            {/* <header className='layout-header'>
-                <h1 className='logo-color'>who are you?</h1>
-            </header> */}
+        
             <div style={{ display: 'flex', height: '100vh' }}>
                 <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 

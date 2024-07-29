@@ -17,18 +17,6 @@ div{
     display: block;
 }
 
-.login-page .layout-header {
-    z-index: 1;
-    height: 64px;
-    width: 100%;
-    background-color: #fff;
-    border-bottom: 1px solid #ebebeb;
-}
-
-header {
-    display: block;
-    unicode-bidi: isolate;
-}
 
 .login-page .layout-body {
     -webkit-box-flex: 1;
