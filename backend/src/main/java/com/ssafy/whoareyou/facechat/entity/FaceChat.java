@@ -27,22 +27,6 @@ public class FaceChat {
     private Female female;
     private String femaleMask;
 
-//    public static FaceChat createFaceChat(User user, String mask){
-//        FaceChat faceChat = new FaceChat();
-//        if(user instanceof Male male){
-//            faceChat.male = male;
-//            faceChat.maleMask = mask;
-//            male.setFaceChatAsMale(faceChat);
-//        }
-//        else if (user instanceof Female female){
-//            faceChat.female = female;
-//            faceChat.femaleMask = mask;
-//            female.setFaceChatAsFemale(faceChat);
-//        }
-//        faceChat.createdAt = LocalDateTime.now();
-//        return faceChat;
-//    }
-
     public void joinUser(User user, String mask){
         boolean isEmptyRoom = true;
 

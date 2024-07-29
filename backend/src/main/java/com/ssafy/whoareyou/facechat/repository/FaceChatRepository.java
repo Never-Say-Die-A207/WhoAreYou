@@ -53,8 +53,6 @@ public class FaceChatRepository {
                 "where f." + myGender + " =:user) " +
                 "order by fc.createdAt";
 
-        System.out.println("queryString = " + queryString);
-
         return em.createQuery(queryString, FaceChat.class)
                 .setParameter("timeLimit", timeLimit)
                 .setParameter("user", user)
@@ -80,29 +78,5 @@ public class FaceChatRepository {
         else if(user instanceof Female)
             return "female";
         throw new IllegalArgumentException("Wrong gender type");
-    }
-//    public FaceChat findFirstFaceChatByGender(String gender, Integer lastFaceChatId) throws NoResultException {
-//        log.info("FaceChat : Find first face chat by Gender " + gender);
-//        String queryString = "select fc from FaceChat fc where fc." + gender + " is null";
-////        String queryString = "select fc from FaceChat fc" +
-////                              " where fc." + user.getGender() + " is null" +
-////                              " and fc not in :recentFaceChats"
-//        //queryString += " and
-//        if(lastFaceChatId != null){
-//            queryString += " and fc.id != :lastId";
-//        }
-//        log.info("Last FaceChatId : " + lastFaceChatId);
-//        queryString += " order by fc.createdAt";
-//        TypedQuery<FaceChat> query = em.createQuery(queryString, FaceChat.class);
-//        if(lastFaceChatId != null)
-//            query.setParameter("lastId", lastFaceChatId);
-//        return query
-//                .setFirstResult(0)
-//                .setMaxResults(1)
-//                .getSingleResult();
-//    }
-
-    public FaceChat findOne(int faceChatId) {
-        return em.find(FaceChat.class, faceChatId);
     }
 }

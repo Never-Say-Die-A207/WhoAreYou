@@ -54,7 +54,7 @@ public class FaceChatService {
 
         if(faceChat == null || needsChange){
             if(needsChange)
-                removeUser(userId);
+                quitUser(userId);
 
             faceChat = getAvailableFaceChat(user);
             if(faceChat == null){
@@ -71,7 +71,7 @@ public class FaceChatService {
         return generateToken(user.getNickname(), String.valueOf(faceChat.getId()));
     }
 
-    public void removeUser(Integer userId){
+    public void quitUser(Integer userId){
         Optional<User> userOpt = userRepository.findById(userId);
         User user = userOpt.orElse(null);
         if(user == null)
@@ -141,45 +141,4 @@ public class FaceChatService {
         accessToken.addGrants(new RoomJoin(true), new RoomName(faceChatId));
         return accessToken;
     }
-
-//    public AccessToken getFirstToken(Integer userId, String mask) {
-//        Optional<User> user = userRepository.findById(userId);
-//        FaceChat faceChat;
-//
-//        if(user.get().getGender().equals("male"))
-//            faceChat = user.get().getFaceChatAsMale();
-//        else
-//            faceChat = user.get().getFaceChatAsFemale();
-//
-//        if(faceChat == null){
-//            faceChat = getAvailableFaceChat(user.get(), null);
-//            if(faceChat == null){
-//                faceChat = createFaceChat(user.get(), mask);
-//            }
-//            else{
-//                faceChat.joinUser(user.get(), mask);
-//                createHistoryForBoth(faceChat);
-//                faceChatRepository.saveFaceChatOrHistory(faceChat);
-//            }
-//        }
-//
-//        return generateToken(user.get().getNickname(), String.valueOf(faceChat.getId()));
-//    }
-
-//    public AccessToken getOtherToken(Integer userId, String mask, Integer lastFaceChatId){
-//        Optional<User> userOpt = userRepository.findById(userId);
-//        User user = userOpt.get();
-//
-//        FaceChat faceChat = getAvailableFaceChat(user, lastFaceChatId);
-//        if(faceChat == null){
-//            faceChat = createFaceChat(user, mask);
-//        }
-//        else{
-//            faceChat.joinUser(user, mask);
-//            faceChat.updateMatchingCount();
-//            faceChatRepository.saveFaceChatOrHistory(faceChat);
-//        }
-//
-//        return generateToken(user.getNickname(), String.valueOf(faceChat.getId()));
-//    }
 }
