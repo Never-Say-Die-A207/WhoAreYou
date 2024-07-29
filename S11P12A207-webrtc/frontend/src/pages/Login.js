@@ -32,7 +32,7 @@ const Login = ({ onClose }) => {
             const response = await api.post('/sign-in', form);
             localStorage.setItem('accessToken', response.data.accessToken);
             console.log('Login success:', response.data);
-            navigate('/');
+            navigate('/matching');
         } catch (error) {
             console.error('Login error:', error);
         }
