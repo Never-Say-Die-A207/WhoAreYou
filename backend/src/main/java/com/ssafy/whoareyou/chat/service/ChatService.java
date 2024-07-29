@@ -39,8 +39,6 @@ public class ChatService {
                 .build();
 
         chatJpaRepository.save(chat);
-//        chatRoom.setHistory(chatRoom.getHistory() + "NEW_MESSAGE" + receivingMessage.getMessage());
-//        chatRoomJpaRepository.save(chatRoom);
 
         return message;
     }

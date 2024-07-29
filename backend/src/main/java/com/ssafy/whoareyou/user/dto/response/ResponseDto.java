@@ -1,4 +1,4 @@
-package com.ssafy.whoareyou.dto.response;
+package com.ssafy.whoareyou.user.dto.response;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

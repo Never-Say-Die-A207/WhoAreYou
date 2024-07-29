@@ -4,17 +4,24 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/who_are_you?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
-    username: developer
-    password: P!ssw0rd
+    url: jdbc:mysql://127.0.0.1:3306/whoareyou
+    username: root
+    password: root
+#    url: jdbc:mysql://127.0.0.1:3306/who_are_you?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+#    username: developer
+#    password: P!ssw0rd
 
+  sql:
+    init:
+      mode: always
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
+    defer-datasource-initialization: true
 
   security:
     oauth2:
@@ -35,6 +42,7 @@ spring:
 
 server:
   port: 4040
+#  port: 8080
 
 secret-key: ThisStatementIsJwtSecretKeyDoNotUseThisStatement
 

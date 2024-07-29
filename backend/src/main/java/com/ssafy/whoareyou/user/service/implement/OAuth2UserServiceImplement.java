@@ -2,6 +2,8 @@ package com.ssafy.whoareyou.user.service.implement;
 
 import java.util.Map;
 
+import com.ssafy.whoareyou.user.entity.Female;
+import com.ssafy.whoareyou.user.entity.Male;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -33,7 +35,7 @@ public class OAuth2UserServiceImplement extends DefaultOAuth2UserService{
             exception.printStackTrace();
         }
 
-        User userEntity = null;
+//        User userEntity = null;
         String email="email@email.com", name, nickname, gender;
 
         if(oauthClientName.equals("naver")){
@@ -42,10 +44,16 @@ public class OAuth2UserServiceImplement extends DefaultOAuth2UserService{
             name = responseMap.get("name");
             nickname = responseMap.get("nickname");
             gender = responseMap.get("gender");
-            userEntity = new User(email, name, nickname, gender, "naver");
-        }
 
-        userRepository.save(userEntity);
+            if(!gender.equals("F")){
+                Male maleEntity = new Male(email, name, nickname, "naver");
+                userRepository.save(maleEntity);
+            }
+            else{
+                Female femaleEntity = new Female(email, name, nickname, "naver");
+                userRepository.save(femaleEntity);
+            }
+        }
 
         return new CustomOAuth2User(email);
     }

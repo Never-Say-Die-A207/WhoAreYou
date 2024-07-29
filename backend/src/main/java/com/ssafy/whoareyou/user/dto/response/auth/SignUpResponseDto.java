@@ -1,8 +1,8 @@
-package com.ssafy.whoareyou.dto.response.auth;
+package com.ssafy.whoareyou.user.dto.response.auth;
 
 import com.ssafy.whoareyou.common.ResponseCode;
 import com.ssafy.whoareyou.common.ResponseMessage;
-import com.ssafy.whoareyou.dto.response.ResponseDto;
+import com.ssafy.whoareyou.user.dto.response.ResponseDto;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

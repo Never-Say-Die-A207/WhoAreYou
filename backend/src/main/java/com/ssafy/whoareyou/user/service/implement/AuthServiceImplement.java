@@ -1,13 +1,15 @@
 package com.ssafy.whoareyou.user.service.implement;
 
-import com.ssafy.whoareyou.dto.request.auth.EmailCheckRequestDto;
-import com.ssafy.whoareyou.dto.request.auth.SignInRequestDto;
-import com.ssafy.whoareyou.dto.request.auth.SignUpRequestDto;
-import com.ssafy.whoareyou.dto.response.ResponseDto;
-import com.ssafy.whoareyou.dto.response.auth.EmailCheckResponseDto;
-import com.ssafy.whoareyou.dto.response.auth.SignInResponseDto;
-import com.ssafy.whoareyou.dto.response.auth.SignUpResponseDto;
+import com.ssafy.whoareyou.user.dto.request.auth.EmailCheckRequestDto;
+import com.ssafy.whoareyou.user.dto.request.auth.SignInRequestDto;
+import com.ssafy.whoareyou.user.dto.request.auth.SignUpRequestDto;
+import com.ssafy.whoareyou.user.dto.response.ResponseDto;
+import com.ssafy.whoareyou.user.dto.response.auth.EmailCheckResponseDto;
+import com.ssafy.whoareyou.user.dto.response.auth.SignInResponseDto;
+import com.ssafy.whoareyou.user.dto.response.auth.SignUpResponseDto;
 import com.ssafy.whoareyou.provider.JwtProvider;
+import com.ssafy.whoareyou.user.entity.Female;
+import com.ssafy.whoareyou.user.entity.Male;
 import com.ssafy.whoareyou.user.entity.User;
 import com.ssafy.whoareyou.user.repository.UserRepository;
 import com.ssafy.whoareyou.user.service.AuthService;
@@ -59,8 +61,16 @@ public class AuthServiceImplement implements AuthService {
             String encodedPassword = passwordEncoder.encode(password);
             dto.setPassword(encodedPassword);
 
-            User userEntity = new User(dto);
-            userRepository.save(userEntity);
+
+//            User userEntity = new User(dto);
+            if(dto.getGender().equals("male")){
+                Male male = new Male(dto);
+                userRepository.save(male);
+            }
+            else{
+                Female female = new Female(dto);
+                userRepository.save(female);
+            }
 
         } catch (Exception exception){
             exception.printStackTrace();
