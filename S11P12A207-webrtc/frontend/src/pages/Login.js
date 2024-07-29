@@ -99,21 +99,21 @@ const Login = ({ onClose }) => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className='login-function-box mgb-md'>
+                                {/* <div className='login-function-box mgb-md'>
                                     <button type="button" className="zm-btn-forgot pdt-0 pdb-0 zm-button--link zm-button--small zm-button">
                                         <span className="zm-button__slot"> 비밀번호를 잊어버렸나요? </span>
                                     </button>
                                     <button type="button" className="zm-button--link zm-button--small zm-button" aria-label="Get help from Chat with Bot">
                                         <span className="zm-button__slot"> 도움말 </span>
                                     </button>
-                                </div>
+                                </div> */}
                                 <div className='mgt-sm'>
                                     <div style={{ paddingTop: '30px', }}>
                                         <button
                                             style={{
                                                 cursor: 'pointer',
                                                 color: 'white',
-                                                backgroundColor: '#8530a7',
+                                                backgroundColor: '#aa4dcb',
                                                 fontSize: '1.5rem',
                                                 width: '200px',
                                                 height: '50px',
@@ -122,7 +122,7 @@ const Login = ({ onClose }) => {
                                                 textAlign: 'center'
                                             }}
                                             onMouseOver={(e) => e.target.style.backgroundColor = '#8530e9'}
-                                            onMouseOut={(e) => e.target.style.backgroundColor = '#8530a7'}
+                                            onMouseOut={(e) => e.target.style.backgroundColor = '#aa4dcb'}
                                             onClick={onSubmit}
                                         >
                                             로그인

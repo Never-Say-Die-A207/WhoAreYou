@@ -29,9 +29,9 @@ const Home = () => {
     return (
         <div className='login-page'>
 
-            <header className='layout-header'>
+            {/* <header className='layout-header'>
                 <h1 className='logo-color'>who are you?</h1>
-            </header>
+            </header> */}
             <div style={{ display: 'flex', height: '100vh' }}>
                 <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 
@@ -59,7 +59,7 @@ const Home = () => {
                         style={{
                             cursor: 'pointer',
                             color: 'white',
-                            backgroundColor: '#8530a7',
+                            backgroundColor: '#aa4dcb',
                             fontSize: '1.5rem',
                             width: '200px',
                             height: '50px',
@@ -68,7 +68,7 @@ const Home = () => {
                             textAlign: 'center'
                         }}
                         onMouseOver={(e) => e.target.style.backgroundColor = '#8530e9'} // 호버 적용
-                        onMouseOut={(e) => e.target.style.backgroundColor = '#8530a7'} // 호버 해제
+                        onMouseOut={(e) => e.target.style.backgroundColor = '#aa4dcb'} // 호버 해제
                     >
                         매칭하기
                     </button>

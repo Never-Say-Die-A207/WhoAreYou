@@ -210,8 +210,8 @@ input[type='email' i] {
     padding-left: 0;
     padding-right: 0;
     border-radius: 0;
-    color: #0956b5;
-    background-color: transparent;
+    color: white;
+    background-color: #aa4dcb;
     border-color: transparent;
 }
 
