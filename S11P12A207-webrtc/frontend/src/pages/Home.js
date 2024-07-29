@@ -30,8 +30,7 @@ const Home = () => {
         <div className='login-page'>
 
         
-            <div style={{ display: 'flex', height: '100vh' }}>
-                <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', height: '100vh', flex: 1,  alignItems: 'center', justifyContent: 'center' }}>
                 
                     <div className='layout-aside'>
                         <div className='layout-body login-page-view' data-lang='ko-KO'>
@@ -40,7 +39,7 @@ const Home = () => {
                             </div>
                         </div>
                     </div>
-            </div>
+            
                 
             
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
