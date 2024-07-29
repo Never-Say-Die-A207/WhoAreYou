@@ -4,12 +4,11 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import './VerticalCarousel.css';
-import RedFoxMaskImage from '../../assets/RedFox_mask.png';
-import PinkFoxMaskImage from '../../assets/PinkFox_mask.png';
-import SpiderManMaskImage from '../../assets/SpiderMan_mask.png';
-import SpiderManBlackMaskImage from '../../assets/SpiderManBlack_mask.png';
-import JokerMaskImage from '../../assets/Joker_mask.png';
-import SquidMaskImage from '../../assets/Squid_mask.png';
+import RedFoxMaskImage from '../../assets/RedFox.png';
+import SpiderManMaskImage from '../../assets/SpiderMan.png';
+import SpiderManBlackMaskImage from '../../assets/SpiderManBlack.png';
+import JokerMaskImage from '../../assets/Joker.png';
+import SquidMaskImage from '../../assets/Squid.png';
 
 import { Pagination, Navigation, Scrollbar } from 'swiper/modules';
 

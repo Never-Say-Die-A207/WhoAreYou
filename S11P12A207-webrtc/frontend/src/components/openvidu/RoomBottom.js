@@ -5,7 +5,7 @@ function RoomBottom({ expressionData }) {
   const { borderClass, imageSrc } = expressionData;
 
   // 로깅을 통해 RoomBottom이 받아온 데이터 확인
-  console.log('Received expressionData in RoomBottom:', expressionData);
+  // console.log('Received expressionData in RoomBottom:', expressionData);
 
   return (
     <div className={`room-bottom-container ${borderClass}`}>

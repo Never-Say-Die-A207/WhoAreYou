@@ -5,6 +5,9 @@ import React, { useRef, useEffect, useState } from 'react';
 import * as cam from '@mediapipe/camera_utils';
 import RedFoxLocal from "./RedFoxLocal";
 import SpiderManLocal from "./SpiderManLocal";
+import SpiderManBlackLocal from "./SpiderManBlackLocal";
+import JokerLocal from "./JokerLocal";
+import SquidLocal from "./SquidLocal";
 
 function VideoComponentLocal({ track, participantIdentity, local, mask }) {
     const videoElement = useRef(null);
@@ -63,6 +66,9 @@ function VideoComponentLocal({ track, participantIdentity, local, mask }) {
             <video ref={videoElement} id={track.sid} style={{ transform: 'scaleX(-1)' }}></video>
             {mask === 'RedFox' && <RedFoxLocal landmarks={landmarks} videoElement={videoElement} />}
             {mask === 'SpiderMan' && <SpiderManLocal landmarks={landmarks} videoElement={videoElement} />}
+            {mask === 'SpiderManBlack' && <SpiderManBlackLocal landmarks={landmarks} videoElement={videoElement} />}
+            {mask === 'Squid' && <SquidLocal landmarks={landmarks} videoElement={videoElement} />}
+            {mask === 'Joker' && <JokerLocal landmarks={landmarks} videoElement={videoElement} />}
         </div>
     );
 }

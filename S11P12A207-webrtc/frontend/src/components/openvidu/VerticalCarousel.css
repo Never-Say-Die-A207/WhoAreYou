@@ -9,12 +9,12 @@
     width: 100%;
     height: auto;
     cursor: pointer;
-    border: 2px solid transparent;
+    border: 1.5px solid transparent;
     border-radius: 5px;
     transition: border-color 0.3s;
   }
   .carousel-image:hover {
-    border-color: #8530a7;
+    border-color: #aa4dcb;
   }
 
   .swiper-button-prev,

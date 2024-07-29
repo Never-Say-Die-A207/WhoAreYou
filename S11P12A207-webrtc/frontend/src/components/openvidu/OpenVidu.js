@@ -27,34 +27,37 @@ import SpiderManBlackLocal from './SpiderManBlackLocal';
 import SquidLocal from './SquidLocal';
 
 
-// var APPLICATION_SERVER_URL = "https://grown-donkey-awfully.ngrok-free.app/";
-// var LIVEKIT_URL = "wss://myapp-yqvsqxqi.livekit.cloud/";
+var APPLICATION_SERVER_URL = "https://grown-donkey-awfully.ngrok-free.app/";
+var LIVEKIT_URL = "wss://myapp-yqvsqxqi.livekit.cloud/";
 
-let APPLICATION_SERVER_URL = "";
-let LIVEKIT_URL = "";
+// let APPLICATION_SERVER_URL = "";
+// let LIVEKIT_URL = "";
 
-configureUrls();
+// configureUrls();
 
 
 //  openvidu
 
-function configureUrls() {
-    if (!APPLICATION_SERVER_URL) {
-        if (window.location.hostname === 'localhost') {
-            APPLICATION_SERVER_URL = 'http://localhost:6080/';
-        } else {
-            APPLICATION_SERVER_URL = 'https://' + window.location.hostname + ':6443/';
-        }
-    }
+// function configureUrls() {
+//     if (!APPLICATION_SERVER_URL) {
+//         if (window.location.hostname === 'localhost') {
+//             APPLICATION_SERVER_URL = 'http://localhost:6080/';
+//         } else {
+//             APPLICATION_SERVER_URL = 'https://' + window.location.hostname + ':6443/';
+//         }
+//     }
 
-    if (!LIVEKIT_URL) {
-        if (window.location.hostname === 'localhost') {
-            LIVEKIT_URL = 'ws://localhost:7880/';
-        } else {
-            LIVEKIT_URL = 'wss://' + window.location.hostname + ':7443/';
-        }
-    }
-}
+//     if (!LIVEKIT_URL) {
+//         if (window.location.hostname === 'localhost') {
+//             LIVEKIT_URL = 'ws://localhost:7880/';
+//         } else {
+//             LIVEKIT_URL = 'wss://' + window.location.hostname + ':7443/';
+//         }
+//     }
+// }
+
+
+
 
 function OpenVidu() {
     const [room, setRoom] = useState(undefined);
@@ -73,19 +76,29 @@ function OpenVidu() {
     const videoPreviewRef = useRef(null);
     const canvasRef = useRef(null);
     const [landmarks, setLandmarks] = useState(null);
-    // const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
     // const loading = false
 
 
     //룸시작 코드
-    function changeLoaclMaskValue(e) {
-        setMask(e.target.value)
-    };
+    // function changeLoaclMaskValue(e) {
+    //     setMask(e.target.value)
+    // };
+
 
     async function joinRoom() {
         const room = new Room();
         setRoom(room);
 
+        // room.on(RoomEvent.TrackSubscribed, async (track, _publication, participant) => {
+        //     if(room.remoteParticipants.size){
+        //         const roomInfo = await getRoomInfo(document.getElementById("participant-name").value);
+        //         console.log('roominfo')
+        //         console.log(roomInfo);
+        //     }
+        //     // addTrack(track, participant.identity);
+        //     }
+        // );
         // setLoading(room.remoteParticipants.size);
         // console.log(room.remoteParticipants);
         // console.log(loading);
@@ -135,6 +148,7 @@ function OpenVidu() {
     }
 
     async function getRoomInfo(participantName) {
+        setLoading(true)
         var requestURL = APPLICATION_SERVER_URL + 'facechat/info/' + participantName;
         const response = await fetch(requestURL, {
             headers: {
@@ -146,6 +160,9 @@ function OpenVidu() {
         console.log('상대방 마스크 정보')
         console.log(body)
         setMaskRemote(body.info.mask);
+        if (body.info.mask) {
+            setLoading(false)
+        }
         return body;
     }
 
@@ -154,32 +171,35 @@ function OpenVidu() {
         console.log('내 마스크 정보')
         console.log(mask)
         // // 다른 사람 통신 주석
-        // const mask_data = {
-        //     'userId': participantName,
-        //     'mask': mask,
-        // };
+        const mask_data = {
+            'userId': participantName,
+            'mask': mask,
+        };
 
-        // const response = await fetch(APPLICATION_SERVER_URL + 'facechat/', {
-        //         method: 'POST',
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //             'ngrok-skip-browser-warning': 'skip-browser-warning'
-        //         },
-        //         body: JSON.stringify(mask_data)
-        //     }
-        // );
-
-
-        const response = await fetch(APPLICATION_SERVER_URL + 'token', {
+        const response = await fetch(APPLICATION_SERVER_URL + 'facechat/', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json",
+                'ngrok-skip-browser-warning': 'skip-browser-warning'
             },
-            body: JSON.stringify({
-                roomName: roomName,
-                participantName: participantName
-            })
-        });
+            body: JSON.stringify(mask_data)
+        }
+        );
+
+
+        // const response = await fetch(APPLICATION_SERVER_URL + 'token', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({
+        //         roomName: roomName,
+        //         participantName: participantName
+        //     })
+        // });
+
+
+
 
         if (!response.ok) {
             const error = await response.json();
@@ -189,6 +209,9 @@ function OpenVidu() {
         const data = await response.json();
         return data.token;
     }
+
+
+
 
     //미리보기 코드
     useEffect(() => {
@@ -301,8 +324,8 @@ function OpenVidu() {
                                     value={mask}
                                     onChange={changeLoaclMaskValue}
                                 > */}
-                                    {/* <option value='' defaultValue='마스크 선택'>마스크 선택</option> */}
-                                    {/* <option value='RedFox'>RedFox</option>
+                            {/* <option value='' defaultValue='마스크 선택'>마스크 선택</option> */}
+                            {/* <option value='RedFox'>RedFox</option>
                                     <option value="SpiderMan">SpiderMan</option>
                                 </select>
                             </div> */}
@@ -340,45 +363,45 @@ function OpenVidu() {
                     </div>
                 </div>
             ) : (
-                // loading ? (  // Loading 상태일 때 로딩 메시지 표시
-                //     <div id='loading'>
-                //         <h2>Loading...</h2>
-                //     </div>
-                // ) : (
-                <div id='room'>
-                    <div id='room-header'>
-                        <h2 id='room-title'>{roomName}</h2>
-                        <button className='btn btn-danger' id='leave-room-button' onClick={leaveRoom}>
-                            Leave Room
-                        </button>
+                loading ? (  // Loading 상태일 때 로딩 메시지 표시
+                    <div id='loading'>
+                        <h2>Loading...</h2>
                     </div>
-                    <div id='layout-container'>
-                        {localTrack && (
-                            <VideoComponentLocal track={localTrack} participantIdentity={participantName} local={true} mask={mask} />
-                        )}
-                        {remoteTracks.map((remoteTrack) =>
-                            remoteTrack.trackPublication.kind === 'video' ? (
-                                <VideoComponent
-                                    key={remoteTrack.trackPublication.trackSid}
-                                    track={remoteTrack.trackPublication.videoTrack}
-                                    participantIdentity={remoteTrack.participantIdentity}
-                                    setExpressionData={setExpressionData} // setExpressionData 전달
-                                    maskRemote={maskRemote}
-                                />
+                ) : (
+                    <div id='room'>
+                        <div id='room-header'>
+                            <h2 id='room-title'>{roomName}</h2>
+                            <button className='btn btn-danger' id='leave-room-button' onClick={leaveRoom}>
+                                Leave Room
+                            </button>
+                        </div>
+                        <div id='layout-container'>
+                            {localTrack && (
+                                <VideoComponentLocal track={localTrack} participantIdentity={participantName} local={true} mask={mask} />
+                            )}
+                            {remoteTracks.map((remoteTrack) =>
+                                remoteTrack.trackPublication.kind === 'video' ? (
+                                    <VideoComponent
+                                        key={remoteTrack.trackPublication.trackSid}
+                                        track={remoteTrack.trackPublication.videoTrack}
+                                        participantIdentity={remoteTrack.participantIdentity}
+                                        setExpressionData={setExpressionData} // setExpressionData 전달
+                                        maskRemote={maskRemote}
+                                    />
 
-                            ) : (
-                                <AudioComponent
-                                    key={remoteTrack.trackPublication.trackSid}
-                                    track={remoteTrack.trackPublication.audioTrack}
-                                />
-                            )
-                        )}
+                                ) : (
+                                    <AudioComponent
+                                        key={remoteTrack.trackPublication.trackSid}
+                                        track={remoteTrack.trackPublication.audioTrack}
+                                    />
+                                )
+                            )}
+                        </div>
+                        <div className='room-bottom'>
+                            <RoomBottom expressionData={expressionData} />
+                        </div>
                     </div>
-                    <div className='room-bottom'>
-                        <RoomBottom expressionData={expressionData} />
-                    </div>
-                </div>
-            )}
+                ))}
         </>
     );
 }
