@@ -19,9 +19,9 @@ const ShapeComponent = React.memo(({ landmarks, indices, color }) => {
       indices.forEach((index, i) => {
         const { x, y } = landmarks[index];
         if (i === 0) {
-          shape.moveTo((x * 4 - 2), -(y * 2.2 - 1.1));
+          shape.moveTo((x * 4 - 2), -(y * 2.2 -1.1));
         } else {
-          shape.lineTo((x * 4 - 2), -(y * 2.2 - 1.1));
+          shape.lineTo((x * 4 - 2), -(y * 2.2 -1.1));
         }
       });
 
@@ -49,7 +49,7 @@ const LineComponent = React.memo(({ landmarks, indices, color, lineWidth }) => {
     if (landmarks) {
       const points = indices.map(index => {
         const { x, y } = landmarks[index];
-        return new THREE.Vector3((x * 4 - 2), -(y * 2.2 - 1.1), 0.1); // Z축 위치를 약간 앞으로 이동
+        return new THREE.Vector3((x * 4 - 2), -(y * 2.2-1.1), 0.1); // Z축 위치를 약간 앞으로 이동
       });
 
       const positions = new Float32Array(points.length * 3);
@@ -98,24 +98,13 @@ const LineComponent = React.memo(({ landmarks, indices, color, lineWidth }) => {
 //   return null;
 // };
 
-const RedFoxLocal = ({ landmarks }) => {
-  const faceOutlineIndices1 = [10, 338, 297, 332, 284, 251, 389, 356, 454, 446, 467, 260, 259, 257, 258, 286, 414, 464, 351, 196, 193, 55, 107, 109, 10];
-  const faceOutlineIndices2 = [10, 109, 67, 103, 54, 21, 162, 127, 234, 111, 226, 247, 30, 29, 27, 28, 56, 190, 243, 188, 197, 10];
-  const faceOutlineIndices3 = [127, 156, 113, 130, 25, 110, 24, 23, 22, 26, 245, 193, 248, 4, 94, 167, 94, 167, 92, 216, 177, 93, 234, 127];
-  const faceOutlineIndices4 = [356, 383, 342, 359, 255, 339, 254, 253, 252, 256, 464, 417, 168, 174, 134, 94, 393, 322, 436, 401, 323, 454, 356];
-  const RedEye1 = [174, 245, 189, 221, 222, 223, 70, 124, 31, 228, 230, 121, 114, 174, 188, 245, 244, 26, 22, 23, 24, 110, 25, 130, 247, 30, 29, 27, 28, 56, 190, 243, 174];
-  const RedEye2 = [399, 465, 413, 441, 442, 443, 300, 353, 261, 448, 450, 350, 343, 399, 412, 465, 464, 256, 252, 253, 254, 339, 255, 359, 467, 260, 259, 257, 258, 286, 414, 463, 399];
-  const faceline = [217, 100, 118, 111];
-  const faceline2 = [198, 209, 36, 50, 123];
-  const faceline3 = [437, 329, 347, 340];
-  const faceline4 = [420, 429, 266, 280, 352];
-  const nose1 = [94, 1];
-  const nose2 = [1, 45];
-  const nose3 = [1, 275];
-  const head = [151, 107, 168, 336, 151];
-
-  return (
-    <div className="canvas-container" style={{width: '100%', height: '100%' }}>
+const SquidLocal = ({ landmarks }) => {
+  const faceOutlineIndices = [10, 338, 297, 332, 284, 251, 389, 356, 454, 323, 361, 288, 397, 365, 379, 378, 400, 377, 152, 148, 176, 149, 150, 136, 172, 58, 132, 93, 234, 127, 162, 21, 54, 103, 67, 109, 10];
+  const triangle = [9, 50, 280, 9]
+  const line = [205, 425]
+   
+    return (
+    <div className="canvas-container" style={{ width: '100%', height: '100%' }}>
       <Canvas
         camera={{ position: [0, 0, 5], fov: 25.4 }}
         style={{
@@ -125,37 +114,25 @@ const RedFoxLocal = ({ landmarks }) => {
           transform: 'scaleX(-1)',
           width: '100%',
           height: '100%',
+        //   zIndex: 10,
+        // 일반 동영상 같은 경우는 index값을 높여야함
           zIndex: 100,
         }}
-
+        
       >
         <ambientLight intensity={0} />
-        <pointLight position={[10, 10, 10]} />
-
+        <pointLight position={[10, 10, 10]}/>
+        {/* <VideoTexture videoRef={videoElement} /> */}
         {landmarks && (
           <>
-            <ShapeComponent landmarks={landmarks} indices={faceOutlineIndices1} color="white" />
-            <ShapeComponent landmarks={landmarks} indices={faceOutlineIndices2} color="white" />
-            <ShapeComponent landmarks={landmarks} indices={faceOutlineIndices3} color="white" />
-            <ShapeComponent landmarks={landmarks} indices={faceOutlineIndices4} color="white" />
-            <ShapeComponent landmarks={landmarks} indices={RedEye1} color="red" />
-            <ShapeComponent landmarks={landmarks} indices={RedEye2} color="red" />
-            <ShapeComponent landmarks={landmarks} indices={head} color="red" />
-            <LineComponent landmarks={landmarks} indices={faceline} color="red" lineWidth={3.5} />
-            <LineComponent landmarks={landmarks} indices={faceline2} color="red" lineWidth={3.5} />
-            <LineComponent landmarks={landmarks} indices={faceline3} color="red" lineWidth={3.5} />
-            <LineComponent landmarks={landmarks} indices={faceline4} color="red" lineWidth={3.5} />
-            <LineComponent landmarks={landmarks} indices={nose1} color="black" lineWidth={3} />
-            <LineComponent landmarks={landmarks} indices={nose2} color="black" lineWidth={3} />
-            <LineComponent landmarks={landmarks} indices={nose3} color="black" lineWidth={3} />
+          <ShapeComponent landmarks={landmarks} indices={faceOutlineIndices} color="black" />
+            <LineComponent landmarks={landmarks} indices={triangle} color="white" lineWidth={6} />
+            <LineComponent landmarks={landmarks} indices={line} color="white" lineWidth={0.5} />
+    
+
           </>
 
         )}
-        {/* {landmarks && (<>
-          <VideoTexture videoRef={videoElement} />
-        </>)} */}
-
-
         <EffectComposer multisampling={0}>
           <Bloom intensity={0.2} luminanceThreshold={0.8} luminanceSmoothing={0.4} height={80} />
         </EffectComposer>
@@ -164,4 +141,4 @@ const RedFoxLocal = ({ landmarks }) => {
   );
 };
 
-export default RedFoxLocal;
+export default SquidLocal;

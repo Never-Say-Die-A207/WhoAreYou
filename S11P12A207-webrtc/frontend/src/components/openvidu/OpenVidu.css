@@ -1,17 +1,21 @@
 #join {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    /* flex-direction: column; */
+    justify-content: space-between;
     align-items: center;
     height: 100%;
 }
 
 #join-dialog {
-    width: 70%;
-    max-width: 900px;
-    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    /* max-width: 900px; */
+    /* padding-left: 30px; */
+    /* padding-bottom: 30px; */
+    /* margin-left:30px; */
     border-radius: 6px;
-    background-color: #f0f0f0;
+    /* background-color: #f0f0f0; */
 }
 
 #join-dialog h2 {
@@ -51,7 +55,12 @@
 
 #join-dialog button {
     display: block;
-    margin: 20px auto 0;
+    margin: 0 auto ;
+    width: 100%;
+    padding: 15px;
+    border: 0px solid;
+    border-radius: 5px;
+    font-size: 1rem;
 }
 
 .btn {
@@ -59,13 +68,16 @@
 }
 
 .btn-success {
-    background-color: #06d362;
-    border-color: #06d362;
+    background-color: #8530a7;
+    border-color: #8530a7;
+    color: white;
+
 }
 
 .btn-success:hover {
-    background-color: #1abd61;
-    border-color: #1abd61;
+    background-color: #672481;
+    border-color: #672481;
+    cursor: pointer;
 }
 
 #room {
@@ -106,6 +118,12 @@
     /* height: 480px; */
     /* padding: 10px;  */
 }
+
+/* Add these styles to your OpenVidu.css */
+
+
+
+
 
 
 /* Media Queries */

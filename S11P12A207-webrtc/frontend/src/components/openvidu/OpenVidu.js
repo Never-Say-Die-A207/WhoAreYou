@@ -16,8 +16,16 @@ import FaceRecognition from './FaceRecognition';
 import Preview from './Preview';
 import { FaceMesh } from '@mediapipe/face_mesh';
 import * as cam from '@mediapipe/camera_utils';
+
+
 import RedFoxLocal from './RedFoxLocal';
 import SpiderManLocal from './SpiderManLocal';
+import VerticalCarousel from './VerticalCarousel';
+import JokerLocal from './JokerLocal';
+import PinkFoxLocal from './PinkFoxLocal';
+import SpiderManBlackLocal from './SpiderManBlackLocal';
+import SquidLocal from './SquidLocal';
+
 
 // var APPLICATION_SERVER_URL = "https://grown-donkey-awfully.ngrok-free.app/";
 // var LIVEKIT_URL = "wss://myapp-yqvsqxqi.livekit.cloud/";
@@ -65,9 +73,11 @@ function OpenVidu() {
     const videoPreviewRef = useRef(null);
     const canvasRef = useRef(null);
     const [landmarks, setLandmarks] = useState(null);
+    // const [loading, setLoading] = useState(true);
+    // const loading = false
+
 
     //룸시작 코드
-
     function changeLoaclMaskValue(e) {
         setMask(e.target.value)
     };
@@ -75,6 +85,10 @@ function OpenVidu() {
     async function joinRoom() {
         const room = new Room();
         setRoom(room);
+
+        // setLoading(room.remoteParticipants.size);
+        // console.log(room.remoteParticipants);
+        // console.log(loading);
 
         room.on(
             RoomEvent.TrackSubscribed,
@@ -87,7 +101,7 @@ function OpenVidu() {
                 console.log(body)
             }
         );
-
+        console.log(room.remoteParticipants.size);
         room.on(RoomEvent.TrackUnsubscribed, (_track, publication) => {
             setRemoteTracks((prev) => prev.filter((track) => track.trackPublication.trackSid !== publication.trackSid));
         });
@@ -97,6 +111,11 @@ function OpenVidu() {
             await room.connect(LIVEKIT_URL, token);
             await room.localParticipant.enableCameraAndMicrophone();
             setLocalTrack(room.localParticipant.videoTrackPublications.values().next().value.videoTrack);
+            console.log(room.remoteParticipants);
+            // setLoading(room.remoteParticipants.size)
+            // if (room.remoteParticipants.size > 0) {
+            //     setLoading(false)
+            // } 
         } catch (error) {
             console.log('There was an error connecting to the room:', error.message);
             await leaveRoom();
@@ -233,8 +252,14 @@ function OpenVidu() {
         }
     };
 
-
-
+    // 슬릭 캐러셀
+    const settings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 3,
+        slidesToScroll: 3
+    };
 
 
 
@@ -242,15 +267,24 @@ function OpenVidu() {
         <>
             {!room ? (
                 <div id='join'>
+                    {/* <JokerLocal landmarks={landmarks} videoElement3={videoPreviewRef} /> */}
+                    {/* <RedFoxLocal landmarks={landmarks} videoElement3={videoPreviewRef}/> */}
+                    {/* 슬라이더 만들기 */}
+                    <VerticalCarousel setMask={setMask} />
+                    {/* 방 입장 시작 */}
                     <div id='join-dialog'>
-                        <h2>Join a Video Room</h2>
+                        {/* 가면 미리보기 보는 화면 */}
                         <div style={{ position: 'relative' }}>
                             <video ref={videoPreviewRef} autoPlay muted style={{
-                                width: '100%', height: 'auto', transform: 'scaleX(-1)'
+                                width: '100%', height: 'auto', transform: 'scaleX(-1)',
                             }}></video>
                             {/* <canvas ref={canvasRef} className="output_canvas" width="1280" height="720" style={{ position: 'absolute', top: 0, left: 0 }}></canvas> */}
                             {mask === 'RedFox' && <RedFoxLocal landmarks={landmarks} videoElement3={videoPreviewRef} />}
                             {mask === 'SpiderMan' && <SpiderManLocal landmarks={landmarks} videoElement3={videoPreviewRef} />}
+                            {mask === 'Joker' && <JokerLocal landmarks={landmarks} videoElement3={videoPreviewRef} />}
+                            {/* {mask === 'PinkFox' && <PinkFoxLocal landmarks={landmarks} videoElement3={videoPreviewRef} />} */}
+                            {mask === 'SpiderManBlack' && <SpiderManBlackLocal landmarks={landmarks} videoElement3={videoPreviewRef} />}
+                            {mask === 'Squid' && <SquidLocal landmarks={landmarks} videoElement3={videoPreviewRef} />}
                         </div>
                         <form
                             onSubmit={(e) => {
@@ -259,19 +293,19 @@ function OpenVidu() {
                                 // stopPreview();
                             }}
                         >
-                            <div>
+                            {/* <div>
                                 <label htmlFor='mask-name'>마스크 변경</label>
                                 <select
                                     id='mask-name'
                                     className='form-control'
                                     value={mask}
                                     onChange={changeLoaclMaskValue}
-                                >
+                                > */}
                                     {/* <option value='' defaultValue='마스크 선택'>마스크 선택</option> */}
-                                    <option value='RedFox'>RedFox</option>
+                                    {/* <option value='RedFox'>RedFox</option>
                                     <option value="SpiderMan">SpiderMan</option>
                                 </select>
-                            </div>
+                            </div> */}
                             <div>
                                 <label htmlFor='participant-name'>Participant</label>
                                 <input
@@ -300,12 +334,17 @@ function OpenVidu() {
                                 type='submit'
                                 disabled={!roomName || !participantName}
                             >
-                                Join!
+                                매칭 시작!
                             </button>
                         </form>
                     </div>
                 </div>
             ) : (
+                // loading ? (  // Loading 상태일 때 로딩 메시지 표시
+                //     <div id='loading'>
+                //         <h2>Loading...</h2>
+                //     </div>
+                // ) : (
                 <div id='room'>
                     <div id='room-header'>
                         <h2 id='room-title'>{roomName}</h2>
