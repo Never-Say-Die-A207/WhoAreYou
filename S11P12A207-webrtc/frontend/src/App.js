@@ -6,6 +6,9 @@ import Home from './pages/Home';
 import Signup from './pages/Signup';
 import Mypage from './pages/Mypage';
 import OpenVidu from './components/openvidu/OpenVidu';
+// index.js 또는 App.js 파일 상단에 추가
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 
 function App() {
