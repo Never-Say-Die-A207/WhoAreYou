@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import './App.css';
+import Navbar from './pages/Navbar';
 import Home from './pages/Home';
 import Signup from './pages/Signup';
 import Mypage from './pages/Mypage';
@@ -10,6 +11,7 @@ import OpenVidu from './components/openvidu/OpenVidu';
 function App() {
   return (
     <div className='App'>
+      <Navbar />
       <Routes>
         <Route path='/' element={<Home />}/>
         <Route path='/signup' element={<Signup />}/>
