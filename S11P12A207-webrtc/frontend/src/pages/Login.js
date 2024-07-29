@@ -97,7 +97,7 @@ const Login = ({ onClose }) => {
                                             style={{
                                                 cursor: 'pointer',
                                                 color: 'white',
-                                                backgroundColor: '#87CEFA',
+                                                backgroundColor: '#8530a7',
                                                 fontSize: '1.5rem',
                                                 width: '200px',
                                                 height: '50px',
@@ -106,8 +106,8 @@ const Login = ({ onClose }) => {
                                                 textAlign: 'center'
                                             
                                             }}
-                                            onMouseOver={(e) => e.target.style.backgroundColor = '#6CA0DC'} // 호버 적용
-                                            onMouseOut={(e) => e.target.style.backgroundColor = '#87CEFA'} // 호버 해제
+                                            onMouseOver={(e) => e.target.style.backgroundColor = '#8530e9'} // 호버 적용
+                                            onMouseOut={(e) => e.target.style.backgroundColor = '#8530a7'} // 호버 해제
                                         >
                                             로그인
                                         </button>
