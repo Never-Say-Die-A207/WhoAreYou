@@ -13,6 +13,7 @@ import com.ssafy.whoareyou.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -31,6 +32,7 @@ public class ChatRoomService {
 
         Optional<ChatRoom> chatRoom = chatRoomJpaRepository.findByUserIds(userId1, userId2);
         log.info("log: "+ chatRoom.get());
+
         List<Chat> chats = chatJpaRepository.findByRoomId(chatRoom.get().getId());
 
         List<SendingMessage> sendingMessages = new LinkedList<>();
@@ -82,6 +84,7 @@ public class ChatRoomService {
         return chatRoomJpaRepository.findById(roomId).orElse(null);
     }
 
+    @Transactional
     public void setRelation(ChatRoom chatRoom, User user){
         Friend friend = Friend.builder()
                 .user(user)

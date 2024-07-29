@@ -8,6 +8,7 @@ import com.ssafy.whoareyou.chat.repository.ChatJpaRepository;
 import com.ssafy.whoareyou.chat.repository.ChatRoomJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -19,6 +20,7 @@ public class ChatService {
     private final ChatRoomJpaRepository chatRoomJpaRepository;
     private final ChatJpaRepository chatJpaRepository;
 
+    @Transactional
     public SendingMessage send(int roomId, ReceivingMessage receivingMessage){
         LocalTime now = LocalTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -39,8 +41,6 @@ public class ChatService {
                 .build();
 
         chatJpaRepository.save(chat);
-//        chatRoom.setHistory(chatRoom.getHistory() + "NEW_MESSAGE" + receivingMessage.getMessage());
-//        chatRoomJpaRepository.save(chatRoom);
 
         return message;
     }

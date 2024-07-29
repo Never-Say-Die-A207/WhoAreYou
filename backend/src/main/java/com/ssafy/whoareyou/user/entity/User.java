@@ -1,6 +1,6 @@
 package com.ssafy.whoareyou.user.entity;
 
-import com.ssafy.whoareyou.dto.request.auth.SignUpRequestDto;
+import com.ssafy.whoareyou.user.dto.request.auth.SignUpRequestDto;
 import com.ssafy.whoareyou.facechat.entity.FaceChat;
 import com.ssafy.whoareyou.facechat.entity.History;
 import com.ssafy.whoareyou.friend.entity.Friend;
@@ -43,7 +43,7 @@ public class User {
     @Column(name = "total_matching_count", nullable = false, columnDefinition = "int default 0")
     private int totalMatchingCount;
 
-    @Column(nullable = false, length = 10)
+    @Column(length = 10)
     private String type; //"general", "kakao", "naver"
 
     @OneToOne(mappedBy = "male", fetch = FetchType.LAZY)

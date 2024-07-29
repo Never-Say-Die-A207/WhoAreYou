@@ -57,10 +57,17 @@ public class ChatRoomController {
      */
     @PostMapping("/relations/{roomId}")
     public ResponseEntity<?> join(HttpServletRequest request, @PathVariable int roomId){
-        int userId = cnt++;//(Integer) request.getAttribute("AccessToken");
+        int userId = (Integer) request.getAttribute("userId");
 
         service.join(roomId, userId);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<?> check(HttpServletRequest request){
+        int userId = Integer.parseInt((String) request.getAttribute("userId"));
+
+        return new ResponseEntity<>(userId, HttpStatus.OK);
     }
 }

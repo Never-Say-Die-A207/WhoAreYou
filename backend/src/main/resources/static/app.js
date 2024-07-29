@@ -11,7 +11,7 @@ stompClient.onConnect = (frame) => {
 
     roomId = $("#roomId").val();
     console.log(roomId);
-    stompClient.subscribe('/message/' + roomId, (message) => {
+    stompClient.subscribe('/sub/' + roomId, (message) => {
         showMessage(JSON.parse(message.body));
     });
 };

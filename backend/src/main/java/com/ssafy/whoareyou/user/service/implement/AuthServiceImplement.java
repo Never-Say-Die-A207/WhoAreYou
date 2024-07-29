@@ -1,12 +1,12 @@
 package com.ssafy.whoareyou.user.service.implement;
 
-import com.ssafy.whoareyou.dto.request.auth.EmailCheckRequestDto;
-import com.ssafy.whoareyou.dto.request.auth.SignInRequestDto;
-import com.ssafy.whoareyou.dto.request.auth.SignUpRequestDto;
-import com.ssafy.whoareyou.dto.response.ResponseDto;
-import com.ssafy.whoareyou.dto.response.auth.EmailCheckResponseDto;
-import com.ssafy.whoareyou.dto.response.auth.SignInResponseDto;
-import com.ssafy.whoareyou.dto.response.auth.SignUpResponseDto;
+import com.ssafy.whoareyou.user.dto.request.auth.EmailCheckRequestDto;
+import com.ssafy.whoareyou.user.dto.request.auth.SignInRequestDto;
+import com.ssafy.whoareyou.user.dto.request.auth.SignUpRequestDto;
+import com.ssafy.whoareyou.user.dto.response.ResponseDto;
+import com.ssafy.whoareyou.user.dto.response.auth.EmailCheckResponseDto;
+import com.ssafy.whoareyou.user.dto.response.auth.SignInResponseDto;
+import com.ssafy.whoareyou.user.dto.response.auth.SignUpResponseDto;
 import com.ssafy.whoareyou.provider.JwtProvider;
 import com.ssafy.whoareyou.user.entity.User;
 import com.ssafy.whoareyou.user.repository.UserRepository;
@@ -86,7 +86,8 @@ public class AuthServiceImplement implements AuthService {
             boolean isMatched = passwordEncoder.matches(password, encodedPassword);
             if(!isMatched) return SignInResponseDto.signInFail();
 
-            token = jwtProvider.create(email);
+            String userId = String.valueOf(userEntity.get().getId());
+            token = jwtProvider.create(userId);
         } catch(Exception exception){
             exception.printStackTrace();
             return ResponseDto.databaseError();

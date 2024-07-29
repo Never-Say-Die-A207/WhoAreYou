@@ -3,6 +3,7 @@ package com.ssafy.whoareyou.config;
 import java.io.IOException;
 
 import com.ssafy.whoareyou.handler.OAuth2SuccessHandler;
+import com.ssafy.whoareyou.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -51,6 +52,7 @@ public class WebSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(request -> request
+                        .requestMatchers("/chat/**", "/chat-rooms/**").permitAll()
                         .requestMatchers("/", "/**", "/api/v1/auth/**", "/oauth2/**").permitAll()
                         .anyRequest().authenticated()
                 )

@@ -17,10 +17,13 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(nullable = false, name = "nickname")
     private String nickname;
 
+    @Column(nullable = false, name = "message")
     private String message;
 
+    @Column(nullable = false, name = "time")
     private String time;
 
     @ManyToOne

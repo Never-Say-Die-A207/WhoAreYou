@@ -6,6 +6,7 @@ import java.security.Key;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -26,11 +27,14 @@ public class JwtProvider {
 
         String jwt = Jwts.builder()
                 .signWith(key, SignatureAlgorithm.HS256)
-                .setSubject(userId).setIssuedAt(new Date()).setExpiration(expiredDate)
+                .setSubject(userId)
+                .setIssuedAt(new Date()).setExpiration(expiredDate)
                 .compact();
         return jwt;
 
     }
+
+
 
     public String validate (String jwt) {
 
@@ -50,5 +54,15 @@ public class JwtProvider {
         }
 
         return subject;
+    }
+
+    public String getUserId(String token) {
+        Key key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
 }

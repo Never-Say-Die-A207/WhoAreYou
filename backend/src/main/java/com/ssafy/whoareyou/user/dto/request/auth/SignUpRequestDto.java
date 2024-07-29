@@ -1,4 +1,4 @@
-package com.ssafy.whoareyou.dto.request.auth;
+package com.ssafy.whoareyou.user.dto.request.auth;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
