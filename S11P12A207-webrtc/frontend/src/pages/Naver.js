@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import naverimg from '../assets/naver.ico';
+import './Naver.css';
 
 const Naver = () => {
     const handleLogin = () => {
@@ -17,8 +19,9 @@ const Naver = () => {
 
     return (
         <div>
-            <h1>네이버 테스트</h1>
-            <button onClick={handleLogin}>네이버 로그인</button>
+            <img src={naverimg} alt="네이버" onClick={handleLogin} className='zm-login-methods__item' />
+
+            
         </div>
     );
 };

@@ -210,7 +210,7 @@ input[type='email' i] {
     padding-left: 0;
     padding-right: 0;
     border-radius: 0;
-    color: #87CEFA;
+    color: #0956b5;
     background-color: transparent;
     border-color: transparent;
 }
@@ -219,6 +219,7 @@ input[type='email' i] {
     min-width: 32px;
     font-size: 14px;
     line-height: 20px;
+    padding: 6px 16px;
 
 }
 
@@ -228,5 +229,181 @@ input[type='email' i] {
     align-items: center;
     -webkit-box-pack: center;
     justify-content: center;
-    
+    position: relative;
+    vertical-align: middle;
+    cursor: pointer;
+    border: none;
+    text-align: center;
+    box-sizing: border-box;
+    outline: none;
+    margin: 0;
+    transition: .1s;
+    font-weight: 500;
+
+
+}
+
+.pgb-0 {
+    padding-bottom: 0;
+}
+
+.pdt-0 {
+    padding-top: 0;
+}
+
+button {
+    font-family: inherit;
+    text-transform: none;
+    overflow: visible;
+    font: inherit;
+    text-rendering: auto;
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-indent: 0px;
+    text-shadow: none;
+
+}
+
+.mgt-sm {
+    margin-top: 8px;
+}
+
+.agree-terms {
+    color: #747487;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.mgt-md {
+    margin-top: 16px;
+}
+p {
+    margin: 0 0 10px;
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    unicode-bidi: isolate;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+.zm-checkbox {
+    margin-right: 0;
+    color: #131619;
+    font-size: inherit;
+    display: inline-block;
+}
+
+.mgt-sm {
+    margin-top: 8px;
+}
+
+
+.zm-checkbox__wrap {
+    position: relative;
+    display: inline-flex;
+    cursor: default;
+    padding: 4px 0;
+    min-height: 20px;
+    line-height: 24px;
+}
+
+.zm-checkbox__label .is-disabled {
+    cursor: not-allowed;
+    color: #6e7680;
+}
+
+.zm-checkbox__label {
+    display: flex;
+    -webkit-box-align: baseline;
+    align-items: baseline;
+    font-size: inherit;
+    word-break: break-word;
+    font-weight: 400;
+    margin-bottom: 0;
+    min-height: 20px;
+    line-height: 20px;
+    position: relative;
+}
+
+input[type='checkbox'][disabled] {
+    cursor: not-allowed;
+}
+
+input[type='checkbox'] {
+    margin-top: 3px;
+    margin: 4px 0 0;
+    line-height: normal;
+    box-sizing: border-box;
+    padding: 0;
+
+}
+
+.zm-checkbox__original {
+    opacity: 0;
+    outline: none;
+    position: absolute;
+    width: 0;
+    height: 0;
+    z-index: -1;
+    transform: scale(0);
+}
+
+.zm-checkbox__label .is-disabled .zm-checkbox__inner {
+    border-color: #c5c8cd;
+    background-color: #f1f4f6;
+    cursor: not-allowed;
+}
+
+.zm-checkbox__inner {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    position: relative;
+    top: 3px;
+    display: inline-block;
+    -webkit-box-flex: 0;
+    flex: 0 0 16px;
+    border: 1px solid #6e7680;
+    border-radius: 4px;
+}
+
+.zm-checkbox__knob {
+    left: 1px;
+    position: absolute;
+    top: -1px;
+    width: 100%;
+    height: 100%;
+    transform: rotate(45deg);
+    opacity: 0;
+}
+
+.zm-login-methods {
+    padding-top: 16px;
+}
+
+.form-width {
+    width: 100%;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.zm-login-methods__title {
+    position: relative;
+    text-align: center;
+    margin-top: 12px;
+    margin-bottom: 24px;
+}
+
+.zm-login-methods__list .justify-between {
+    display: flex;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+
+}
+.zm-login-methods__list {
+    text-align: center;
 }
