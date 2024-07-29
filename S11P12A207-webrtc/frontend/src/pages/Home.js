@@ -54,6 +54,24 @@ const Home = () => {
                         <button onClick={mypage}>마이페이지</button>
                     </div>
                 
+                    <button
+                        onClick={onMatching}
+                        style={{
+                            cursor: 'pointer',
+                            color: 'white',
+                            backgroundColor: '#8530a7',
+                            fontSize: '1.5rem',
+                            width: '200px',
+                            height: '50px',
+                            border: 'none',
+                            borderRadius: '5px',
+                            textAlign: 'center'
+                        }}
+                        onMouseOver={(e) => e.target.style.backgroundColor = '#8530e9'} // 호버 적용
+                        onMouseOut={(e) => e.target.style.backgroundColor = '#8530a7'} // 호버 해제
+                    >
+                        매칭하기
+                    </button>
                 </div>
             
             </div>
