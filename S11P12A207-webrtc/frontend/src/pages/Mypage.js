@@ -1,141 +1,159 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import FriendCard from './FriendCard';
+import FriendList from './FriendList';
 import MessageList from './MessageList';
-import api from '../api/api';
 
 const Mypage = () => {
-    const [selectedFriend, setSelectedFriend] = useState(null);
     const [messages, setMessages] = useState([]);
+    const [friends, setFriends] = useState([]);
+    const [selectedFriend, setSelectedFriend] = useState(null);
     const [newMessage, setNewMessage] = useState('');
-    const navigate = useNavigate();
 
-    const userData = {
-        name: '유저',
-        email: 'email'
-    };
-
-    const friends = [
-        {
-            id: 1,
-            nickname: '황태건',
-        },
-        {
-            id: 2,
-            nickname: '김태건',
-        }
-    ];
-
+    // 더미 데이터 설정
     useEffect(() => {
-        if (selectedFriend) {
-            const fetchMessages = async () => {
-                try {
-                    // const response = await api.get(`/messages/${selectedFriend.id}`);
-                    // setMessages(response.data);
-                    setMessages([
-                        { id: 1, text: '안녕하세요!', sender: '김태건' },
-                        { id: 2, text: '안녕하세요, 반가워요!', sender: '유저' }
-                    ]);
-                } catch (error) {
-                    console.error('Error fetching messages:', error);
-                }
-            };
-            fetchMessages();
-        }
-    }, [selectedFriend]);
+        const fetchData = () => {
+            // 더미 데이터
+            const dummyFriends = [
+                { id: 1, name: '홍길동' },
+                { id: 2, name: '김철수' }
+            ];
+
+            const dummyMessages = [
+                { id: 1, sender: '홍길동', text: '안녕하세요!' },
+                { id: 2, sender: '나', text: '안녕하세요! 잘 지내세요?' }
+            ];
+
+            setFriends(dummyFriends);
+            setMessages(dummyMessages);
+        };
+
+        fetchData();
+    }, []);
 
     const handleSendMessage = () => {
         if (newMessage.trim()) {
-            const newMsg = {
-                id: messages.length + 1,
-                text: newMessage,
-                sender: '유저' // Assuming the current user is '유저'
-            };
-            setMessages([...messages, newMsg]);
+            setMessages([...messages, { id: messages.length + 1, sender: '나', text: newMessage }]);
             setNewMessage('');
         }
     };
 
-    const handleKeyPress = (e) => {
+    const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
+            e.preventDefault(); // 기본 엔터 키 동작 방지 (줄바꿈 방지)
             handleSendMessage();
         }
     };
 
     return (
-        <div style={{ display: 'flex', height: '100vh' }}>
-            <div style={{ flex: 1, borderRight: '1px solid #ccc', padding: '20px' }}>
-                <h1>마이페이지</h1>
-                <h2>{userData.name}</h2>
-                <p>{userData.email}</p>
-                {friends.length > 0 ? (
-                    <div>
-                        {friends.map((friend) => (
-                            <div
-                                key={friend.id}
-                                onClick={() => setSelectedFriend(friend)}
-                                style={{
-                                    padding: '10px',
-                                    cursor: 'pointer',
-                                    backgroundColor: selectedFriend?.id === friend.id ? '#aa4dcb' : 'transparent',
-                                    color: selectedFriend?.id === friend.id ? 'white' : 'black',
-                                    borderRadius: '5px',
-                                    margin: '10px 0'
-                                }}
-                            >
-                                {friend.nickname}
-                            </div>
-                        ))}
+        <div style={styles.container}>
+            <div style={styles.friendList}>
+                {friends.length === 0 ? (
+                    <div style={styles.noFriendsMessage}>
+                        친구가 없습니다. 친구를 추가하세요!
                     </div>
                 ) : (
-                    <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '1.2rem', color: '#666' }}>
-                        친구가 없어요! 새로운 친구를 사귀어 보세요.
-                    </div>
+                    <FriendList friends={friends} onSelectFriend={setSelectedFriend} />
                 )}
             </div>
-            <div style={{ flex: 2, padding: '20px' }}>
+            <div style={styles.chatArea}>
                 {selectedFriend ? (
                     <>
-                        <h2>{selectedFriend.nickname}와의 대화</h2>
-                        <MessageList messages={messages} />
-                        <div style={{ display: 'flex', marginTop: '20px' }}>
+                        {messages.length === 0 ? (
+                            <div style={styles.noMessagesMessage}>
+                                대화 내용이 없습니다. 먼저 채팅을 시작하세요!
+                            </div>
+                        ) : (
+                            <MessageList messages={messages} />
+                        )}
+                        <div style={styles.inputContainer}>
                             <input
-                                type='text'
+                                type="text"
                                 value={newMessage}
                                 onChange={(e) => setNewMessage(e.target.value)}
-                                onKeyDown={handleKeyPress}
-                                style={{
-                                    flex: 1,
-                                    padding: '10px',
-                                    borderRadius: '5px',
-                                    border: '1px solid #ccc',
-                                    marginRight: '10px'
-                                }}
-                                placeholder='메시지를 입력하세요...'
+                                placeholder="메시지를 입력하세요..."
+                                style={styles.input}
+                                onKeyDown={handleKeyDown} // 엔터 키 입력 처리
                             />
-                            <button
-                                onClick={handleSendMessage}
-                                style={{
-                                    padding: '10px 20px',
-                                    backgroundColor: '#aa4dcb',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '5px',
-                                    cursor: 'pointer'
-                                }}
-                            >
-                                전송하기
+                            <button onClick={handleSendMessage} style={styles.sendButton}>
+                                보내기
                             </button>
                         </div>
                     </>
                 ) : (
-                    <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '1.2rem', color: '#666' }}>
-                        대화할 친구를 선택해 주세요.
+                    <div style={styles.selectFriendMessage}>
+                        친구를 선택하세요.
                     </div>
                 )}
             </div>
         </div>
     );
+};
+
+const styles = {
+    container: {
+        display: 'flex',
+        height: '100vh',
+        backgroundColor: '#e5e5e5',
+    },
+    friendList: {
+        width: '25%',
+        borderRight: '1px solid #ccc',
+        padding: '10px',
+        boxSizing: 'border-box',
+        backgroundColor: '#fff',
+    },
+    chatArea: {
+        width: '75%',
+        padding: '10px',
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexDirection: 'column',
+        backgroundColor: '#fff',
+    },
+    noFriendsMessage: {
+        textAlign: 'center',
+        padding: '20px',
+        color: '#888',
+        fontSize: '16px',
+    },
+    noMessagesMessage: {
+        textAlign: 'center',
+        padding: '20px',
+        color: '#888',
+        fontSize: '16px',
+    },
+    selectFriendMessage: {
+        textAlign: 'center',
+        padding: '20px',
+        color: '#888',
+        fontSize: '16px',
+    },
+    inputContainer: {
+        marginTop: 'auto',
+        display: 'flex',
+        padding: '10px',
+        borderTop: '1px solid #ccc',
+    },
+    input: {
+        flex: 1,
+        padding: '10px',
+        borderRadius: '5px',
+        border: '1px solid #ddd',
+        fontSize: '16px',
+    },
+    sendButton: {
+        marginLeft: '10px',
+        padding: '10px 20px',
+        borderRadius: '5px',
+        border: 'none',
+        backgroundColor: '#aa4dcb',
+        color: '#fff',
+        fontSize: '16px',
+        cursor: 'pointer',
+        transition: 'background-color 0.3s ease',
+    },
+    sendButtonHover: {
+        backgroundColor: '#8a3fb8',
+    }
 };
 
 export default Mypage;
