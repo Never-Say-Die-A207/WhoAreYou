@@ -30,13 +30,12 @@ const Home = () => {
         <div className='login-page'>
 
             <header className='layout-header'>
-                <h1>홈이야</h1>
+                <h1>who are you?</h1>
             </header>
             <div style={{ display: 'flex', height: '100vh' }}>
                 <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 
                     <div className='layout-aside'>
-                        <h1 style={{ fontSize: '3rem' }}>who are you?</h1>
                         <div className='layout-body login-page-view' data-lang='ko-KO'>
                             <div className='layout-aside'>
                                 <img src={mainimg} alt="Main" />
@@ -51,12 +50,12 @@ const Home = () => {
 
                     <Login/>
             
+                    <div>
+                        <button onClick={mypage}>마이페이지</button>
+                    </div>
                 
                 </div>
             
-                <div>
-                    <button onClick={mypage}>마이페이지</button>
-                </div>
             </div>
         </div>
     );

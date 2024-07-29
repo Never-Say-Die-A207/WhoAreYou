@@ -28,6 +28,7 @@ div{
 header {
     display: block;
     unicode-bidi: isolate;
+    padding-bottom: 20px;
 }
 
 .login-page .layout-body {
