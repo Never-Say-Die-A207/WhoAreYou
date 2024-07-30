@@ -164,7 +164,7 @@ function OpenVidu() {
 
         const body = await response.json();
         console.log('상대방 마스크 정보')
-        console.log(body)
+        console.log(body.info.mask)
         setMaskRemote(body.info.mask);
         if (body.info.mask) {
             setLoading(false)
@@ -175,12 +175,13 @@ function OpenVidu() {
     //마스크 이름 넣기 주석 
     async function getToken(mask, participantName) {
         const userId = localStorage.getItem('userId')
-        // console.log('내 마스크 정보')
-        // console.log(mask)
+        console.log('내 마스크 정보')
+        console.log(mask)
         // // // 다른 사람 통신 주석
         const mask_data = {
-            userId,
+            'userId': userId,
             'mask': mask,
+            'needsChange': false,
         };
 
         const response = await fetch(APPLICATION_SERVER_URL + 'facechat/', {
@@ -336,7 +337,7 @@ function OpenVidu() {
                                 <option value="SpiderMan">SpiderMan</option>
                             </select>
                             </div> */}
-                                    <div>
+                                    {/* <div>
                                         <label htmlFor='participant-name'>Participant</label>
                                         <input
                                             id='participant-name'
@@ -346,8 +347,8 @@ function OpenVidu() {
                                             onChange={(e) => setParticipantName(e.target.value)}
                                             required
                                         />
-                                    </div>
-                                    <div>
+                                    </div> */}
+                                    {/* <div>
                                         <label htmlFor='room-name'>Room</label>
                                         <input
                                             id='room-name'
@@ -357,7 +358,7 @@ function OpenVidu() {
                                             onChange={(e) => setRoomName(e.target.value)}
                                             required
                                         />
-                                    </div>
+                                    </div> */}
 
                                     <button
                                         className='btn-mobile btn-lg-mobile btn-success-mobile'
@@ -388,7 +389,7 @@ function OpenVidu() {
                                     <option value="SpiderMan">SpiderMan</option>
                                 </select>
                                 </div> */}
-                                    <div>
+                                    {/* <div>
                                         <label htmlFor='participant-name'>Participant</label>
                                         <input
                                             id='participant-name'
@@ -409,7 +410,7 @@ function OpenVidu() {
                                             onChange={(e) => setRoomName(e.target.value)}
                                             required
                                         />
-                                    </div>
+                                    </div> */}
 
                                     <button
                                         className='btn btn-lg btn-success'

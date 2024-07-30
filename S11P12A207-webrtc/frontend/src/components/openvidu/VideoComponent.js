@@ -61,9 +61,9 @@ function VideoComponent({ track, participantIdentity, setExpressionData, local =
         <p>{participantIdentity + (local ? " (You)" : "")}</p>
       </div>
       <video ref={videoElement2} id={track.sid} style={{ display: 'none' }} />
-      <RedFoxRemote landmarks={landmarks} videoElement={videoElement2} />
-      {/* {maskRemote === 'RedFox' && <RedFoxRemote landmarks={landmarks} videoElement={videoElement2} />}
-      {maskRemote === 'SpiderMan' && <SpiderManRemote landmarks={landmarks} videoElement={videoElement2} />} */}
+      {/* <RedFoxRemote landmarks={landmarks} videoElement={videoElement2} /> */}
+      {maskRemote === 'RedFox' && <RedFoxRemote landmarks={landmarks} videoElement={videoElement2} />}
+      {maskRemote === 'SpiderMan' && <SpiderManRemote landmarks={landmarks} videoElement={videoElement2} />}
       <FaceRecognition videoElement={videoElement2} setExpressionData={setExpressionData} />
     </div>
   );
