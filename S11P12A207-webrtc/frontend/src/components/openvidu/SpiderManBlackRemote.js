@@ -168,9 +168,9 @@ const SpiderManBlackRemote = ({ landmarks, videoElement }) => {
         {landmarks && (<>
           <VideoTexture videoRef={videoElement} />
         </>)}
-        {/* <EffectComposer multisampling={0}>
-          <Bloom intensity={0.2} luminanceThreshold={0.8} luminanceSmoothing={0.4} height={80} />
-        </EffectComposer> */}
+        <EffectComposer multisampling={0}>
+          <Bloom intensity={0.1} luminanceThreshold={0.8} luminanceSmoothing={0.4} height={40} />
+        </EffectComposer>
       </Canvas>
     </div>
   );
