@@ -8,18 +8,16 @@ const Mypage = () => {
     const [selectedFriend, setSelectedFriend] = useState(null);
     const [newMessage, setNewMessage] = useState('');
 
-    // 더미 데이터 설정
     useEffect(() => {
         const fetchData = () => {
-            // 더미 데이터
             const dummyFriends = [
                 { id: 1, name: '홍길동' },
                 { id: 2, name: '김철수' }
             ];
 
             const dummyMessages = [
-                { id: 1, sender: '홍길동', text: '안녕하세요!' },
-                { id: 2, sender: '나', text: '안녕하세요! 잘 지내세요?' }
+                { id: 1, sender: '홍길동', text: '안녕하세요!', time: new Date().toLocaleTimeString() },
+                { id: 2, sender: '나', text: '안녕하세요! 잘 지내세요?', time: new Date().toLocaleTimeString() }
             ];
 
             setFriends(dummyFriends);
@@ -31,14 +29,14 @@ const Mypage = () => {
 
     const handleSendMessage = () => {
         if (newMessage.trim()) {
-            setMessages([...messages, { id: messages.length + 1, sender: '나', text: newMessage }]);
+            setMessages([...messages, { id: messages.length + 1, sender: '나', text: newMessage, time: new Date().toLocaleTimeString() }]);
             setNewMessage('');
         }
     };
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
-            e.preventDefault(); // 기본 엔터 키 동작 방지 (줄바꿈 방지)
+            e.preventDefault();
             handleSendMessage();
         }
     };
@@ -71,7 +69,7 @@ const Mypage = () => {
                                 onChange={(e) => setNewMessage(e.target.value)}
                                 placeholder="메시지를 입력하세요..."
                                 style={styles.input}
-                                onKeyDown={handleKeyDown} // 엔터 키 입력 처리
+                                onKeyDown={handleKeyDown}
                             />
                             <button onClick={handleSendMessage} style={styles.sendButton}>
                                 보내기
