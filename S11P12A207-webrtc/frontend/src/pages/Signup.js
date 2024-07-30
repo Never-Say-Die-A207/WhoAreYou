@@ -140,29 +140,20 @@ const Signup = () => {
                                                     {!email && (
                                                         <label
                                                             htmlFor="email"
-                                                            className="zm-input__label"
+                                                            className="zm-input__label email_label"
                                                             style={{
-                                                                position:
-                                                                    'absolute',
-                                                                top: '50%',
-                                                                left: '50%',
+                    
                                                                 transform:
                                                                     'translate(-50%, -50%)',
-                                                                color: '#999', // 적절한 색상을 지정하세요
                                                             }}
                                                         >
                                                             이메일 주소
                                                         </label>
                                                     )}
                                                 </div>
-                                                <button
+                                                <button className='email_button'
                                                     onClick={checkEmail}
-                                                    style={{
-                                                        color: 'white',
-                                                        backgroundColor:
-                                                            '#aa4dcb',
-                                                        height: '50px',
-                                                    }}
+                                            
                                                 >
                                                     {emailCheck}
                                                 </button>
@@ -180,11 +171,8 @@ const Signup = () => {
                                                     alignItems: 'center',
                                                 }}
                                             >
-                                                <div
-                                                    style={{
-                                                        position: 'relative',
-                                                        width: '100%',
-                                                    }}
+                                                <div className='password_div'
+                    
                                                 >
                                                     <input
                                                         type="password"
@@ -195,32 +183,20 @@ const Signup = () => {
                                                         aria-label="비밀번호"
                                                         id="password"
                                                         maxLength="99"
-                                                        className="zm-input__inner"
+                                                        className="zm-input__inner password_input"
                                                         value={password}
                                                         onChange={onChange}
-                                                        style={{
-                                                            width: '100%',
-                                                            height: '50px',
-                                                            boxSizing:
-                                                                'border-box',
-                                                            padding: '0 10px',
-                                                            fontSize: '1rem',
-                                                        }}
+                                                
                                                     />
                                                     {!password && (
                                                         <label
                                                             htmlFor="password"
-                                                            className="zm-input__label"
+                                                            className="zm-input__label password_label"
                                                             style={{
-                                                                position:
-                                                                    'absolute',
-                                                                top: '50%',
-                                                                left: '50%',
+                                                             
                                                                 transform:
-                                                                    'translate(-50%, -50%)',
-                                                                pointerEvents:
-                                                                    'none', // 사용자 입력 불가능하도록
-                                                                color: '#999', // 적절한 색상을 지정하세요
+                                                                    'translate(-50%, -50%)'
+                                                               
                                                             }}
                                                         >
                                                             비밀번호
@@ -241,11 +217,8 @@ const Signup = () => {
                                                     alignItems: 'center',
                                                 }}
                                             >
-                                                <div
-                                                    style={{
-                                                        position: 'relative',
-                                                        width: '100%',
-                                                    }}
+                                                <div className='password_div'
+                                            
                                                 >
                                                     <input
                                                         type="password"
@@ -256,32 +229,19 @@ const Signup = () => {
                                                         aria-label="비밀번호확인"
                                                         id="checkpassword"
                                                         maxLength="99"
-                                                        className="zm-input__inner"
+                                                        className="zm-input__inner password_input"
                                                         value={checkpassword}
                                                         onChange={onCheck}
-                                                        style={{
-                                                            width: '100%',
-                                                            height: '50px',
-                                                            boxSizing:
-                                                                'border-box',
-                                                            padding: '0 10px',
-                                                            fontSize: '1rem',
-                                                        }}
+                                                
                                                     />
                                                     {!checkpassword && (
                                                         <label
                                                             htmlFor="checkpassword"
-                                                            className="zm-input__label"
+                                                            className="zm-input__label password_label"
                                                             style={{
-                                                                position:
-                                                                    'absolute',
-                                                                top: '50%',
-                                                                left: '50%',
+                                
                                                                 transform:
                                                                     'translate(-50%, -50%)',
-                                                                pointerEvents:
-                                                                    'none', // 사용자 입력 불가능하도록
-                                                                color: '#999', // 적절한 색상을 지정하세요
                                                             }}
                                                         >
                                                             비밀번호확인
@@ -302,12 +262,7 @@ const Signup = () => {
                                                     alignItems: 'center',
                                                 }}
                                             >
-                                                <div
-                                                    style={{
-                                                        position: 'relative',
-                                                        flex: '1',
-                                                    }}
-                                                >
+                                                <div className='email_input'>
                                                     <input
                                                         type="text"
                                                         autoComplete="text"
@@ -317,31 +272,19 @@ const Signup = () => {
                                                         aria-label="닉네임"
                                                         id="nickname"
                                                         maxLength="99"
-                                                        className="zm-input__inner"
+                                                        className="zm-input__inner email_input_input"
                                                         value={nickname}
                                                         onChange={onChange}
-                                                        style={{
-                                                            width: '100%',
-                                                            height: '50px',
-                                                            boxSizing:
-                                                                'border-box',
-                                                            paddingRight:
-                                                                '10px',
-                                                            fontSize: '1rem',
-                                                        }}
+                                    
                                                     />
                                                     {!nickname && (
                                                         <label
                                                             htmlFor="nickname"
-                                                            className="zm-input__label"
+                                                            className="zm-input__label email_label"
                                                             style={{
-                                                                position:
-                                                                    'absolute',
-                                                                top: '50%',
-                                                                left: '50%',
+                                                              
                                                                 transform:
                                                                     'translate(-50%, -50%)',
-                                                                color: '#999', // 적절한 색상을 지정하세요
                                                             }}
                                                         >
                                                             닉네임
@@ -349,13 +292,9 @@ const Signup = () => {
                                                     )}
                                                 </div>
                                                 <button
+                                                    className='email_button'
                                                     onClick={checkNickname}
-                                                    style={{
-                                                        color: 'white',
-                                                        backgroundColor:
-                                                            '#aa4dcb',
-                                                        height: '50px',
-                                                    }}
+                                                 
                                                 >
                                                     {nicknameCheck}
                                                 </button>
@@ -373,11 +312,8 @@ const Signup = () => {
                                                     alignItems: 'center',
                                                 }}
                                             >
-                                                <div
-                                                    style={{
-                                                        position: 'relative',
-                                                        flex: '1',
-                                                    }}
+                                                <div className='email_input'
+                                              
                                                 >
                                                     <input
                                                         type="text"
@@ -388,7 +324,7 @@ const Signup = () => {
                                                         aria-label="이름"
                                                         id="name"
                                                         maxLength="99"
-                                                        className="zm-input__inner"
+                                                        className="zm-input__inne email_input_input"
                                                         value={name}
                                                         onChange={onChange}
                                                         style={{
