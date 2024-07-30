@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import api from '../api/api';
+import './Signup.css';
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -90,46 +91,178 @@ const Signup = () => {
 
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', justifyContent: 'center' }}>
+        
+        <div className='login-page'>
             <h1>회원가입</h1>
-            <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
-                <div>
-                    <label htmlFor='email'>이메일</label>
-                    <input type='email' id='email' value={email} onChange={onChange}></input>
-                    <button onClick={checkEmail}>{emailCheck}</button>
-                </div>
-                <div>
-                    <label htmlFor='name'>이름</label>
-                    <input type='text' id='name' value={name} onChange={onChange}></input>
-                </div>
-                <div>
-                    <label htmlFor='nickname'>닉네임</label>
-                    <input type='text' id='nickname' value={nickname} onChange={onChange}></input>
-                    <button onClick={checkNickname}>{nicknameCheck}</button>
-                </div>
-                <div>
-                    <label htmlFor='password'>비밀번호</label>
-                    <input type='password' id='password' value={password} onChange={onChange}></input>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <label htmlFor='radio'>성별</label>
-                    <div id='radio' style={{ display: 'flex', flexDirection: 'row', gap: '10px' }}>
-                        <p style={{ margin: 0 }}>
-                            <input type='radio' id='gender' value='male' checked={gender === 'male'} onChange={onRadioChange} />
-                            남
-                        </p>
-                        <p style={{ margin: 0 }}>
-                            <input type='radio' id='gender' value='female' checked={gender === 'female'} onChange={onRadioChange} />
-                            여
-                        </p>
+            <div className='layout-body login-page-view' data-lang='ko-KO'>
+                <div className='layout-main'>
+                    <div className='layout-main-slot'>
+                        <div className='form-width-sm'>
+                            <form action='javascript:;' className='zm-form zm-from--label-inline' onSubmit={onSubmit}>
+                                <div className='zm-form-item is-no-asterisk'>
+                                    <div className='zm-form-item__content'>
+                                        
+                                    <div className={`zm-input zm-input--xLarge ${email ? '' : 'is-empty'} zm-input--suffix zm-input--show-label`} style={{ display: 'flex', alignItems: 'center' }}>
+                                        <div style={{ position: 'relative', flex: '1' }}>
+                                            <input
+                                                type='email'
+                                                autoComplete='email'
+                                                name='email'
+                                                placeholder
+                                                aria-required='true'
+                                                aria-label='이메일 주소'
+                                                id='email'
+                                                maxLength='99'
+                                                className='zm-input__inner'
+                                                value={email}
+                                                onChange={onChange}
+                                                style={{ width: '100%', height: '100%', boxSizing: 'border-box', paddingRight: '10px' }}
+                                            />
+                                            {!email && (
+                                                <label
+                                                    htmlFor='email'
+                                                    className='zm-input__label'
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: '50%',
+                                                        left: '50%',
+                                                        transform: 'translate(-50%, -50%)',
+                                                        color: '#999' // 적절한 색상을 지정하세요
+                                                    }}
+                                                >
+                                                    이메일 주소
+                                                </label>
+                                            )}
+                                        </div>
+                                        <button onClick={checkEmail}
+                                            style={{
+                                                color: 'white',
+                                                backgroundColor: '#aa4dcb'
+                                            }}
+                                        >{emailCheck}</button>
+                                    </div>
+
+                                    </div>
+                                </div>
+                                <div className='zm-form-item zm-form-password is-no-asterisk'>
+                                    <div className='zm-form-item__content'>
+                                    <div className={`zm-input zm-input--xLarge ${password ? '' : 'is-empty'} zm-input--suffix zm-input--show-label`} style={{ display: 'flex', alignItems: 'center' }}>
+                                        <div style={{ position: 'relative', width: '100%' }}>
+                                            <input
+                                                type='password'
+                                                autoComplete='password'
+                                                name='password'
+                                                placeholder
+                                                aria-required='true'
+                                                aria-label='비밀번호'
+                                                id='password'
+                                                maxLength='99'
+                                                className='zm-input__inner'
+                                                value={password}
+                                                onChange={onChange}
+                                                style={{ width: '100%', height: '40px', boxSizing: 'border-box', padding: '0 10px' }}
+                                            />
+                                            {!password && (
+                                                <label
+                                                    htmlFor='password'
+                                                    className='zm-input__label'
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: '50%',
+                                                        left: '50%',
+                                                        transform: 'translate(-50%, -50%)',
+                                                        pointerEvents: 'none', // 사용자 입력 불가능하도록
+                                                        color: '#999' // 적절한 색상을 지정하세요
+                                                    }}
+                                                >
+                                                    비밀번호
+                                                </label>
+                                            )}
+                                        </div>
+                                    </div>
+
+
+
+                                    </div>
+                                </div>
+                                <div className='zm-form-item zm-form-password is-no-asterisk'>
+                                    <div className='zm-form-item__content'>
+                                    <div className={`zm-input zm-input--xLarge ${password ? '' : 'is-empty'} zm-input--suffix zm-input--show-label`} style={{ display: 'flex', alignItems: 'center' }}>
+                                        <div style={{ position: 'relative', width: '100%' }}>
+                                            <input
+                                                type='password'
+                                                autoComplete='password'
+                                                name='password'
+                                                placeholder
+                                                aria-required='true'
+                                                aria-label='비밀번호확인'
+                                                id='checkpassword'
+                                                maxLength='99'
+                                                className='zm-input__inner'
+                                                value={checkpassword}
+                                                onChange={onChange}
+                                                style={{ width: '100%', height: '40px', boxSizing: 'border-box', padding: '0 10px' }}
+                                            />
+                                            {!checkpassword && (
+                                                <label
+                                                    htmlFor='checkpassword'
+                                                    className='zm-input__label'
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: '50%',
+                                                        left: '50%',
+                                                        transform: 'translate(-50%, -50%)',
+                                                        pointerEvents: 'none', // 사용자 입력 불가능하도록
+                                                        color: '#999' // 적절한 색상을 지정하세요
+                                                    }}
+                                                >
+                                                    비밀번호확인
+                                                </label>
+                                            )}
+                                        </div>
+                                    </div>
+
+
+
+                                    </div>
+                                </div>
+                    
+                                <div className='mgt-sm'>
+                                        <button
+                                            style={{
+                                                cursor: 'pointer',
+                                                color: 'white',
+                                                backgroundColor: '#aa4dcb',
+                                                fontSize: '1.5rem',
+                                                width: '200px',
+                                                height: '50px',
+                                                border: 'none',
+                                                borderRadius: '5px',
+                                                textAlign: 'center'
+                                            }}
+                                            onMouseOver={(e) => e.target.style.backgroundColor = '#8530e9'}
+                                            onMouseOut={(e) => e.target.style.backgroundColor = '#aa4dcb'}
+                                            onClick={onSubmit}
+                                        >
+                                            회원가입
+                                        </button>
+                                    <div style={{ paddingTop: '30px', }}>
+                                    </div>
+                             
+                                </div>
+                            </form>
+                        </div>
+               
+                        <div className='form-width-sm form-group re-captcha' style={{ fontSize: '14px' }}></div>
                     </div>
                 </div>
-                <div>
-                    <button type='submit'>회원가입</button>
-                    <button onClick={goBack}>뒤로가기</button>
-                </div>
-            </form>
+            </div>
         </div>
+
+                 
+
+
+     
     );
 };
 
