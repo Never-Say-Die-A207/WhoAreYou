@@ -21,15 +21,12 @@ import * as cam from '@mediapipe/camera_utils';
 import RedFoxLocal from './RedFoxLocal';
 import SpiderManLocal from './SpiderManLocal';
 import VerticalCarousel from './VerticalCarousel';
-import MobileCarousel from './MobileCarousel';
 import JokerLocal from './JokerLocal';
 import PinkFoxLocal from './PinkFoxLocal';
 import SpiderManBlackLocal from './SpiderManBlackLocal';
 import SquidLocal from './SquidLocal';
 import RedFoxRemote from './RedFoxRemote';
 
-// 반응형
-import { useMediaQuery, MediaQuery } from 'react-responsive';
 
 // var APPLICATION_SERVER_URL = "https://grown-donkey-awfully.ngrok-free.app/";
 // var LIVEKIT_URL = "wss://myapp-yqvsqxqi.livekit.cloud/";
@@ -63,7 +60,7 @@ function configureUrls() {
 
 
 
-function OpenVidu() {
+function MobileOpenVidu() {
     const [room, setRoom] = useState(undefined);
     const [localTrack, setLocalTrack] = useState(undefined);
     const [remoteTracks, setRemoteTracks] = useState([]);
@@ -83,8 +80,6 @@ function OpenVidu() {
     const [loading, setLoading] = useState(true);
     // const loading = false
 
-    //반응형
-    const isSmallScreen = useMediaQuery({ maxWidth: 576 });
 
     //룸시작 코드
     // function changeLoaclMaskValue(e) {
@@ -291,20 +286,14 @@ function OpenVidu() {
                     {/* <JokerLocal landmarks={landmarks} videoElement3={videoPreviewRef} /> */}
                     {/* <RedFoxLocal landmarks={landmarks} videoElement3={videoPreviewRef}/> */}
                     {/* 슬라이더 만들기 */}
-
+                    
                     {/* 방 입장 시작 */}
                     <div id='join-dialog'>
                         {/* 가면 미리보기 보는 화면 */}
-
-                        <div style={{ position: 'relative', height: '91vh' }}>
-                            {isSmallScreen ? (
-                                <MobileCarousel setMask={setMask} />
-                            ) : (
-                                <VerticalCarousel setMask={setMask} />
-                            )}
-
+                        <div style={{ position: 'relative', height: '91vh'}}>
+                            <VerticalCarousel setMask={setMask} />
                             <video ref={videoPreviewRef} autoPlay muted style={{
-                                width: '100%', height: '100%', transform: 'scaleX(-1)', visibility: 'hidden',
+                                width: '100%', height: '100%', transform: 'scaleX(-1)', 
                             }}></video>
                             {/* <RedFoxRemote landmarks={landmarks} videoElement={videoPreviewRef} /> */}
                             {/* <canvas ref={canvasRef} className="output_canvas" width="1280" height="720" style={{ position: 'absolute', top: 0, left: 0 }}></canvas> */}
@@ -314,68 +303,14 @@ function OpenVidu() {
                             {/* {mask === 'PinkFox' && <PinkFoxLocal landmarks={landmarks} videoElement3={videoPreviewRef} />} */}
                             {mask === 'SpiderManBlack' && <SpiderManBlackLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
                             {mask === 'Squid' && <SquidLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
-                            {isSmallScreen ? (
-                                // 모바일 꾸미기
-                                <form
-                                    onSubmit={(e) => {
-                                        e.preventDefault();
-                                        joinRoom();
-                                        // stopPreview();
-                                    }}
-                                    className='video-form-mobile'>
-                                    {/* <div>
-                            <label htmlFor='mask-name'>마스크 변경</label>
-                            <select
-                                id='mask-name'
-                                className='form-control'
-                                value={mask}
-                                onChange={changeLoaclMaskValue}
-                            > */}
-                                    {/* <option value='' defaultValue='마스크 선택'>마스크 선택</option> */}
-                                    {/* <option value='RedFox'>RedFox</option>
-                                <option value="SpiderMan">SpiderMan</option>
-                            </select>
-                            </div> */}
-                                    <div>
-                                        <label htmlFor='participant-name'>Participant</label>
-                                        <input
-                                            id='participant-name'
-                                            className='form-control'
-                                            type='text'
-                                            value={participantName}
-                                            onChange={(e) => setParticipantName(e.target.value)}
-                                            required
-                                        />
-                                    </div>
-                                    <div>
-                                        <label htmlFor='room-name'>Room</label>
-                                        <input
-                                            id='room-name'
-                                            className='form-control'
-                                            type='text'
-                                            value={roomName}
-                                            onChange={(e) => setRoomName(e.target.value)}
-                                            required
-                                        />
-                                    </div>
-
-                                    <button
-                                        className='btn-mobile btn-lg-mobile btn-success-mobile'
-                                        type='submit'
-                                        disabled={!roomName || !participantName}
-                                    >
-                                        매칭!
-                                    </button>
-                                </form>
-                            ) : (
-                                <form
-                                    onSubmit={(e) => {
-                                        e.preventDefault();
-                                        joinRoom();
-                                        // stopPreview();
-                                    }}
-                                    className='video-form'>
-                                    {/* <div>
+                            <form
+                                onSubmit={(e) => {
+                                    e.preventDefault();
+                                    joinRoom();
+                                    // stopPreview();
+                                }}
+                                className='video-form'>
+                                {/* <div>
                                 <label htmlFor='mask-name'>마스크 변경</label>
                                 <select
                                     id='mask-name'
@@ -383,44 +318,42 @@ function OpenVidu() {
                                     value={mask}
                                     onChange={changeLoaclMaskValue}
                                 > */}
-                                    {/* <option value='' defaultValue='마스크 선택'>마스크 선택</option> */}
-                                    {/* <option value='RedFox'>RedFox</option>
+                                {/* <option value='' defaultValue='마스크 선택'>마스크 선택</option> */}
+                                {/* <option value='RedFox'>RedFox</option>
                                     <option value="SpiderMan">SpiderMan</option>
                                 </select>
-                                </div> */}
-                                    <div>
-                                        <label htmlFor='participant-name'>Participant</label>
-                                        <input
-                                            id='participant-name'
-                                            className='form-control'
-                                            type='text'
-                                            value={participantName}
-                                            onChange={(e) => setParticipantName(e.target.value)}
-                                            required
-                                        />
-                                    </div>
-                                    <div>
-                                        <label htmlFor='room-name'>Room</label>
-                                        <input
-                                            id='room-name'
-                                            className='form-control'
-                                            type='text'
-                                            value={roomName}
-                                            onChange={(e) => setRoomName(e.target.value)}
-                                            required
-                                        />
-                                    </div>
+                            </div> */}
+                                <div>
+                                    <label htmlFor='participant-name'>Participant</label>
+                                    <input
+                                        id='participant-name'
+                                        className='form-control'
+                                        type='text'
+                                        value={participantName}
+                                        onChange={(e) => setParticipantName(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor='room-name'>Room</label>
+                                    <input
+                                        id='room-name'
+                                        className='form-control'
+                                        type='text'
+                                        value={roomName}
+                                        onChange={(e) => setRoomName(e.target.value)}
+                                        required
+                                    />
+                                </div>
 
-                                    <button
-                                        className='btn btn-lg btn-success'
-                                        type='submit'
-                                        disabled={!roomName || !participantName}
-                                    >
-                                        매칭 시작!
-                                    </button>
-                                </form>
-                            )}
-
+                                <button
+                                    className='btn btn-lg btn-success'
+                                    type='submit'
+                                    disabled={!roomName || !participantName}
+                                >
+                                    매칭 시작!
+                                </button>
+                            </form>
                         </div>
 
                     </div>
@@ -473,4 +406,4 @@ function OpenVidu() {
     );
 }
 
-export default OpenVidu;
+export default MobileOpenVidu;
