@@ -46,7 +46,7 @@ const Login = ({ onClose }) => {
         <div className='login-page'>
             <div className='layout-body login-page-view' data-lang='ko-KO'>
                 <div className='layout-main'>
-                    <div className='layout-main-slot'>
+   
                         <div className='form-width-sm'>
                             <form action='javascript:;' className='zm-form zm-from--label-inline'>
                                 <div className='zm-form-item is-no-asterisk'>
@@ -160,7 +160,7 @@ const Login = ({ onClose }) => {
                             </div>
                         </div>
                         <div className='form-width-sm form-group re-captcha' style={{ fontSize: '14px' }}></div>
-                    </div>
+                   
                 </div>
             </div>
         </div>

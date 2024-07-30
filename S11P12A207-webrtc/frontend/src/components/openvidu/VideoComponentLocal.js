@@ -63,7 +63,7 @@ function VideoComponentLocal({ track, participantIdentity, local, mask }) {
             <div className="participant-data">
                 <p>{participantIdentity + (local ? " (You)" : "")}</p>
             </div>
-            <video ref={videoElement} id={track.sid} style={{ transform: 'scaleX(-1)' }}></video>
+            <video ref={videoElement} id={track.sid} style={{ transform: 'scaleX(-1)', display: 'none' }}></video>
             {mask === 'RedFox' && <RedFoxLocal landmarks={landmarks} videoElement={videoElement} />}
             {mask === 'SpiderMan' && <SpiderManLocal landmarks={landmarks} videoElement={videoElement} />}
             {mask === 'SpiderManBlack' && <SpiderManBlackLocal landmarks={landmarks} videoElement={videoElement} />}

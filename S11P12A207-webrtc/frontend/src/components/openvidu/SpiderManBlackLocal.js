@@ -71,34 +71,34 @@ const LineComponent = React.memo(({ landmarks, indices, color, lineWidth }) => {
   );
 });
 
-// const VideoTexture = ({ videoRef }) => {
-//   const { scene } = useThree();
-//   const texture = useMemo(() => new THREE.VideoTexture(videoRef.current), [videoRef]);
+const VideoTexture = ({ videoRef }) => {
+  const { scene } = useThree();
+  const texture = useMemo(() => new THREE.VideoTexture(videoRef.current), [videoRef]);
 
-//   useEffect(() => {
-//     if (videoRef.current) {
+  useEffect(() => {
+    if (videoRef.current) {
 
-//       texture.minFilter = THREE.LinearFilter;
-//       texture.magFilter = THREE.LinearFilter;
-//       texture.format = THREE.RGBFormat;
-//       texture.colorSpace = THREE.SRGBColorSpace;
-//       const geometry = new THREE.PlaneGeometry(4, 2.25); // 크기를 조정합니다
-//       const material = new THREE.MeshBasicMaterial({ map: texture });
-//       const mesh = new THREE.Mesh(geometry, material);
-//       mesh.position.y = 0;
-//       scene.add(mesh);
+      texture.minFilter = THREE.LinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+      texture.format = THREE.RGBFormat;
+      texture.colorSpace = THREE.SRGBColorSpace;
+      const geometry = new THREE.PlaneGeometry(4, 2.25); // 크기를 조정합니다
+      const material = new THREE.MeshBasicMaterial({ map: texture });
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.y = 0;
+      scene.add(mesh);
 
-//       return () => {
-//         scene.remove(mesh);
-//         texture.dispose();
-//       };
-//     }
-//   }, [videoRef, scene, texture]);
+      return () => {
+        scene.remove(mesh);
+        texture.dispose();
+      };
+    }
+  }, [videoRef, scene, texture]);
 
-//   return null;
-// };
+  return null;
+};
 
-const SpiderManBlackLocal = ({ landmarks }) => {
+const SpiderManBlackLocal = ({ landmarks, videoElement }) => {
   const BlackEye1 = [122, 193, 55, 65, 52, 68, 156, 35, 111, 117, 118, 119, 47, 174, 196, 122, 245, 244, 243, 26, 22, 23, 24, 110, 25, 130, 247, 30, 29, 27, 28, 56, 190, 243, 244, 245, 122];
   const BlackEye2 = [351, 417, 285, 295, 282, 298, 383, 265, 340, 346, 347, 348, 277, 399, 419, 351, 465, 464, 463, 256, 252, 253, 254, 339, 255, 359, 467, 260, 259, 257, 258, 286, 414, 463, 399];
   const whiteEye1 = [244, 189, 221, 222, 223, 224, 225, 124, 35, 31, 228, 229, 230, 231, 232, 233, 244]
@@ -120,13 +120,13 @@ const SpiderManBlackLocal = ({ landmarks }) => {
 
  
     return (
-    <div className="canvas-container" style={{ width: '100%', height: '100%' }}>
+    <div className="canvas-container" style={{position:'absolute', top:'0', left:'0', width: '100%', height: '100%' }}>
       <Canvas
         camera={{ position: [0, 0, 5], fov: 25.4 }}
         style={{
-          position: 'absolute',
-          top: '0',
-          left: '0',
+          // position: 'absolute',
+          // top: '0',
+          // left: '0',
           transform: 'scaleX(-1)',
           width: '100%',
           height: '100%',
@@ -138,7 +138,9 @@ const SpiderManBlackLocal = ({ landmarks }) => {
       >
         <ambientLight intensity={0} />
         <pointLight position={[10, 10, 10]}/>
-        {/* <VideoTexture videoRef={videoElement} /> */}
+        {videoElement?.current && (
+          <VideoTexture videoRef={videoElement} />
+        )}
         {landmarks && (
           <>
                       <ShapeComponent landmarks={landmarks} indices={faceOutlineIndices} color="#292929" />

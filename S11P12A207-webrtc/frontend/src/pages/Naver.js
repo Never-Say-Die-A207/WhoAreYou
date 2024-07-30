@@ -18,10 +18,8 @@ const Naver = () => {
     }, []);
 
     return (
-        <div>
-            <img src={naverimg} alt="네이버" onClick={handleLogin} className='zm-login-methods__item' />
-
-            
+        <div className='naver-img-div'>
+            <img src={naverimg} alt="네이버" onClick={handleLogin} className='naver-img' />            
         </div>
     );
 };

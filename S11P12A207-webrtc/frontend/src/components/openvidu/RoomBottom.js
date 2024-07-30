@@ -8,14 +8,18 @@ function RoomBottom({ expressionData }) {
   // console.log('Received expressionData in RoomBottom:', expressionData);
 
   return (
-    <div className={`room-bottom-container ${borderClass}`}>
-      <button className="bottom-button">
-        홈으로 가기
-      </button>
-      {imageSrc && <img src={imageSrc} alt="expression" className="bottom-image" />}
-      <button className="bottom-button">
-        다시 매칭하기
-      </button>
+    <div className='room-bottom'>
+      <div className={`room-bottom-container ${borderClass}`}>
+        {imageSrc && <img src={imageSrc} alt="expression" className="bottom-image" />}
+      </div>
+      <div>
+        <button className="bottom-button">
+          홈으로 가기
+        </button>
+        <button className="bottom-button">
+          다시 매칭하기
+        </button>
+      </div>
     </div>
   );
 }

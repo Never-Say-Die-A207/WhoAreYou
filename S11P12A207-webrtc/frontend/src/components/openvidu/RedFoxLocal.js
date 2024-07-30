@@ -19,9 +19,9 @@ const ShapeComponent = React.memo(({ landmarks, indices, color }) => {
       indices.forEach((index, i) => {
         const { x, y } = landmarks[index];
         if (i === 0) {
-          shape.moveTo((x * 4 - 2), -(y * 2.2 - 1.1));
+          shape.moveTo((x * 4 - 2), -(y * 2.2 -1.1));
         } else {
-          shape.lineTo((x * 4 - 2), -(y * 2.2 - 1.1));
+          shape.lineTo((x * 4 - 2), -(y * 2.2 -1.1));
         }
       });
 
@@ -49,7 +49,7 @@ const LineComponent = React.memo(({ landmarks, indices, color, lineWidth }) => {
     if (landmarks) {
       const points = indices.map(index => {
         const { x, y } = landmarks[index];
-        return new THREE.Vector3((x * 4 - 2), -(y * 2.2 - 1.1), 0.1); // Z축 위치를 약간 앞으로 이동
+        return new THREE.Vector3((x * 4 - 2), -(y * 2.2-1.1), 0.1); // Z축 위치를 약간 앞으로 이동
       });
 
       const positions = new Float32Array(points.length * 3);
@@ -71,34 +71,34 @@ const LineComponent = React.memo(({ landmarks, indices, color, lineWidth }) => {
   );
 });
 
-// const VideoTexture = ({ videoRef }) => {
-//   const { scene } = useThree();
-//   const texture = useMemo(() => new THREE.VideoTexture(videoRef.current), [videoRef]);
+const VideoTexture = ({ videoRef }) => {
+  const { scene } = useThree();
+  const texture = useMemo(() => new THREE.VideoTexture(videoRef.current), [videoRef]);
 
-//   useEffect(() => {
-//     if (videoRef.current) {
+  useEffect(() => {
+    if (videoRef.current) {
 
-//       texture.minFilter = THREE.LinearFilter;
-//       texture.magFilter = THREE.LinearFilter;
-//       texture.format = THREE.RGBFormat;
-//       texture.colorSpace = THREE.SRGBColorSpace;
-//       const geometry = new THREE.PlaneGeometry(4, 2.25); // 크기를 조정합니다
-//       const material = new THREE.MeshBasicMaterial({ map: texture });
-//       const mesh = new THREE.Mesh(geometry, material);
-//       mesh.position.y = 0;
-//       scene.add(mesh);
+      texture.minFilter = THREE.LinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+      texture.format = THREE.RGBFormat;
+      texture.colorSpace = THREE.SRGBColorSpace;
+      const geometry = new THREE.PlaneGeometry(4, 2.25); // 크기를 조정합니다
+      const material = new THREE.MeshBasicMaterial({ map: texture });
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.y = 0;
+      scene.add(mesh);
 
-//       return () => {
-//         scene.remove(mesh);
-//         texture.dispose();
-//       };
-//     }
-//   }, [videoRef, scene, texture]);
+      return () => {
+        scene.remove(mesh);
+        texture.dispose();
+      };
+    }
+  }, [videoRef, scene, texture]);
 
-//   return null;
-// };
+  return null;
+};
 
-const RedFoxLocal = ({ landmarks }) => {
+const SpiderManLocal = ({ landmarks, videoElement }) => {
   const faceOutlineIndices1 = [10, 338, 297, 332, 284, 251, 389, 356, 454, 446, 467, 260, 259, 257, 258, 286, 414, 464, 351, 196, 193, 55, 107, 109, 10];
   const faceOutlineIndices2 = [10, 109, 67, 103, 54, 21, 162, 127, 234, 111, 226, 247, 30, 29, 27, 28, 56, 190, 243, 188, 197, 10];
   const faceOutlineIndices3 = [127, 156, 113, 130, 25, 110, 24, 23, 22, 26, 245, 193, 248, 4, 94, 167, 94, 167, 92, 216, 177, 93, 234, 127];
@@ -113,28 +113,32 @@ const RedFoxLocal = ({ landmarks }) => {
   const nose2 = [1, 45];
   const nose3 = [1, 275];
   const head = [151, 107, 168, 336, 151];
-
+  
   return (
-    <div className="canvas-container" style={{width: '100%', height: '100%' }}>
+    <div className="canvas-container" style={{ position:'absolute', top:'0', left:'0', width: '100%', height: '100%' }}>
       <Canvas
         camera={{ position: [0, 0, 5], fov: 25.4 }}
         style={{
-          position: 'absolute',
-          top: '0',
-          left: '0',
+          // position: 'absolute',
+          // top: '0',
+          // left: '0',
           transform: 'scaleX(-1)',
           width: '100%',
           height: '100%',
+        //   zIndex: 10,
+        // 일반 동영상 같은 경우는 index값을 높여야함
           zIndex: 100,
         }}
-
+        
       >
         <ambientLight intensity={0} />
-        <pointLight position={[10, 10, 10]} />
-
+        <pointLight position={[10, 10, 10]}/>
+        {videoElement?.current && (
+          <VideoTexture videoRef={videoElement} />
+        )}
         {landmarks && (
           <>
-            <ShapeComponent landmarks={landmarks} indices={faceOutlineIndices1} color="white" />
+              <ShapeComponent landmarks={landmarks} indices={faceOutlineIndices1} color="white" />
             <ShapeComponent landmarks={landmarks} indices={faceOutlineIndices2} color="white" />
             <ShapeComponent landmarks={landmarks} indices={faceOutlineIndices3} color="white" />
             <ShapeComponent landmarks={landmarks} indices={faceOutlineIndices4} color="white" />
@@ -148,14 +152,11 @@ const RedFoxLocal = ({ landmarks }) => {
             <LineComponent landmarks={landmarks} indices={nose1} color="black" lineWidth={3} />
             <LineComponent landmarks={landmarks} indices={nose2} color="black" lineWidth={3} />
             <LineComponent landmarks={landmarks} indices={nose3} color="black" lineWidth={3} />
+     
+
           </>
 
         )}
-        {/* {landmarks && (<>
-          <VideoTexture videoRef={videoElement} />
-        </>)} */}
-
-
         <EffectComposer multisampling={0}>
           <Bloom intensity={0.2} luminanceThreshold={0.8} luminanceSmoothing={0.4} height={80} />
         </EffectComposer>
@@ -164,4 +165,4 @@ const RedFoxLocal = ({ landmarks }) => {
   );
 };
 
-export default RedFoxLocal;
+export default SpiderManLocal;

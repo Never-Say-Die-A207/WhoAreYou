@@ -37,17 +37,20 @@ div{
     background-color: #f7f9fa;
 }
 
-.layout-aside img{
-    max-width: 100%;
+.mainpage-pic {
+    width: 100%;
 }
+/* .layout-aside img{
+    max-width: 100%;
+} */
 
-img{
+/* img{
     height: auto;
     width: auto;
     vertical-align: middle;
     border: 0;
     overflow: clip;
-}
+} */
 
 .form-width-sm {
     width: 346px;
@@ -392,6 +395,6 @@ input[type='checkbox'] {
     justify-content: space-between;
 
 }
-.zm-login-methods__list {
+/* .zm-login-methods__list {
     text-align: center;
-}
+} */

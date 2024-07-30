@@ -1,15 +1,15 @@
 #join {
-    display: flex;
+    /* display: flex; */
     /* flex-direction: column; */
-    justify-content: space-between;
-    align-items: center;
-    height: 100%;
+    /* justify-content: space-between;
+    align-items: center; */
+    height: 100%
 }
 
 #join-dialog {
-    display: flex;
-    flex-direction: column;
-    width: 80%;
+    /* display: flex;
+    flex-direction: column; */
+    /* width: 80%; */
     /* max-width: 900px; */
     /* padding-left: 30px; */
     /* padding-bottom: 30px; */
@@ -68,15 +68,15 @@
 }
 
 .btn-success {
-    background-color: #aa4dcb;
-    border-color: #aa4dcb;
+    background-color: #aa4dcb !important;
+    border-color: #aa4dcb !important;
     color: white;
 
 }
 
 .btn-success:hover {
-    background-color: #672481;
-    border-color: #672481;
+    background-color: #672481 !important;
+    border-color: #672481 !important;
     cursor: pointer;
 }
 
@@ -122,16 +122,23 @@
 /* Add these styles to your OpenVidu.css */
 
 
+.bottom {
+    width: 100%;
+}
 
-
-
+.video-form {
+    position: absolute;
+    bottom: 5%;
+    left: 45%;
+    z-index: 101;
+}
 
 /* Media Queries */
 @media screen and (max-width: 768px) {
-    #join-dialog {
+    /* #join-dialog {
         width: 90%;
         padding: 30px;
-    }
+    } */
 
     #join-dialog h2 {
         font-size: 50px;
@@ -143,10 +150,10 @@
 }
 
 @media screen and (max-width: 480px) {
-    #join-dialog {
+    /* #join-dialog {
         width: 100%;
         padding: 20px;
-    }
+    } */
 
     #join-dialog h2 {
         font-size: 40px;

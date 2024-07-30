@@ -386,7 +386,7 @@ input[type='checkbox'] {
     margin-bottom: 24px;
 }
 
-.zm-login-methods__list .justify-between {
+/* .zm-login-methods__list .justify-between {
     display: flex;
     -webkit-box-pack: justify;
     justify-content: space-between;
@@ -394,4 +394,4 @@ input[type='checkbox'] {
 }
 .zm-login-methods__list {
     text-align: center;
-}
+} */

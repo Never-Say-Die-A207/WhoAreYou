@@ -25,36 +25,37 @@ import JokerLocal from './JokerLocal';
 import PinkFoxLocal from './PinkFoxLocal';
 import SpiderManBlackLocal from './SpiderManBlackLocal';
 import SquidLocal from './SquidLocal';
+import RedFoxRemote from './RedFoxRemote';
 
 
-var APPLICATION_SERVER_URL = "https://grown-donkey-awfully.ngrok-free.app/";
-var LIVEKIT_URL = "wss://myapp-yqvsqxqi.livekit.cloud/";
+// var APPLICATION_SERVER_URL = "https://grown-donkey-awfully.ngrok-free.app/";
+// var LIVEKIT_URL = "wss://myapp-yqvsqxqi.livekit.cloud/";
 
-// let APPLICATION_SERVER_URL = "";
-// let LIVEKIT_URL = "";
+let APPLICATION_SERVER_URL = "";
+let LIVEKIT_URL = "";
 
-// configureUrls();
+configureUrls();
 
 
 //  openvidu
 
-// function configureUrls() {
-//     if (!APPLICATION_SERVER_URL) {
-//         if (window.location.hostname === 'localhost') {
-//             APPLICATION_SERVER_URL = 'http://localhost:6080/';
-//         } else {
-//             APPLICATION_SERVER_URL = 'https://' + window.location.hostname + ':6443/';
-//         }
-//     }
+function configureUrls() {
+    if (!APPLICATION_SERVER_URL) {
+        if (window.location.hostname === 'localhost') {
+            APPLICATION_SERVER_URL = 'http://localhost:6080/';
+        } else {
+            APPLICATION_SERVER_URL = 'https://' + window.location.hostname + ':6443/';
+        }
+    }
 
-//     if (!LIVEKIT_URL) {
-//         if (window.location.hostname === 'localhost') {
-//             LIVEKIT_URL = 'ws://localhost:7880/';
-//         } else {
-//             LIVEKIT_URL = 'wss://' + window.location.hostname + ':7443/';
-//         }
-//     }
-// }
+    if (!LIVEKIT_URL) {
+        if (window.location.hostname === 'localhost') {
+            LIVEKIT_URL = 'ws://localhost:7880/';
+        } else {
+            LIVEKIT_URL = 'wss://' + window.location.hostname + ':7443/';
+        }
+    }
+}
 
 
 
@@ -168,35 +169,35 @@ function OpenVidu() {
 
     //마스크 이름 넣기 주석 
     async function getToken(mask, participantName) {
-        console.log('내 마스크 정보')
-        console.log(mask)
-        // // 다른 사람 통신 주석
-        const mask_data = {
-            'userId': participantName,
-            'mask': mask,
-        };
+        // console.log('내 마스크 정보')
+        // console.log(mask)
+        // // // 다른 사람 통신 주석
+        // const mask_data = {
+        //     'userId': participantName,
+        //     'mask': mask,
+        // };
 
-        const response = await fetch(APPLICATION_SERVER_URL + 'facechat/', {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-                'ngrok-skip-browser-warning': 'skip-browser-warning'
-            },
-            body: JSON.stringify(mask_data)
-        }
-        );
-
-
-        // const response = await fetch(APPLICATION_SERVER_URL + 'token', {
+        // const response = await fetch(APPLICATION_SERVER_URL + 'facechat/', {
         //     method: 'POST',
         //     headers: {
-        //         'Content-Type': 'application/json'
+        //         "Content-Type": "application/json",
+        //         'ngrok-skip-browser-warning': 'skip-browser-warning'
         //     },
-        //     body: JSON.stringify({
-        //         roomName: roomName,
-        //         participantName: participantName
-        //     })
-        // });
+        //     body: JSON.stringify(mask_data)
+        // }
+        // );
+
+
+        const response = await fetch(APPLICATION_SERVER_URL + 'token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                roomName: roomName,
+                participantName: participantName
+            })
+        });
 
 
 
@@ -249,6 +250,7 @@ function OpenVidu() {
                 height: 720,
             });
             camera.start();
+            // videoPreviewRef.current = camera
         }
     }, [previewStream, videoPreviewRef]);  // videoPreviewRef도 의존성 배열에 추가
 
@@ -275,15 +277,6 @@ function OpenVidu() {
         }
     };
 
-    // 슬릭 캐러셀
-    const settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 3,
-        slidesToScroll: 3
-    };
-
 
 
     return (
@@ -293,30 +286,31 @@ function OpenVidu() {
                     {/* <JokerLocal landmarks={landmarks} videoElement3={videoPreviewRef} /> */}
                     {/* <RedFoxLocal landmarks={landmarks} videoElement3={videoPreviewRef}/> */}
                     {/* 슬라이더 만들기 */}
-                    <VerticalCarousel setMask={setMask} />
+                    
                     {/* 방 입장 시작 */}
                     <div id='join-dialog'>
                         {/* 가면 미리보기 보는 화면 */}
-                        <div style={{ position: 'relative' }}>
+                        <div style={{ position: 'relative', height: '91vh'}}>
+                            <VerticalCarousel setMask={setMask} />
                             <video ref={videoPreviewRef} autoPlay muted style={{
-                                width: '100%', height: 'auto', transform: 'scaleX(-1)',
+                                width: '100%', height: '100%', transform: 'scaleX(-1)', 
                             }}></video>
+                            {/* <RedFoxRemote landmarks={landmarks} videoElement={videoPreviewRef} /> */}
                             {/* <canvas ref={canvasRef} className="output_canvas" width="1280" height="720" style={{ position: 'absolute', top: 0, left: 0 }}></canvas> */}
-                            {mask === 'RedFox' && <RedFoxLocal landmarks={landmarks} videoElement3={videoPreviewRef} />}
-                            {mask === 'SpiderMan' && <SpiderManLocal landmarks={landmarks} videoElement3={videoPreviewRef} />}
-                            {mask === 'Joker' && <JokerLocal landmarks={landmarks} videoElement3={videoPreviewRef} />}
+                            {mask === 'RedFox' && <RedFoxLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
+                            {mask === 'SpiderMan' && <SpiderManLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
+                            {mask === 'Joker' && <JokerLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
                             {/* {mask === 'PinkFox' && <PinkFoxLocal landmarks={landmarks} videoElement3={videoPreviewRef} />} */}
-                            {mask === 'SpiderManBlack' && <SpiderManBlackLocal landmarks={landmarks} videoElement3={videoPreviewRef} />}
-                            {mask === 'Squid' && <SquidLocal landmarks={landmarks} videoElement3={videoPreviewRef} />}
-                        </div>
-                        <form
-                            onSubmit={(e) => {
-                                e.preventDefault();
-                                joinRoom();
-                                // stopPreview();
-                            }}
-                        >
-                            {/* <div>
+                            {mask === 'SpiderManBlack' && <SpiderManBlackLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
+                            {mask === 'Squid' && <SquidLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
+                            <form
+                                onSubmit={(e) => {
+                                    e.preventDefault();
+                                    joinRoom();
+                                    // stopPreview();
+                                }}
+                                className='video-form'>
+                                {/* <div>
                                 <label htmlFor='mask-name'>마스크 변경</label>
                                 <select
                                     id='mask-name'
@@ -324,50 +318,53 @@ function OpenVidu() {
                                     value={mask}
                                     onChange={changeLoaclMaskValue}
                                 > */}
-                            {/* <option value='' defaultValue='마스크 선택'>마스크 선택</option> */}
-                            {/* <option value='RedFox'>RedFox</option>
+                                {/* <option value='' defaultValue='마스크 선택'>마스크 선택</option> */}
+                                {/* <option value='RedFox'>RedFox</option>
                                     <option value="SpiderMan">SpiderMan</option>
                                 </select>
                             </div> */}
-                            <div>
-                                <label htmlFor='participant-name'>Participant</label>
-                                <input
-                                    id='participant-name'
-                                    className='form-control'
-                                    type='text'
-                                    value={participantName}
-                                    onChange={(e) => setParticipantName(e.target.value)}
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor='room-name'>Room</label>
-                                <input
-                                    id='room-name'
-                                    className='form-control'
-                                    type='text'
-                                    value={roomName}
-                                    onChange={(e) => setRoomName(e.target.value)}
-                                    required
-                                />
-                            </div>
+                                <div>
+                                    <label htmlFor='participant-name'>Participant</label>
+                                    <input
+                                        id='participant-name'
+                                        className='form-control'
+                                        type='text'
+                                        value={participantName}
+                                        onChange={(e) => setParticipantName(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor='room-name'>Room</label>
+                                    <input
+                                        id='room-name'
+                                        className='form-control'
+                                        type='text'
+                                        value={roomName}
+                                        onChange={(e) => setRoomName(e.target.value)}
+                                        required
+                                    />
+                                </div>
 
-                            <button
-                                className='btn btn-lg btn-success'
-                                type='submit'
-                                disabled={!roomName || !participantName}
-                            >
-                                매칭 시작!
-                            </button>
-                        </form>
+                                <button
+                                    className='btn btn-lg btn-success'
+                                    type='submit'
+                                    disabled={!roomName || !participantName}
+                                >
+                                    매칭 시작!
+                                </button>
+                            </form>
+                        </div>
+
                     </div>
                 </div>
             ) : (
-                loading ? (  // Loading 상태일 때 로딩 메시지 표시
-                    <div id='loading'>
-                        <h2>Loading...</h2>
-                    </div>
-                ) : (
+                // loading ? (  // Loading 상태일 때 로딩 메시지 표시
+                //     <div id='loading'>
+                //         <h2>Loading...</h2>
+                //     </div>
+                // ) : (
+                <div>
                     <div id='room'>
                         <div id='room-header'>
                             <h2 id='room-title'>{roomName}</h2>
@@ -397,11 +394,14 @@ function OpenVidu() {
                                 )
                             )}
                         </div>
-                        <div className='room-bottom'>
-                            <RoomBottom expressionData={expressionData} />
-                        </div>
+
                     </div>
-                ))}
+                    <div className='bottom'>
+                        <RoomBottom expressionData={expressionData} />
+                    </div>
+                </div>
+                // )
+            )}
         </>
     );
 }

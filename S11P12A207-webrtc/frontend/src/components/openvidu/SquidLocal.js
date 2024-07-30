@@ -71,46 +71,46 @@ const LineComponent = React.memo(({ landmarks, indices, color, lineWidth }) => {
   );
 });
 
-// const VideoTexture = ({ videoRef }) => {
-//   const { scene } = useThree();
-//   const texture = useMemo(() => new THREE.VideoTexture(videoRef.current), [videoRef]);
+const VideoTexture = ({ videoRef }) => {
+  const { scene } = useThree();
+  const texture = useMemo(() => new THREE.VideoTexture(videoRef.current), [videoRef]);
 
-//   useEffect(() => {
-//     if (videoRef.current) {
+  useEffect(() => {
+    if (videoRef.current) {
 
-//       texture.minFilter = THREE.LinearFilter;
-//       texture.magFilter = THREE.LinearFilter;
-//       texture.format = THREE.RGBFormat;
-//       texture.colorSpace = THREE.SRGBColorSpace;
-//       const geometry = new THREE.PlaneGeometry(4, 2.25); // 크기를 조정합니다
-//       const material = new THREE.MeshBasicMaterial({ map: texture });
-//       const mesh = new THREE.Mesh(geometry, material);
-//       mesh.position.y = 0;
-//       scene.add(mesh);
+      texture.minFilter = THREE.LinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+      texture.format = THREE.RGBFormat;
+      texture.colorSpace = THREE.SRGBColorSpace;
+      const geometry = new THREE.PlaneGeometry(4, 2.25); // 크기를 조정합니다
+      const material = new THREE.MeshBasicMaterial({ map: texture });
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.y = 0;
+      scene.add(mesh);
 
-//       return () => {
-//         scene.remove(mesh);
-//         texture.dispose();
-//       };
-//     }
-//   }, [videoRef, scene, texture]);
+      return () => {
+        scene.remove(mesh);
+        texture.dispose();
+      };
+    }
+  }, [videoRef, scene, texture]);
 
-//   return null;
-// };
+  return null;
+};
 
-const SquidLocal = ({ landmarks }) => {
+const SquidLocal = ({ landmarks, videoElement }) => {
   const faceOutlineIndices = [10, 338, 297, 332, 284, 251, 389, 356, 454, 323, 361, 288, 397, 365, 379, 378, 400, 377, 152, 148, 176, 149, 150, 136, 172, 58, 132, 93, 234, 127, 162, 21, 54, 103, 67, 109, 10];
   const triangle = [9, 50, 280, 9]
   const line = [205, 425]
    
     return (
-    <div className="canvas-container" style={{ width: '100%', height: '100%' }}>
+    <div className="canvas-container" style={{position:'absolute', top:'0', left:'0', width: '100%', height: '100%' }}>
       <Canvas
         camera={{ position: [0, 0, 5], fov: 25.4 }}
         style={{
-          position: 'absolute',
-          top: '0',
-          left: '0',
+          // position: 'absolute',
+          // top: '0',
+          // left: '0',
           transform: 'scaleX(-1)',
           width: '100%',
           height: '100%',
@@ -122,7 +122,9 @@ const SquidLocal = ({ landmarks }) => {
       >
         <ambientLight intensity={0} />
         <pointLight position={[10, 10, 10]}/>
-        {/* <VideoTexture videoRef={videoElement} /> */}
+        {videoElement?.current && (
+          <VideoTexture videoRef={videoElement} />
+        )}
         {landmarks && (
           <>
           <ShapeComponent landmarks={landmarks} indices={faceOutlineIndices} color="black" />
