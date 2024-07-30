@@ -75,40 +75,30 @@ public class FriendServiceTest {
 
         // 친구 목록으로 추가 된 친구목록 리스트 형성
         List<Friend> friends = new ArrayList<>();
-        friends.add(new Friend(1, null, male1, female1, null, null, new ChatRoom()));
-        friends.add(new Friend(2, null, male1, female2, null, null, new ChatRoom()));
-        friends.add(new Friend(3, null, male1, female3, null, null, new ChatRoom()));
-        friends.add(new Friend(4, null, male1, female4, null, null, new ChatRoom()));
+        friends.add(new Friend(1, null, male1, female1, null, "femalemask1", new ChatRoom()));
+        friends.add(new Friend(2, null, male1, female2, null, "femalemask2", new ChatRoom()));
+        friends.add(new Friend(3, null, male1, female3, null, "femalemask3", new ChatRoom()));
+        friends.add(new Friend(4, null, male1, female4, null, "femalemask4", new ChatRoom()));
 
         // 성별이 남성인 사람의 친구는 여자
         Mockito.when(friendJpaRepository.findFemaleByMaleId(male1.getId())).thenReturn(friends);
 
-        // getFriends의 결과 생성
-        List<User> users = new ArrayList<>();
-        users.add(friends.get(0).getFemale());
-        users.add(friends.get(1).getFemale());
-        users.add(friends.get(2).getFemale());
-        users.add(friends.get(3).getFemale());
-
         // FriendUserDto로 결과 생성
         List<FriendUserDto> friendUsers = new ArrayList<>();
-        for (User curUser : users) {
+        for (Friend curUser : friends) {
             friendUsers.add(FriendUserDto.builder()
-                    .email(curUser.getEmail())
-                    .gender(curUser instanceof Male ? "Male" : "Female")
-                    .name(curUser.getName())
-                    .nickname(curUser.getNickname())
-                    .type(curUser.getType())
+                    .nickname(curUser.getFemale().getNickname())
+                            .maskName(curUser.getFemaleMask())
                     .build());
         }
 
         List<FriendUserDto> result = friendSrvice.getList(male1.getId());
 
         // 비교
-        Assertions.assertEquals(friendUsers.get(0).getName(), result.get(0).getName());
-        Assertions.assertEquals(friendUsers.get(1).getName(), result.get(1).getName());
-        Assertions.assertEquals(friendUsers.get(2).getName(), result.get(2).getName());
-        Assertions.assertEquals(friendUsers.get(3).getName(), result.get(3).getName());
+        Assertions.assertEquals(friendUsers.get(0).getNickname(), result.get(0).getNickname());
+        Assertions.assertEquals(friendUsers.get(1).getNickname(), result.get(1).getNickname());
+        Assertions.assertEquals(friendUsers.get(2).getNickname(), result.get(2).getNickname());
+        Assertions.assertEquals(friendUsers.get(3).getNickname(), result.get(3).getNickname());
     }
 
     //@Test

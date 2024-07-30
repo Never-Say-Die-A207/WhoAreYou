@@ -8,9 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FriendUserDto {
-    String email;
-    String name;
     String nickname;
-    String gender;
-    String type;
+    String maskName;
 }

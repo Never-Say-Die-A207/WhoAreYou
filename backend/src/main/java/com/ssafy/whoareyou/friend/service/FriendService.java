@@ -35,21 +35,9 @@ public class FriendService {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("존재하지 않은 유저"));
         log.info("사용자 정보 불러오기");
 
-        List<User> friends = getFriends(user, user instanceof Male);
+
         log.info("남성 / 여성에 따라 친구 리스트 불러오기");
-
-        List<FriendUserDto> friendUsers = new ArrayList<>();
-
-        for (User curUser : friends) {
-            friendUsers.add(FriendUserDto.builder()
-                    .email(curUser.getEmail())
-                    .gender(curUser instanceof Male ? "Male" : "Female")
-                    .name(curUser.getName())
-                    .nickname(curUser.getNickname())
-                    .type(curUser.getType())
-                    .build());
-        }
-
+        List<FriendUserDto> friendUsers = getFriends(user, user instanceof Male);
 
         log.info("친구 리스트 불러오기 종료");
         return friendUsers;
@@ -89,18 +77,29 @@ public class FriendService {
         friendJpaRepository.save(friend);
     }
 
-    public List<User> getFriends(User user, boolean isMale) {
+    public List<FriendUserDto> getFriends(User user, boolean isMale) {
         List<Friend> friends = isMale ? friendJpaRepository.findFemaleByMaleId(user.getId()) : friendJpaRepository.findMaleByFemaleId(user.getId());
 
-        List<User> users = new ArrayList<>();
+        List<FriendUserDto> friendUserDtos = new ArrayList<>();
         for (Friend friend : friends) {
-            if (isMale)
-                users.add(friend.getFemale());
-            else
-                users.add(friend.getMale());
+            FriendUserDto dto;
+            if (isMale) {
+                dto = FriendUserDto.builder()
+                        .nickname(friend.getFemale().getNickname())
+                        .maskName(friend.getFemaleMask())
+                        .build();
+            }
+            else {
+                dto = FriendUserDto.builder()
+                        .nickname(friend.getMale().getNickname())
+                        .maskName(friend.getMaleMask())
+                        .build();
+            }
+
+            friendUserDtos.add(dto);
         }
 
-        return users;
+        return friendUserDtos;
     }
 
 }
