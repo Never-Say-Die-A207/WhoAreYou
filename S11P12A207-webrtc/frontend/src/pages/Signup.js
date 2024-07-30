@@ -9,14 +9,13 @@ const Signup = () => {
         name: '',
         nickname: '',
         password: '',
-        checkpassword: '',
         gender: '',
     });
     const [emailCheck, setEmailCheck] = useState('중복확인');
     const [nicknameCheck, setNicknameCheck] = useState('중복확인');
     const [passwordMatch, setPasswordMatch] = useState(null);
 
-    const { email, name, nickname, password, checkpassword, gender } = form;
+    const { email, name, nickname, password, gender } = form;
 
     const onChange = (e) => {
         const value = e.target.value;
@@ -26,10 +25,6 @@ const Signup = () => {
             ...form,
             [id]: value
         });
-
-        if (id === 'checkpassword') {
-            setPasswordMatch(value === form.password);
-        }
     };
 
     const onRadioChange = (e) => {
@@ -41,30 +36,33 @@ const Signup = () => {
         });
     };
 
-    const checkEmail = async () => {
+    const checkEmail = async (e) => {
+        e.preventDefault();
         const emailForm = {
             email
         };
         try {
             const response = await api.post('/email-check', emailForm);
-            console.log('Email Check api:', response.data);
             if (response.data.code == 'SU') {
                 setEmailCheck('가능');
-            } else {
-                setEmailCheck('불가능');
             };
         } catch (error) {
-            console.error('Email Check api error:', error);
+            if (error.response.data.code == 'DE') {
+                setEmailCheck('불가능');
+            }
+            else {
+                console.log('Email Check api error:', error)
+            }
         };
     };
 
-    const checkNickname = async () => {
+    const checkNickname = async (e) => {
+        e.preventDefault();
         const nicknameForm = {
             nickname
         };
         try {
             const response = await api.post('/nickname-check', nicknameForm);
-            console.log('Nickname Check api:', response.data);
             if (response.data.code == 'SU') {
                 setNicknameCheck('가능');
             } else {
@@ -112,22 +110,6 @@ const Signup = () => {
                 <div>
                     <label htmlFor='password'>비밀번호</label>
                     <input type='password' id='password' value={password} onChange={onChange}></input>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <label htmlFor='checkpassword'>비밀번호 확인</label>
-                    <input type='password' id='checkpassword' value={checkpassword} onChange={onChange}></input>
-                    {passwordMatch !== null && (
-                        <p
-                            style={{
-                                color: passwordMatch ? 'blue' : 'red',
-                                opacity: 0.5,
-                                fontSize: '0.9rem',
-                                margin: 0
-                            }}
-                        >
-                            {passwordMatch ? '일치' : '불일치'}
-                        </p>
-                    )}
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <label htmlFor='radio'>성별</label>
