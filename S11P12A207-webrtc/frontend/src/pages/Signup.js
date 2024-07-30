@@ -10,14 +10,13 @@ const Signup = () => {
         name: '',
         nickname: '',
         password: '',
-        checkpassword: '',
         gender: '',
     });
     const [emailCheck, setEmailCheck] = useState('중복확인');
     const [nicknameCheck, setNicknameCheck] = useState('중복확인');
     const [passwordMatch, setPasswordMatch] = useState(null);
 
-    const { email, name, nickname, password, checkpassword, gender } = form;
+    const { email, name, nickname, password, gender } = form;
 
     const onChange = (e) => {
         const value = e.target.value;
@@ -27,10 +26,6 @@ const Signup = () => {
             ...form,
             [id]: value
         });
-
-        if (id === 'checkpassword') {
-            setPasswordMatch(value === form.password);
-        }
     };
 
     const onRadioChange = (e) => {
@@ -42,30 +37,33 @@ const Signup = () => {
         });
     };
 
-    const checkEmail = async () => {
+    const checkEmail = async (e) => {
+        e.preventDefault();
         const emailForm = {
             email
         };
         try {
             const response = await api.post('/email-check', emailForm);
-            console.log('Email Check api:', response.data);
             if (response.data.code == 'SU') {
                 setEmailCheck('가능');
-            } else {
-                setEmailCheck('불가능');
             };
         } catch (error) {
-            console.error('Email Check api error:', error);
+            if (error.response.data.code == 'DE') {
+                setEmailCheck('불가능');
+            }
+            else {
+                console.log('Email Check api error:', error)
+            }
         };
     };
 
-    const checkNickname = async () => {
+    const checkNickname = async (e) => {
+        e.preventDefault();
         const nicknameForm = {
             nickname
         };
         try {
             const response = await api.post('/nickname-check', nicknameForm);
-            console.log('Nickname Check api:', response.data);
             if (response.data.code == 'SU') {
                 setNicknameCheck('가능');
             } else {

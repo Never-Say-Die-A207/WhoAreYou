@@ -1,14 +1,18 @@
 import axios from 'axios';
 
 const api = axios.create({
+  // 로컬
   baseURL: 'http://localhost:5000',
+  
+  // 서버
+  // baseURL: 'http://3.36.120.21:4040',
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('accessToken');
+  const token = localStorage.getItem('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

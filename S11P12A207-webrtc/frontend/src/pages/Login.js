@@ -3,7 +3,7 @@ import api from '../api/api';
 import { useNavigate } from 'react-router-dom';
 import Naver from './Naver';
 
-const Login = ({ onClose }) => {
+const Login = () => {
     const navigate = useNavigate();
     const [form, setForm] = useState({
         email: '',
@@ -30,7 +30,7 @@ const Login = ({ onClose }) => {
         e.preventDefault();
         try {
             const response = await api.post('/sign-in', form);
-            localStorage.setItem('accessToken', response.data.accessToken);
+            localStorage.setItem('token', response.data.token);
             console.log('Login success:', response.data);
             navigate('/matching');
         } catch (error) {
