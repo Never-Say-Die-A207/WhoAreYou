@@ -15,6 +15,6 @@ public interface AuthService {
     ResponseEntity<? super EmailCheckResponseDto> emailCheck(EmailCheckRequestDto dto);
     ResponseEntity<? super NicknameCheckResponseDto> nicknameCheck(NicknameCheckRequestDto dto);
     ResponseEntity<? super SignUpResponseDto> signUp (SignUpRequestDto dto);
-    ResponseEntity<? super SignInResponseDto> signIn (SignInRequestDto dto);
+    ResponseEntity<? super SignInResponseDto>  signIn (SignInRequestDto dto);
 
 }
