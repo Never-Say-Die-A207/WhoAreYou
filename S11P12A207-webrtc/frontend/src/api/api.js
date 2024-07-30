@@ -2,10 +2,10 @@ import axios from 'axios';
 
 const api = axios.create({
   // 로컬
-  baseURL: 'http://localhost:5000',
+  // baseURL: 'http://localhost:5000',
   
   // 서버
-  // baseURL: 'http://3.36.120.21:4040',
+  baseURL: 'http://3.36.120.21:4040',
   headers: {
     'Content-Type': 'application/json',
   },

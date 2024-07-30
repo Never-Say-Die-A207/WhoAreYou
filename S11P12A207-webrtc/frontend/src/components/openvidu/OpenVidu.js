@@ -16,7 +16,7 @@ import FaceRecognition from './FaceRecognition';
 import Preview from './Preview';
 import { FaceMesh } from '@mediapipe/face_mesh';
 import * as cam from '@mediapipe/camera_utils';
-
+import api from '../../api/api';
 
 import RedFoxLocal from './RedFoxLocal';
 import SpiderManLocal from './SpiderManLocal';
@@ -31,11 +31,11 @@ import RedFoxRemote from './RedFoxRemote';
 // 반응형
 import { useMediaQuery, MediaQuery } from 'react-responsive';
 
-// var APPLICATION_SERVER_URL = "https://grown-donkey-awfully.ngrok-free.app/";
-// var LIVEKIT_URL = "wss://myapp-yqvsqxqi.livekit.cloud/";
+var APPLICATION_SERVER_URL = "http://3.36.120.21:4040/";
+var LIVEKIT_URL = "wss://myapp-yqvsqxqi.livekit.cloud/";
 
-let APPLICATION_SERVER_URL = "";
-let LIVEKIT_URL = "";
+// let APPLICATION_SERVER_URL = "";
+// let LIVEKIT_URL = "";
 
 configureUrls();
 
@@ -150,7 +150,7 @@ function OpenVidu() {
         setRoom(undefined);
         setLocalTrack(undefined);
         setRemoteTracks([]);
-        window.location.reload();
+        // window.location.reload();
     }
 
     async function getRoomInfo(participantName) {
@@ -174,35 +174,35 @@ function OpenVidu() {
 
     //마스크 이름 넣기 주석 
     async function getToken(mask, participantName) {
+        const userId = localStorage.getItem('userId')
         // console.log('내 마스크 정보')
         // console.log(mask)
         // // // 다른 사람 통신 주석
-        // const mask_data = {
-        //     'userId': participantName,
-        //     'mask': mask,
-        // };
+        const mask_data = {
+            userId,
+            'mask': mask,
+        };
 
-        // const response = await fetch(APPLICATION_SERVER_URL + 'facechat/', {
-        //     method: 'POST',
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //         'ngrok-skip-browser-warning': 'skip-browser-warning'
-        //     },
-        //     body: JSON.stringify(mask_data)
-        // }
-        // );
-
-
-        const response = await fetch(APPLICATION_SERVER_URL + 'token', {
+        const response = await fetch(APPLICATION_SERVER_URL + 'facechat/', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-                roomName: roomName,
-                participantName: participantName
-            })
-        });
+            body: JSON.stringify(mask_data)
+        }
+        );
+
+
+        // const response = await fetch(APPLICATION_SERVER_URL + 'token', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({
+        //         roomName: roomName,
+        //         participantName: participantName
+        //     })
+        // });
 
 
 

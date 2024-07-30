@@ -4,7 +4,7 @@ import './Naver.css';
 
 const Naver = () => {
     const handleLogin = () => {
-        window.location.href = 'http://localhost:4040/oauth2/authorization/naver';
+        window.location.href = 'http://3.36.120.21:4040/oauth2/authorization/naver';
     };
 
     useEffect(() => {
