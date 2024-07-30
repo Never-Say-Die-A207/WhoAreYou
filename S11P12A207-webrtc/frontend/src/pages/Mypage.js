@@ -5,19 +5,22 @@ import MessageList from './MessageList';
 const Mypage = () => {
     const [messages, setMessages] = useState([]);
     const [friends, setFriends] = useState([]);
-    const [selectedFriend, setSelectedFriend] = useState(null);
+    const [selectedFriendId, setSelectedFriendId] = useState(null);
     const [newMessage, setNewMessage] = useState('');
 
     useEffect(() => {
         const fetchData = () => {
             const dummyFriends = [
                 { id: 1, name: '홍길동' },
-                { id: 2, name: '김철수' }
+                { id: 2, name: '김철수' },
+                { id: 3, name: '이영희' },
+                { id: 4, name: '박지민' },
+                { id: 5, name: '최민호' },
             ];
 
             const dummyMessages = [
-                { id: 1, sender: '홍길동', text: '안녕하세요!', time: new Date().toLocaleTimeString() },
-                { id: 2, sender: '나', text: '안녕하세요! 잘 지내세요?', time: new Date().toLocaleTimeString() }
+                { id: 1, sender: '홍길동', text: '안녕하세요!', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) },
+                { id: 2, sender: '나', text: '안녕하세요! 잘 지내세요?', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
             ];
 
             setFriends(dummyFriends);
@@ -29,7 +32,7 @@ const Mypage = () => {
 
     const handleSendMessage = () => {
         if (newMessage.trim()) {
-            setMessages([...messages, { id: messages.length + 1, sender: '나', text: newMessage, time: new Date().toLocaleTimeString() }]);
+            setMessages([...messages, { id: messages.length + 1, sender: '나', text: newMessage, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
             setNewMessage('');
         }
     };
@@ -41,6 +44,12 @@ const Mypage = () => {
         }
     };
 
+    const handleFriendClick = (friendId) => {
+        setSelectedFriendId(friendId);
+    };
+
+    const isFriendSelected = (friendId) => selectedFriendId === friendId;
+
     return (
         <div style={styles.container}>
             <div style={styles.friendList}>
@@ -49,11 +58,21 @@ const Mypage = () => {
                         친구가 없습니다. 친구를 추가하세요!
                     </div>
                 ) : (
-                    <FriendList friends={friends} onSelectFriend={setSelectedFriend} />
+                    <ul style={styles.friendListItems}>
+                        {friends.map(friend => (
+                            <li
+                                key={friend.id}
+                                style={isFriendSelected(friend.id) ? styles.selectedFriendListItem : styles.friendListItem}
+                                onClick={() => handleFriendClick(friend.id)}
+                            >
+                                {friend.name}
+                            </li>
+                        ))}
+                    </ul>
                 )}
             </div>
             <div style={styles.chatArea}>
-                {selectedFriend ? (
+                {selectedFriendId ? (
                     <>
                         {messages.length === 0 ? (
                             <div style={styles.noMessagesMessage}>
@@ -89,23 +108,24 @@ const Mypage = () => {
 const styles = {
     container: {
         display: 'flex',
-        height: '100vh',
-        backgroundColor: '#e5e5e5',
+        height: 'calc(100vh - 60px)',
     },
     friendList: {
-        width: '25%',
+        width: '20%',
         borderRight: '1px solid #ccc',
         padding: '10px',
         boxSizing: 'border-box',
-        backgroundColor: '#fff',
+        overflowY: 'auto',
+        height: 'calc(100vh - 60px)',
     },
     chatArea: {
-        width: '75%',
-        padding: '10px',
-        boxSizing: 'border-box',
+        width: '80%',
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: '#fff',
+        padding: '10px',
+        boxSizing: 'border-box',
+        overflowY: 'auto',
+        height: 'calc(100vh - 60px)',
     },
     noFriendsMessage: {
         textAlign: 'center',
@@ -124,6 +144,29 @@ const styles = {
         padding: '20px',
         color: '#888',
         fontSize: '16px',
+    },
+    friendListItems: {
+        listStyleType: 'none',
+        padding: 0,
+        margin: 0,
+    },
+    friendListItem: {
+        padding: '10px',
+        borderRadius: '20px',
+        border: '1px solid #ddd',
+        marginBottom: '10px',
+        cursor: 'pointer',
+        transition: 'background-color 0.3s ease',
+    },
+    selectedFriendListItem: {
+        padding: '10px',
+        borderRadius: '20px',
+        border: '1px solid #aa4dcb',
+        marginBottom: '10px',
+        cursor: 'pointer',
+        backgroundColor: '#aa4dcb',
+        color: '#fff',
+        transition: 'background-color 0.3s ease',
     },
     inputContainer: {
         marginTop: 'auto',
@@ -149,9 +192,6 @@ const styles = {
         cursor: 'pointer',
         transition: 'background-color 0.3s ease',
     },
-    sendButtonHover: {
-        backgroundColor: '#8a3fb8',
-    }
 };
 
 export default Mypage;
