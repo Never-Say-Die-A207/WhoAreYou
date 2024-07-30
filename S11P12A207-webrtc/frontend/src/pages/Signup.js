@@ -14,9 +14,12 @@ const Signup = () => {
     });
     const [emailCheck, setEmailCheck] = useState('중복확인');
     const [nicknameCheck, setNicknameCheck] = useState('중복확인');
-    const [passwordMatch, setPasswordMatch] = useState(null);
+    const [passwordMatch, setPasswordMatch] = useState({
+        checkpassword: ''
+    });
 
     const { email, name, nickname, password, gender } = form;
+    const { checkpassword } = passwordMatch;
 
     const onChange = (e) => {
         const value = e.target.value;
@@ -24,6 +27,15 @@ const Signup = () => {
         console.log(id, value)
         setForm({
             ...form,
+            [id]: value
+        });
+    };
+
+    const onCheck = (e) => {
+        const value = e.target.value;
+        const id = e.target.id;
+        console.log(id, value)
+        setPasswordMatch({
             [id]: value
         });
     };
@@ -200,7 +212,7 @@ const Signup = () => {
                                                 maxLength='99'
                                                 className='zm-input__inner'
                                                 value={checkpassword}
-                                                onChange={onChange}
+                                                onChange={onCheck}
                                                 style={{ width: '100%', height: '40px', boxSizing: 'border-box', padding: '0 10px' }}
                                             />
                                             {!checkpassword && (
