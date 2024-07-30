@@ -32,7 +32,7 @@ public class ChatService {
                 .time(formattedTime)
                 .build();
 
-        ChatRoom chatRoom = chatRoomJpaRepository.findById(roomId).orElse(chatRoomService.get(roomId));
+        ChatRoom chatRoom = chatRoomJpaRepository.findById(roomId).orElse(chatRoomService.create());
         Chat chat = Chat.builder()
                 .nickname(receivingMessage.getNickname())
                 .message(receivingMessage.getMessage())

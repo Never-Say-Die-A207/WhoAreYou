@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class FaceChatRepository {
@@ -35,6 +37,11 @@ public class FaceChatRepository {
     public void deleteFaceChat(FaceChat faceChat) {
         log.info("FaceChat : Delete face chat");
         em.remove(faceChat);
+    }
+
+    public Optional<FaceChat> findById(int id){
+        log.info("FaceChat : findById");
+        return Optional.of(em.find(FaceChat.class, id));
     }
 
     public FaceChat findAvailable(User user) throws NoResultException, IllegalArgumentException {

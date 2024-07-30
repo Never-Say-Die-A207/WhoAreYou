@@ -1,5 +1,5 @@
-insert into user (id, total_matching_count, email, gender, name, nickname, type)
-values -- (1, 0, "email1", "male", "name1", "nickname1"),
+--insert into user (id, total_matching_count, email, gender, name, nickname, type)
+--values  (1, 0, "email1", "male", "name1", "nickname1"),
 -- (2, 0, "email2", "female", "name2", "nickname2"),
 -- (3, 0, "email3", "male", "name3", "nickname3"),
 -- (4, 0, "email4", "female", "name4", "nickname4"),
@@ -9,5 +9,5 @@ values -- (1, 0, "email1", "male", "name1", "nickname1"),
 -- (8, 0, "email8", "female", "name8", "nickname8"),
 -- (9, 0, "email9", "male", "name9", "nickname9"),
 -- (10, 0, "email10", "female", "name10", "nickname10"),
-(11, 0, "email9", "male", "name9", "황태건", "general"),
-(12, 0, "email10", "female", "name10", "조성욱", "general");
+--(11, 0, "email9", "male", "name9", "황태건", "general"),
+--(12, 0, "email10", "female", "name10", "조성욱", "general");
