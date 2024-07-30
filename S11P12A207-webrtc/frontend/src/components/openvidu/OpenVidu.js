@@ -116,7 +116,9 @@ function OpenVidu() {
                     ...prev,
                     { trackPublication: publication, participantIdentity: participant.identity }
                 ]);
-                const body = getRoomInfo(participantName)
+
+                const userId = localStorage.getItem('userId')
+                const body = getRoomInfo(userId)
                 console.log(body)
             }
         );

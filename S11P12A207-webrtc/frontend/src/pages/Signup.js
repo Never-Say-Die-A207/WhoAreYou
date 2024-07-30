@@ -18,6 +18,8 @@ const Signup = () => {
         checkpassword: '',
     });
 
+    const [showModal, setShowModal] = useState(false); // 모달 상태 추가
+
     const { email, name, nickname, password, gender } = form;
     const { checkpassword } = passwordMatch;
 
@@ -87,7 +89,14 @@ const Signup = () => {
             navigate('/');
         } catch (error) {
             console.error('Signup error:', error);
+            // 회원가입 실패 시 모달 표시
+            setShowModal(true);
         }
+    };
+
+    // 모달 닫기 함수
+    const closeModal = () => {
+        setShowModal(false);
     };
 
     return (
@@ -113,12 +122,7 @@ const Signup = () => {
                                                     alignItems: 'center',
                                                 }}
                                             >
-                                                <div
-                                                    style={{
-                                                        position: 'relative',
-                                                        flex: '1',
-                                                    }}
-                                                >
+                                                <div className='email_input'>
                                                     <input
                                                         type="email"
                                                         autoComplete="email"
@@ -128,18 +132,10 @@ const Signup = () => {
                                                         aria-label="이메일 주소"
                                                         id="email"
                                                         maxLength="99"
-                                                        className="zm-input__inner"
+                                                        className="zm-input__inner email_input_input"
                                                         value={email}
                                                         onChange={onChange}
-                                                        style={{
-                                                            width: '100%',
-                                                            height: '50px',
-                                                            boxSizing:
-                                                                'border-box',
-                                                            paddingRight:
-                                                                '10px',
-                                                            fontSize: '1rem',
-                                                        }}
+                                                    
                                                     />
                                                     {!email && (
                                                         <label
@@ -492,13 +488,10 @@ const Signup = () => {
                                                 (e.target.style.backgroundColor =
                                                     '#aa4dcb')
                                             }
-                                            onClick={onSubmit}
+                                            type="submit" // 변경: onClick에서 type="submit"으로 수정
                                         >
                                             회원가입
                                         </button>
-                                        <div
-                                            style={{ paddingTop: '30px' }}
-                                        ></div>
                                     </div>
                                 </form>
                             </div>
@@ -510,6 +503,17 @@ const Signup = () => {
                     </div>
                 </div>
             </div>
+
+            {/* 모달 */}
+            {showModal && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <h2>회원가입 실패</h2>
+                        <p>회원가입에 실패했습니다.</p>
+                        <button onClick={closeModal}>확인</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

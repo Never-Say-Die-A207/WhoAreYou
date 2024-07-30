@@ -79,3 +79,16 @@
     border-color: #aa4dcb;
     outline: none;
 }
+
+.email_input {
+    position: relative;
+    flex: 1;
+}
+
+.zm-input__inner .email_input_input {
+    width: 100%;
+    height: 50px;
+    box-sizing: border-box;
+    padding-right: 10px;
+    font-size: 1rem;
+}
