@@ -84,7 +84,7 @@ const Signup = () => {
         }
         try {
             const response = await api.post('/sign-up', form);
-            navigate('/login');
+            navigate('/');
         } catch (error) {
             console.error('Signup error:', error);
         }
@@ -363,6 +363,67 @@ const Signup = () => {
                                                 >
                                                     {nicknameCheck}
                                                 </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="zm-form-item is-no-asterisk">
+                                        <div className="zm-form-item__content">
+                                            <div
+                                                className={`zm-input zm-input--xLarge ${
+                                                    nickname ? '' : 'is-empty'
+                                                } zm-input--suffix zm-input--show-label`}
+                                                style={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                }}
+                                            >
+                                                <div
+                                                    style={{
+                                                        position: 'relative',
+                                                        flex: '1',
+                                                    }}
+                                                >
+                                                    <input
+                                                        type="text"
+                                                        autoComplete="text"
+                                                        name="name"
+                                                        placeholder="이름"
+                                                        aria-required="true"
+                                                        aria-label="이름"
+                                                        id="name"
+                                                        maxLength="99"
+                                                        className="zm-input__inner"
+                                                        value={name}
+                                                        onChange={onChange}
+                                                        style={{
+                                                            width: '100%',
+                                                            height: '50px',
+                                                            boxSizing:
+                                                                'border-box',
+                                                            paddingRight:
+                                                                '10px',
+                                                            fontSize: '1rem',
+                                                        }}
+                                                    />
+                                                    {!name && (
+                                                        <label
+                                                            htmlFor="name"
+                                                            className="zm-input__label"
+                                                            style={{
+                                                                position:
+                                                                    'absolute',
+                                                                top: '50%',
+                                                                left: '50%',
+                                                                transform:
+                                                                    'translate(-50%, -50%)',
+                                                                color: '#999', // 적절한 색상을 지정하세요
+                                                            }}
+                                                        >
+                                                            이름
+                                                        </label>
+                                                    )}
+                                                </div>
+                                                
                                             </div>
                                         </div>
                                     </div>
