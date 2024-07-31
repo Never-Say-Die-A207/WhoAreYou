@@ -70,11 +70,11 @@ const Signup = () => {
             const response = await api.post('/nickname-check', nicknameForm);
             if (response.data.code === 'SU') {
                 setNicknameCheck('가능');
-            } else {
-                setNicknameCheck('불가능');
             }
         } catch (error) {
-            console.error('Nickname Check api error:', error);
+            if (error.response.data.code === 'DE') {
+                setEmailCheck('불가능');
+            }
         }
     };
 
