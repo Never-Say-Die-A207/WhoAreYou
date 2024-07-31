@@ -398,3 +398,10 @@ input[type='checkbox'] {
 /* .zm-login-methods__list {
     text-align: center;
 } */
+
+/* Home.css 또는 Modal.css에 추가 */
+@media (max-width: 768px) { /* 예: 768px 이하일 때 */
+    .layout-aside {
+        display: none; /* 해당 div를 숨김 */
+    }
+}

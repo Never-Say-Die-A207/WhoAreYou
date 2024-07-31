@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Login from './Login';
-import Mypage from './Mypage';
 import './Modal.css';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
@@ -28,10 +27,7 @@ const Home = () => {
 
     return (
         <div className='login-page'>
-
-
             <div style={{ display: 'flex', height: '100vh', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-
                 <div className='layout-aside'>
                     <div className='layout-body login-page-view' data-lang='ko-KO'>
                         <div className='layout-aside'>
@@ -40,11 +36,9 @@ const Home = () => {
                     </div>
                 </div>
 
-
-
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                     <div>
-                    <h2 style={{ fontSize: '3rem' }}>로그인해주세요</h2>
+                        <h2 style={{ fontSize: '3rem' }}>로그인해주세요</h2>
                     </div>
                     <Login />
                 </div>
