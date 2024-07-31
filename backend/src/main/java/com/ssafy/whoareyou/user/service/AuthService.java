@@ -4,6 +4,7 @@ import com.ssafy.whoareyou.user.dto.request.auth.EmailCheckRequestDto;
 import com.ssafy.whoareyou.user.dto.request.auth.NicknameCheckRequestDto;
 import com.ssafy.whoareyou.user.dto.request.auth.SignInRequestDto;
 import com.ssafy.whoareyou.user.dto.request.auth.SignUpRequestDto;
+import com.ssafy.whoareyou.user.dto.response.UserResponseDto;
 import com.ssafy.whoareyou.user.dto.response.auth.EmailCheckResponseDto;
 import com.ssafy.whoareyou.user.dto.response.auth.NicknameCheckResponseDto;
 import com.ssafy.whoareyou.user.dto.response.auth.SignInResponseDto;
@@ -17,4 +18,5 @@ public interface AuthService {
     ResponseEntity<? super SignUpResponseDto> signUp (SignUpRequestDto dto);
     ResponseEntity<? super SignInResponseDto>  signIn (SignInRequestDto dto);
 
+    UserResponseDto getUserById(int id);
 }
