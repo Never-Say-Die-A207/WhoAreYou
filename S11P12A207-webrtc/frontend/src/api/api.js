@@ -21,8 +21,7 @@ api.interceptors.request.use((config) => {
         if (now > parseInt(expirationTime, 10)) {
             const navigate = useNavigate();
             console.error('Token expired');
-            localStorage.removeItem('token');
-            localStorage.removeItem('expirationTime');
+            localStorage.clear();
             window.alert('토큰이 만료되었습니다. 다시 로그인 해주세요.');
             navigate('/');
         } else {
