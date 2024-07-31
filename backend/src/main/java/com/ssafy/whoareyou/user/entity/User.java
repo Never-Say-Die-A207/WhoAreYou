@@ -7,13 +7,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-//@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name="user")
 @Table(name="user")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "gender")
+@DiscriminatorColumn(name = "gender", discriminatorType = DiscriminatorType.STRING)
 public abstract class User {
 
     @Id

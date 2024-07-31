@@ -43,16 +43,15 @@ public class OAuth2UserServiceImplement extends DefaultOAuth2UserService{
             email = responseMap.get("email");
             name = responseMap.get("name");
             nickname = responseMap.get("nickname");
-            gender = responseMap.get("gender");
+            gender = responseMap.get("gender").equals("M") ? "male" : "female";
 
-            if(!gender.equals("F")){
-                Male maleEntity = new Male(email, name, nickname, "naver");
-                userRepository.save(maleEntity);
+            User userEntity;
+            if(gender.equals("male")){
+                userEntity = new Male(email, name, nickname, "naver");
+            } else {
+                userEntity = new Female(email, name, nickname, "naver");
             }
-            else{
-                Female femaleEntity = new Female(email, name, nickname, "naver");
-                userRepository.save(femaleEntity);
-            }
+            userRepository.save(userEntity);
         }
 
         return new CustomOAuth2User(email);
