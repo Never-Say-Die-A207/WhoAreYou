@@ -3,19 +3,24 @@ package com.ssafy.whoareyou.friend.repository;
 import com.ssafy.whoareyou.friend.entity.Friend;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface FriendJpaRepository extends JpaRepository<Friend, Integer> {
-    @Query(value = "select f from friend " +
-            "where f.male_id = :maleId and f.female_id = :femaleId ", nativeQuery = true)
-    Optional<Friend> findByGenderId(int maleId, int femaleId);
 
-//    @Query(value = "select * from friend where user_id = :userId and chat_room_id = :chatRoomId", nativeQuery = true)
-//    Optional<Friend> findByIds(int userId, int chatRoomId);
-//
-//    @Query(value = "select * from friend where user_id = :userId", nativeQuery = true)
-//    List<Friend> findListByUserId(int userId);
+    @Query("select f from Friend f " +
+            "where f.male.id = :maleId")
+    List<Friend> findFemaleByMaleId(@Param("maleId") int maleId);
+
+    @Query("select f from Friend f " +
+            "where f.female.id = :femaleId")
+    List<Friend> findMaleByFemaleId(@Param("femaleId") int femaleId);
+
+    @Query("select f from Friend f " +
+            "where f.male.id = :maleId and f.female.id = :femaleId ")
+    Optional<Friend> findByGenderId(@Param("maleId") int maleId, @Param("femaleId") int femaleId);
 }

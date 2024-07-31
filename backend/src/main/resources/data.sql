@@ -10,5 +10,5 @@
 -- (8, 0, "email8", "female", "name8", "nickname8", "general"),
 -- (9, 0, "email9", "male", "name9", "nickname9", "general"),
 -- (10, 0, "email10", "female", "name10", "nickname10", "general"),
--- (11, 0, "email9", "male", "name9", "황태건", "general"),
--- (12, 0, "email10", "female", "name10", "조성욱", "general");
+-- (11, 0, "email11", "male", "name11", "nickname11", "general"),
+-- (12, 0, "email12", "female", "name12", "nickname12", "general");

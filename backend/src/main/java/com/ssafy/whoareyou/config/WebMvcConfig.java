@@ -17,6 +17,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry
                 .addInterceptor(new InterceptorHandler(provider))
                 .addPathPatterns("/chat-rooms/**")
+                .addPathPatterns("/friends/**")
                 .excludePathPatterns("/css/**", "/images/**", "/js/**");
     }
 }

@@ -7,12 +7,14 @@ import com.ssafy.whoareyou.chat.entity.ChatRoom;
 import com.ssafy.whoareyou.chat.repository.ChatJpaRepository;
 import com.ssafy.whoareyou.chat.repository.ChatRoomJpaRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ChatService {
@@ -32,7 +34,7 @@ public class ChatService {
                 .time(formattedTime)
                 .build();
 
-        ChatRoom chatRoom = chatRoomJpaRepository.findById(roomId).orElse(chatRoomService.get(roomId));
+        ChatRoom chatRoom = chatRoomJpaRepository.findById(roomId).orElse(chatRoomService.create());
         Chat chat = Chat.builder()
                 .nickname(receivingMessage.getNickname())
                 .message(receivingMessage.getMessage())
@@ -40,6 +42,7 @@ public class ChatService {
                 .chatRoom(chatRoom)
                 .build();
 
+        log.info("채팅내역 저장 완료");
         chatJpaRepository.save(chat);
 
         return message;

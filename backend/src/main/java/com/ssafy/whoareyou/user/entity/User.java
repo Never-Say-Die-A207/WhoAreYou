@@ -1,17 +1,10 @@
 package com.ssafy.whoareyou.user.entity;
 
 import com.ssafy.whoareyou.user.dto.request.auth.SignUpRequestDto;
-import com.ssafy.whoareyou.facechat.entity.FaceChat;
-import com.ssafy.whoareyou.facechat.entity.History;
-import com.ssafy.whoareyou.friend.entity.Friend;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 //@Setter
@@ -42,11 +35,15 @@ public abstract class User {
 //    @Column(nullable = false, length = 20)
 //    private String gender;
 
-    @Column(name = "total_matching_count", nullable = false, columnDefinition = "int default 0")
-    private int totalMatchingCount;
 
     @Column(length = 10)
     private String type; //"general", "kakao", "naver"
+
+    @Column(columnDefinition = "integer default 0")
+    private Integer matchingCount;
+
+    @Column(columnDefinition = "integer default 0")
+    private Integer successCount;
 
 //    @OneToOne(mappedBy = "male", fetch = FetchType.LAZY)
 //    private FaceChat faceChatAsMale;
@@ -66,7 +63,8 @@ public abstract class User {
         this.name = dto.getName();
         this.nickname = dto.getNickname();
 //        this.gender = dto.getGender();
-        this.totalMatchingCount = 0;
+        this.matchingCount = 0;
+        this.successCount = 0;
         this.type = "general";
     }
 
@@ -75,11 +73,13 @@ public abstract class User {
         this.name = name;
         this.nickname = nickname;
 //        this.gender = gender;
-        this.totalMatchingCount = 0;
+        this.matchingCount = 0;
+        this.successCount = 0;
         this.type = type;
     }
 
     public void increaseMatchingCount(){
-        totalMatchingCount++;
+        matchingCount++;
     }
+    public void increaseSuccessCount(){ successCount++; }
 }
