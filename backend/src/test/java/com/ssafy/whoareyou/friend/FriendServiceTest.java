@@ -75,10 +75,10 @@ public class FriendServiceTest {
 
         // 친구 목록으로 추가 된 친구목록 리스트 형성
         List<Friend> friends = new ArrayList<>();
-        friends.add(new Friend(1, null, male1, female1, null, "femalemask1", new ChatRoom()));
-        friends.add(new Friend(2, null, male1, female2, null, "femalemask2", new ChatRoom()));
-        friends.add(new Friend(3, null, male1, female3, null, "femalemask3", new ChatRoom()));
-        friends.add(new Friend(4, null, male1, female4, null, "femalemask4", new ChatRoom()));
+        friends.add(new Friend(1, null, male1, female1, new ChatRoom()));
+        friends.add(new Friend(2, null, male1, female2, new ChatRoom()));
+        friends.add(new Friend(3, null, male1, female3, new ChatRoom()));
+        friends.add(new Friend(4, null, male1, female4, new ChatRoom()));
 
         // 성별이 남성인 사람의 친구는 여자
         Mockito.when(friendJpaRepository.findFemaleByMaleId(male1.getId())).thenReturn(friends);
@@ -88,7 +88,6 @@ public class FriendServiceTest {
         for (Friend curUser : friends) {
             friendUsers.add(FriendUserDto.builder()
                     .nickname(curUser.getFemale().getNickname())
-                            .maskName(curUser.getFemaleMask())
                     .build());
         }
 
@@ -119,14 +118,12 @@ public class FriendServiceTest {
         Friend friend = Friend.builder()
                 .male(male1)
                 .female(female1)
-                .maleMask(faceChat.getMaleMask())
-                .femaleMask(faceChat.getFemaleMask())
                 .chatRoom(chatRoom)
                 .build();
 
         Mockito.when(friendJpaRepository.save(friend)).thenReturn(friend);
 
-        int result = friendSrvice.join(1, new SearchTargetChatRoom(male1.getId(), female1.getId()));
+        int result = friendSrvice.join(new SearchTargetChatRoom(male1.getId(), female1.getId()));
         Assertions.assertEquals(result, chatRoom.getId());
     }
 }

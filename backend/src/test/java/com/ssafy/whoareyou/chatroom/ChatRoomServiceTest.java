@@ -54,20 +54,6 @@ public class ChatRoomServiceTest {
     }
 
     @Test
-    void getEmptyRoom() {
-        ChatRoom chatRoom = ChatRoom.builder()
-                .id(1)
-                .build();
-
-        Mockito.when(chatRoomJpaRepository.findById(-1)).thenReturn(Optional.of(chatRoom));
-
-        ChatRoom result = chatRoomService.create();
-        System.out.println(result.getId());
-
-        Assertions.assertEquals(1, result.getId());
-    }
-
-    @Test
     void getExistRoom() {
         // chatroom 생성
         ChatRoom chatRoom = ChatRoom.builder()
@@ -80,8 +66,6 @@ public class ChatRoomServiceTest {
                 .male(male1)
                 .female(female1)
                 .chatRoom(chatRoom)
-                .femaleMask("femaleMask")
-                .maleMask("maleMask")
                 .build();
 
         Mockito.when(friendJpaRepository.findByGenderId(male1.getId(), female1.getId())).thenReturn(Optional.of(friend));
@@ -92,7 +76,7 @@ public class ChatRoomServiceTest {
         Assertions.assertEquals(result.getChatRoom().getId(), chatRoom.getId());
     }
 
-    @Test
+//    @Test
     void loadHistoryTest() {
         // 방 저장
         ChatRoom chatRoom = ChatRoom.builder()

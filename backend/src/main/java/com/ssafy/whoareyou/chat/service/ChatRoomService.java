@@ -2,9 +2,10 @@ package com.ssafy.whoareyou.chat.service;
 
 import com.ssafy.whoareyou.chat.dto.SearchTargetChatRoom;
 import com.ssafy.whoareyou.chat.dto.SendingMessage;
-import com.ssafy.whoareyou.chat.entity.Chat;
+import com.ssafy.whoareyou.chat.entity.mongo.Chat;
 import com.ssafy.whoareyou.chat.entity.ChatRoom;
 import com.ssafy.whoareyou.chat.repository.ChatJpaRepository;
+import com.ssafy.whoareyou.chat.repository.ChatMongoRepository;
 import com.ssafy.whoareyou.chat.repository.ChatRoomJpaRepository;
 import com.ssafy.whoareyou.friend.entity.Friend;
 import com.ssafy.whoareyou.friend.repository.FriendJpaRepository;
@@ -26,6 +27,7 @@ public class ChatRoomService {
     private final UserRepository userRepository;
     private final ChatRoomJpaRepository chatRoomJpaRepository;
     private final ChatJpaRepository chatJpaRepository;
+    private final ChatMongoRepository chatMongoRepository;
     private final FriendJpaRepository friendJpaRepository;
 
     public int getChatRoomId(int userId, String nickname){
@@ -59,7 +61,7 @@ public class ChatRoomService {
         ).getChatRoom();
         
         log.info("채팅내역 가져오기");
-        List<Chat> chats = chatJpaRepository.findByRoomId(chatRoom.getId());
+        List<Chat> chats = chatMongoRepository.findByRoomId(chatRoom.getId());
 
         List<SendingMessage> sendingMessages = new LinkedList<>();
         for(Chat chat : chats){

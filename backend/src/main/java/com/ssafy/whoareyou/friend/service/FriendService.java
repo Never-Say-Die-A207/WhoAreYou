@@ -43,10 +43,8 @@ public class FriendService {
         return friendUsers;
     }
 
-    public int join(int faceChatRoomId, SearchTargetChatRoom dto) {
+    public int join(SearchTargetChatRoom dto) {
         log.info("FaceChatRoom 가져오기");
-        FaceChat faceChat = faceChatRepository.findById(faceChatRoomId)
-                .orElseThrow(() -> new NullPointerException("존재하지 않는 FaceChatRoom"));
 
         log.info("ChatRoom 생성");
         ChatRoom chatRoom = chatRoomService.create();
@@ -60,17 +58,15 @@ public class FriendService {
                 .orElseThrow(() -> new NullPointerException("존재하지 않는 유저"));
 
         log.info("친구관계 생성");
-        setRelation(faceChat, chatRoom, (Male) male, (Female) female);
+        setRelation(chatRoom, (Male) male, (Female) female);
 
         return chatRoom.getId();
     }
 
-    public void setRelation(FaceChat faceChat, ChatRoom chatRoom, Male male, Female female) {
+    public void setRelation(ChatRoom chatRoom, Male male, Female female) {
         Friend friend = Friend.builder()
                 .male(male)
                 .female(female)
-                .maleMask(faceChat.getMaleMask())
-                .femaleMask(faceChat.getFemaleMask())
                 .chatRoom(chatRoom)
                 .build();
 
@@ -86,13 +82,11 @@ public class FriendService {
             if (isMale) {
                 dto = FriendUserDto.builder()
                         .nickname(friend.getFemale().getNickname())
-                        .maskName(friend.getFemaleMask())
                         .build();
             }
             else {
                 dto = FriendUserDto.builder()
                         .nickname(friend.getMale().getNickname())
-                        .maskName(friend.getMaleMask())
                         .build();
             }
 

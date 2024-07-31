@@ -29,12 +29,6 @@ public class Friend {
     @JoinColumn(name = "female_id")
     private Female female;
 
-    @Column(name = "male_mask")
-    private String maleMask;
-
-    @Column(name = "female_mask")
-    private String femaleMask;
-
     @ManyToOne
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
