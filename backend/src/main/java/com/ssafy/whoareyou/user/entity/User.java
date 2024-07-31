@@ -39,11 +39,11 @@ public abstract class User {
     @Column(length = 10)
     private String type; //"general", "kakao", "naver"
 
-    @Column
-    private int matchingCount;
+    @Column(columnDefinition = "integer default 0")
+    private Integer matchingCount;
 
-    @Column
-    private int successCount;
+    @Column(columnDefinition = "integer default 0")
+    private Integer successCount;
 
 //    @OneToOne(mappedBy = "male", fetch = FetchType.LAZY)
 //    private FaceChat faceChatAsMale;
