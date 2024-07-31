@@ -59,7 +59,7 @@ const Home = () => {
                     </div>
                 </div>
 
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingTop: '15px' }}>
                     {userId ? (
                         <div>
                             <h2 style={{ fontSize: '3rem' }}>안녕하세요 {userId}님 반갑습니다.</h2>
