@@ -21,7 +21,8 @@ import java.util.Optional;
 public class FaceChatRepository {
     private static final Logger log = LoggerFactory.getLogger(FaceChatRepository.class);
     private final EntityManager em;
-    private final int timeLimit = 10;
+    //private final int timeLimit = 10;
+    private final int timeLimit = -1;
 
     public void saveFaceChatOrHistory(Object object) {
         if(object instanceof FaceChat faceChat) {

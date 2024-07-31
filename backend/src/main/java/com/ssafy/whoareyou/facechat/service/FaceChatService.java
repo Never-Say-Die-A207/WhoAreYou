@@ -116,15 +116,13 @@ public class FaceChatService {
         Male male = faceChat.getMale();
         Female female = faceChat.getFemale();
 
-        History historyForMale = new History(male, female, now);
-        male.getHistoriesAsMale().add(historyForMale);
+        History history = new History(male, female, now);
+        male.getHistoriesAsMale().add(history);
         userRepository.save(male);
-        faceChatRepository.saveFaceChatOrHistory(historyForMale);
 
-        History historyForFemale = new History(male, female, now);
-        female.getHistoriesAsFemale().add(historyForFemale);
+        female.getHistoriesAsFemale().add(history);
         userRepository.save(female);
-        faceChatRepository.saveFaceChatOrHistory(historyForFemale);
+        faceChatRepository.saveFaceChatOrHistory(history);
     }
 
     private AccessToken generateToken(String nickname, int id, String faceChatId){
