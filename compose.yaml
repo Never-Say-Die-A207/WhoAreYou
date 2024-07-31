@@ -11,15 +11,33 @@ services:
     networks:
       - back-tier
 
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 1234
+      MONGO_INITDB_DATABASE: whoareyou
+    ports:
+      - "27017:27017"
+    networks:
+      - back-tier
+    volumes:
+      - mongo_data:/data/db
+
   backend:
     build: ./backend
     image: backend
     depends_on:
       - database
+      - mongodb
     ports:
       - "4040:4040"
     networks:
-    - back-tier
+      - back-tier
 
 networks:
   back-tier: {}
+
+volumes:
+  mongo_data:
