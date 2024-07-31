@@ -23,7 +23,12 @@ public class FaceChatController {
     private static final Logger log = LoggerFactory.getLogger(FaceChatController.class);
     private final FaceChatService faceChatService;
 
-    //post 하나로 처리
+    /**
+     * @author 황태건
+     *
+     * @param params {@link FaceChatRequest}
+     * @return {@link ResponseEntity}
+     */
     @PostMapping("/")
     public ResponseEntity<?> enter(@RequestBody FaceChatRequest params) {
         Integer userId = params.getUserId();
