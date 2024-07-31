@@ -37,6 +37,7 @@ const Login = () => {
         try {
             const response = await api.post('/sign-in', form);
             localStorage.setItem('token', response.data.token);
+            localStorage.setItem('expirationTime', response.data.expirationTime);
             console.log('Login success:', response.data);
             // 예시: 프론트엔드에서 받은 JWT 토큰
             const token = response.data.token;
