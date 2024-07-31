@@ -312,9 +312,7 @@ const Signup = () => {
                                                     alignItems: 'center',
                                                 }}
                                             >
-                                                <div className='email_input'
-                                              
-                                                >
+                                                <div className='email_input'>
                                                     <input
                                                         type="text"
                                                         autoComplete="text"
@@ -324,38 +322,25 @@ const Signup = () => {
                                                         aria-label="이름"
                                                         id="name"
                                                         maxLength="99"
-                                                        className="zm-input__inne email_input_input"
+                                                        className="zm-input__inner email_input_input"
                                                         value={name}
                                                         onChange={onChange}
-                                                        style={{
-                                                            width: '100%',
-                                                            height: '50px',
-                                                            boxSizing:
-                                                                'border-box',
-                                                            paddingRight:
-                                                                '10px',
-                                                            fontSize: '1rem',
-                                                        }}
+                                    
                                                     />
                                                     {!name && (
                                                         <label
                                                             htmlFor="name"
-                                                            className="zm-input__label"
+                                                            className="zm-input__label email_label"
                                                             style={{
-                                                                position:
-                                                                    'absolute',
-                                                                top: '50%',
-                                                                left: '50%',
+                                                              
                                                                 transform:
                                                                     'translate(-50%, -50%)',
-                                                                color: '#999', // 적절한 색상을 지정하세요
                                                             }}
                                                         >
                                                             이름
                                                         </label>
                                                     )}
                                                 </div>
-                                                
                                             </div>
                                         </div>
                                     </div>
@@ -403,28 +388,22 @@ const Signup = () => {
                                             </label>
                                         </div>
                                     </div>
-                                    <div className="mgt-sm">
+                                    <div className="mgt-sm" style={{ display: 'flex', justifyContent: 'center' }}>
                                         <button
                                             style={{
                                                 cursor: 'pointer',
                                                 color: 'white',
                                                 backgroundColor: '#aa4dcb',
                                                 fontSize: '1.5rem',
-                                                width: '200px',
+                                                width: '500px',
                                                 height: '50px',
                                                 border: 'none',
                                                 borderRadius: '5px',
                                                 textAlign: 'center',
                                             }}
-                                            onMouseOver={(e) =>
-                                                (e.target.style.backgroundColor =
-                                                    '#8530e9')
-                                            }
-                                            onMouseOut={(e) =>
-                                                (e.target.style.backgroundColor =
-                                                    '#aa4dcb')
-                                            }
-                                            type="submit" // 변경: onClick에서 type="submit"으로 수정
+                                            onMouseOver={(e) => (e.target.style.backgroundColor = '#8530e9')}
+                                            onMouseOut={(e) => (e.target.style.backgroundColor = '#aa4dcb')}
+                                            type="submit"
                                         >
                                             회원가입
                                         </button>

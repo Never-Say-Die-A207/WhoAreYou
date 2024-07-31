@@ -147,6 +147,8 @@ function OpenVidu() {
         // Leave the room by calling 'disconnect' method over the Room object
         // Stop local video and audio tracks
 
+        await quit();
+
         await room?.disconnect();
         // Reset the state
         setRoom(undefined);
@@ -285,6 +287,16 @@ function OpenVidu() {
         }
     };
 
+    async function quit() {
+        const userId = localStorage.getItem('userId');
+    
+        const response = await fetch(APPLICATION_SERVER_URL + 'facechat/' + userId, {
+                method: 'DELETE'
+            }
+        );
+    
+        return response;
+    }
 
 
     return (

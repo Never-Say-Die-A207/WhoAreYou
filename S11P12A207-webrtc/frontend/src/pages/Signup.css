@@ -39,6 +39,10 @@
     color: #999;
 }
 
+.layout-main-slot {
+    justify-content: center;
+}
+
 /* 라디오 버튼 스타일 */
 .form-check-input {
     appearance: none;
