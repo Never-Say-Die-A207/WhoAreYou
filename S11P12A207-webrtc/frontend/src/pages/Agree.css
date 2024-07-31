@@ -1,0 +1,89 @@
+.cont_division {
+    position: relative;
+    margin-top: 24px;
+    width: 80%;
+    box-sizing: border-box;
+}
+
+div, span, p {
+    margin: 0;
+    padding: 0;
+    font-family: "Pretendard", "Malgun Gothic";
+    font-size: 100%;
+}
+
+div {
+    display: block;
+    unicode-bidi: isolate;
+}
+
+.cont_division .terms_agree {
+    display: inline-block;
+    margin-bottom: 8px;
+    color: #373f57;
+    font-size: 16px;
+}
+
+.cont_division .agree_box {
+    padding: 16px;
+    border: 1px solid #d7dce5;
+    border-radius: 4px;
+}
+
+strong {
+    font-weight: bold;
+}
+
+.cont_division .agree_box .agree_article {
+    padding-bottom: 16px;
+    border-bottom: 1px solid #d7dce5;
+    color: #5c667b;
+}
+
+ul {
+    list-style-type: none;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+    unicode-bidi: isolate;
+}
+
+p {
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    unicode-bidi: isolate;
+}
+
+.cont_division .agree_box .agree_article .depth2 {
+    padding-bottom: 0;
+    border: none;
+}
+
+
+li {
+    display: list-item;
+    unicode-bidi: isolate;
+}
+
+.InBox {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.cont_division .agree_box .agree_article .agree_txt {
+    margin: 8px 0 0 40px;
+    color: var(--gray100);
+    font-size: 13px;
+    line-height: 20px;
+}
+
+.InBox .Chk {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}

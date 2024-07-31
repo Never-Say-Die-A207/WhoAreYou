@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/api';
 import './Signup.css'; // 커스터마이징된 CSS를 추가합니다.
+import Agree from './Agree';
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -388,6 +389,7 @@ const Signup = () => {
                                             </label>
                                         </div>
                                     </div>
+                                    <Agree />
                                     <div className="mgt-sm" style={{ display: 'flex', justifyContent: 'center' }}>
                                         <button
                                             style={{
