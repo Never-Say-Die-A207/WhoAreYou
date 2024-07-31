@@ -441,11 +441,11 @@ function OpenVidu() {
                     </div>
                 </div>
             ) : (
-                // loading ? (  // Loading 상태일 때 로딩 메시지 표시
-                //     <div id='loading'>
-                //         <h2>Loading...</h2>
-                //     </div>
-                // ) : (
+                loading ? (  // Loading 상태일 때 로딩 메시지 표시
+                    <div id='loading'>
+                        <h2>Loading...</h2>
+                    </div>
+                ) : (
                 <div>
                     <div id='room'>
                         <div id='room-header'>
@@ -482,7 +482,7 @@ function OpenVidu() {
                         <RoomBottom expressionData={expressionData} />
                     </div>
                 </div>
-                // )
+                )
             )}
         </>
     );
