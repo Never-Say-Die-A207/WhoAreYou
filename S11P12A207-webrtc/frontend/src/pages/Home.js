@@ -20,7 +20,7 @@ const Home = () => {
 
     const onLoginSuccess = (userId) => {
         setUserId(userId);
-        setLoginModal(false); // 로그인 성공 시 모달을 닫을 수 있습니다.
+        setLoginModal(false);
     };
 
     const onLogout = () => {
@@ -41,6 +41,11 @@ const Home = () => {
 
     const mypage = () => {
         navigate('/mypage');
+    };
+
+    // 회원가입 페이지로 이동하는 함수 추가
+    const goToSignup = () => {
+        navigate('/signup');
     };
 
     return (
@@ -66,6 +71,31 @@ const Home = () => {
                         <div>
                             <h2 style={{ fontSize: '3rem' }}>로그인해주세요</h2>
                             <Login onLoginSuccess={onLoginSuccess} />
+
+                            {/* 회원가입 버튼 추가 */}
+                            <div className='mgt-sm'>
+                                <div style={{ paddingTop: '30px' }}>
+                                    <button
+                                        style={{
+                                            cursor: 'pointer',
+                                            color: 'white',
+                                            backgroundColor: '#aa4dcb',
+                                            fontSize: '1.5rem',
+                                            width: '200px',
+                                            height: '50px',
+                                            border: 'none',
+                                            borderRadius: '5px',
+                                            textAlign: 'center'
+                                        }}
+                                        onMouseOver={(e) => e.target.style.backgroundColor = '#8530e9'}
+                                        onMouseOut={(e) => e.target.style.backgroundColor = '#aa4dcb'}
+                                        onClick={goToSignup} // 회원가입 함수 호출
+                                    >
+                                        회원가입
+                                    </button>
+                                </div>
+                         
+                            </div>
                         </div>
                     )}
                 </div>

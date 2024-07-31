@@ -13,12 +13,12 @@ const Navbar = () => {
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav ml-auto">
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <Link to='/' className="nav-link">홈</Link>
-              </li>
-              <li className="nav-item">
+              </li> */}
+              {/* <li className="nav-item">
                 <Link to='/signup' className='nav-link'>회원가입</Link>
-              </li>
+              </li> */}
               <li className="nav-item">
                 <Link to='/matching' className='nav-link'>매칭하기</Link>
               </li>
