@@ -5,6 +5,7 @@ import com.ssafy.whoareyou.facechat.entity.History;
 import com.ssafy.whoareyou.user.entity.Female;
 import com.ssafy.whoareyou.user.entity.Male;
 import com.ssafy.whoareyou.user.entity.User;
+import com.ssafy.whoareyou.user.exception.InvalidGenderException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
@@ -44,9 +45,8 @@ public class FaceChatRepository {
         return Optional.of(em.find(FaceChat.class, id));
     }
 
-    public FaceChat findAvailable(User user) throws NoResultException, IllegalArgumentException {
 
-        String myGender = getGender(user);
+    public Optional<FaceChat> findAvailable(User user, String myGender) throws RuntimeException {
         String yourGender = myGender.equals("male") ? "female" : "male";
 
         String queryString = "select fc from FaceChat fc " +
@@ -60,30 +60,27 @@ public class FaceChatRepository {
                 "where f." + myGender + " =:user) " +
                 "order by fc.createdAt";
 
-        return em.createQuery(queryString, FaceChat.class)
-                .setParameter("timeLimit", timeLimit)
-                .setParameter("user", user)
-                .setFirstResult(0)
-                .setMaxResults(1)
-                .getSingleResult();
+        try{
+            return Optional.of(em.createQuery(queryString, FaceChat.class)
+                    .setParameter("timeLimit", timeLimit)
+                    .setParameter("user", user)
+                    .setFirstResult(0)
+                    .setMaxResults(1)
+                    .getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
 
-    public FaceChat findMy(User user) throws NoResultException, NonUniqueResultException,
-            NullPointerException, IllegalArgumentException {
+    public Optional<FaceChat> findMy(User user, String myGender) throws RuntimeException {
         log.info("FaceChat : Find current face chat by User " + user.getId());
 
-        String myGender = getGender(user);
-
-        return em.createQuery("select fc from FaceChat fc where fc." + myGender + " = :user", FaceChat.class)
-                .setParameter("user", user)
-                .getSingleResult();
-    }
-
-    private String getGender(User user) throws IllegalArgumentException{
-        if(user instanceof Male)
-            return "male";
-        else if(user instanceof Female)
-            return "female";
-        throw new IllegalArgumentException("Wrong gender type");
+        try{
+            return Optional.of(em.createQuery("select fc from FaceChat fc where fc." + myGender + " = :user", FaceChat.class)
+                    .setParameter("user", user)
+                    .getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
 }
