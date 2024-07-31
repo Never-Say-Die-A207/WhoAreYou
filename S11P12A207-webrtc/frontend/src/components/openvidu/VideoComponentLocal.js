@@ -9,54 +9,55 @@ import SpiderManBlackLocal from "./SpiderManBlackLocal";
 import JokerLocal from "./JokerLocal";
 import SquidLocal from "./SquidLocal";
 
-function VideoComponentLocal({ track, participantIdentity, local, mask }) {
+function VideoComponentLocal({ track, participantIdentity, local = false, mask }) {
     const videoElement = useRef(null);
     const [landmarks, setLandmarks] = useState(null);
-    const cameraRef = useRef(null);
 
     useEffect(() => {
-        if (videoElement.current && track) {
+        if (videoElement.current) {
             track.attach(videoElement.current);
-
-            const faceMesh = new FaceMesh({
-                locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
-            });
-
-            faceMesh.setOptions({
-                maxNumFaces: 1,
-                minDetectionConfidence: 0.5,
-                minTrackingConfidence: 0.5,
-            });
-
-            faceMesh.onResults((results) => {
-                if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
-                    const landmarks = results.multiFaceLandmarks[0];
-                    setLandmarks(landmarks);
-                }
-            });
-
-            const camera = new cam.Camera(videoElement.current, {
-                onFrame: async () => {
-                    if (videoElement.current) {
-                        await faceMesh.send({ image: videoElement.current });
-                    }
-                },
-                width: 1280,
-                height: 720,
-            });
-            camera.start();
-            cameraRef.current = camera;
         }
 
         return () => {
-            if (track) {
-                track.detach();
-            }
-            if (cameraRef.current) {
-                cameraRef.current.stop();
-            }
+            track.detach();
         };
     }, [track]);
+
+    useEffect(() => {
+        const faceMesh = new FaceMesh({
+            locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
+        });
+
+        faceMesh.setOptions({
+            maxNumFaces: 1,
+            minDetectionConfidence: 0.5,
+            minTrackingConfidence: 0.5,
+        });
+
+        faceMesh.onResults((results) => {
+            if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
+                const landmarks = results.multiFaceLandmarks[0];
+                setLandmarks(landmarks);
+            }
+        });
+
+        const detectLandmarks = async () => {
+            if (videoElement.current) {
+                await faceMesh.send({ image: videoElement.current });
+                requestAnimationFrame(detectLandmarks);
+            }
+        };
+
+        videoElement.current.addEventListener('loadeddata', () => {
+            detectLandmarks();
+        });
+
+        return () => {
+            if (faceMesh) {
+                faceMesh.close();
+            }
+        };
+    }, []);
 
     return (
         <div id={"camera-" + participantIdentity} className="video-container-local">
