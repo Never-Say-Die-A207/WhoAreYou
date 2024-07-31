@@ -53,6 +53,7 @@ public class OAuth2SuccessHandler  extends SimpleUrlAuthenticationSuccessHandler
             String email = oAuth2User.getName();
             System.out.println("이메일: " + email);
             Optional<User> user = userRepository.findByEmail(email);
+            System.out.println("ㅇㅇㅇ");
             if (user.isPresent()) {
                 String userId = String.valueOf(user.get().getId());
                 System.out.println("사용자 ID: " + userId);
