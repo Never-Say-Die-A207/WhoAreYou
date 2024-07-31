@@ -5,9 +5,7 @@ const Logout = ({ onLogout }) => {
     const navigate = useNavigate();
     
     const onClick = async () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('userId');
-        localStorage.removeItem('expirationTime');
+        localStorage.clear();
         
         // onLogout 콜백 호출
         onLogout();
