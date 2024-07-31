@@ -47,8 +47,10 @@ public class FaceChat {
 
         if(isEmptyRoom)
             this.createdAt = LocalDateTime.now();
-        else
+        else{
             this.startedAt = LocalDateTime.now();
+            updateMatchingCount();
+        }
     }
 
     public Boolean removeUser(User user){

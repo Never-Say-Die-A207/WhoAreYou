@@ -45,6 +45,7 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	testImplementation 'org.mockito:mockito-junit-jupiter:5.12.0'
 }
 
 tasks.named('test') {

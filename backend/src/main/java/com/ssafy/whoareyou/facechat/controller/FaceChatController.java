@@ -2,7 +2,10 @@ package com.ssafy.whoareyou.facechat.controller;
 
 import com.ssafy.whoareyou.facechat.dto.FaceChatInfoResponse;
 import com.ssafy.whoareyou.facechat.dto.FaceChatRequest;
+import com.ssafy.whoareyou.facechat.exception.FaceChatNotFoundException;
 import com.ssafy.whoareyou.facechat.service.FaceChatService;
+import com.ssafy.whoareyou.user.exception.InvalidGenderException;
+import com.ssafy.whoareyou.user.exception.UserNotFoundException;
 import io.livekit.server.AccessToken;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -19,16 +22,18 @@ import java.util.Map;
 public class FaceChatController {
     private static final Logger log = LoggerFactory.getLogger(FaceChatController.class);
     private final FaceChatService faceChatService;
-    
-    //post 하나로 처리
+
+    /**
+     * @author 황태건
+     *
+     * @param params {@link FaceChatRequest}
+     * @return {@link ResponseEntity}
+     */
     @PostMapping("/")
     public ResponseEntity<?> enter(@RequestBody FaceChatRequest params) {
         Integer userId = params.getUserId();
         String mask = params.getMask();
         Boolean needsChange = params.getNeedsChange();
-
-        if(userId == null)
-            return new ResponseEntity<Void> (HttpStatus.BAD_REQUEST);
 
         if(needsChange == null)
             needsChange = false;
@@ -36,28 +41,40 @@ public class FaceChatController {
         try {
             AccessToken token = faceChatService.getToken(userId, mask, needsChange);
             return new ResponseEntity<Map<String, String>> (Map.of("token", token.toJwt()), HttpStatus.OK);
+        } catch (UserNotFoundException | InvalidGenderException e) {
+            return new ResponseEntity<String>("Wrong user info.", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
+            log.info(e.getMessage());
             return new ResponseEntity<Void> (HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<?> quit(@PathVariable("userId") Integer userId){
-        if(userId == null)
-            return new ResponseEntity<Void> (HttpStatus.BAD_REQUEST);
-
-        faceChatService.quitUser(userId);
-
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        try{
+            faceChatService.quitUser(userId);
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        } catch (FaceChatNotFoundException e) {
+            return new ResponseEntity<String>("Not on face chat now.", HttpStatus.OK);
+        } catch (UserNotFoundException | InvalidGenderException e){
+            return new ResponseEntity<String> ("Wrong user info.", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            return new ResponseEntity<Void> (HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/info/{userId}")
     public ResponseEntity<?> getInfo(@PathVariable("userId") Integer userId){
-        if(userId == null)
-            return new ResponseEntity<Void> (HttpStatus.BAD_REQUEST);
 
-        FaceChatInfoResponse infoResponse = faceChatService.getInfo(userId);
-
-        return new ResponseEntity<Map<String, Object>>(Map.of("info", infoResponse),HttpStatus.OK);
+        try{
+            FaceChatInfoResponse infoResponse = faceChatService.getInfo(userId);
+            return new ResponseEntity<Map<String, Object>>(Map.of("info", infoResponse),HttpStatus.OK);
+        } catch (UserNotFoundException e){
+            return new ResponseEntity<String> ("Wrong user info.", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            return new ResponseEntity<Void> (HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

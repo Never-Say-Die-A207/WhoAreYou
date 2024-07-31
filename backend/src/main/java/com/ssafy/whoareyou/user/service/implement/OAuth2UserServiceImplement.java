@@ -1,6 +1,7 @@
 package com.ssafy.whoareyou.user.service.implement;
 
 import java.util.Map;
+import java.util.Optional;
 
 import com.ssafy.whoareyou.user.entity.Female;
 import com.ssafy.whoareyou.user.entity.Male;
@@ -43,15 +44,19 @@ public class OAuth2UserServiceImplement extends DefaultOAuth2UserService{
             email = responseMap.get("email");
             name = responseMap.get("name");
             nickname = responseMap.get("nickname");
-            gender = responseMap.get("gender");
+            gender = responseMap.get("gender").equals("M") ? "male" : "female";
 
-            if(!gender.equals("F")){
-                Male maleEntity = new Male(email, name, nickname, "naver");
-                userRepository.save(maleEntity);
-            }
-            else{
-                Female femaleEntity = new Female(email, name, nickname, "naver");
-                userRepository.save(femaleEntity);
+            Optional<User> userEntity = userRepository.findByEmail(email);
+            if (userEntity.isEmpty()) {
+                // Create new user entity if not exists
+                if (gender.equals("male")) {
+                    userEntity = Optional.of(new Male(email, name, nickname, "naver"));
+                } else {
+                    userEntity = Optional.of(new Female(email, name, nickname, "naver"));
+                }
+                System.out.println("저장시도");
+                userRepository.save(userEntity.get());
+                System.out.println("저장완료");
             }
         }
 

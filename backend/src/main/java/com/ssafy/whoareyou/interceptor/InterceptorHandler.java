@@ -21,7 +21,7 @@ public class InterceptorHandler implements HandlerInterceptor {
 
         String userId = provider.getUserId(accessToken);
 
-        log.info("" + userId);
+        log.info("userId 추출 완료: " + userId);
 
         request.setAttribute("userId", userId);
 

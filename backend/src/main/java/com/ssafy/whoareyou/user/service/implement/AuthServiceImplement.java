@@ -1,10 +1,12 @@
 package com.ssafy.whoareyou.user.service.implement;
 
 import com.ssafy.whoareyou.user.dto.request.auth.EmailCheckRequestDto;
+import com.ssafy.whoareyou.user.dto.request.auth.NicknameCheckRequestDto;
 import com.ssafy.whoareyou.user.dto.request.auth.SignInRequestDto;
 import com.ssafy.whoareyou.user.dto.request.auth.SignUpRequestDto;
 import com.ssafy.whoareyou.user.dto.response.ResponseDto;
 import com.ssafy.whoareyou.user.dto.response.auth.EmailCheckResponseDto;
+import com.ssafy.whoareyou.user.dto.response.auth.NicknameCheckResponseDto;
 import com.ssafy.whoareyou.user.dto.response.auth.SignInResponseDto;
 import com.ssafy.whoareyou.user.dto.response.auth.SignUpResponseDto;
 import com.ssafy.whoareyou.provider.JwtProvider;
@@ -49,6 +51,23 @@ public class AuthServiceImplement implements AuthService {
     }
 
     @Override
+    public ResponseEntity<? super NicknameCheckResponseDto> nicknameCheck(NicknameCheckRequestDto dto) {
+
+        try{
+
+            String nickname = dto.getNickname();
+            boolean isExisted = userRepository.findByNickname(nickname).isPresent();
+            if(isExisted) return NicknameCheckResponseDto.duplicateNickname();
+
+        }catch(Exception exception){
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        return NicknameCheckResponseDto.success();
+    }
+
+    @Override
     public ResponseEntity<? super SignUpResponseDto> signUp(SignUpRequestDto dto) {
 
         try{
@@ -56,6 +75,10 @@ public class AuthServiceImplement implements AuthService {
             String email = dto.getEmail();
             boolean isExisted = userRepository.findByEmail(email).isPresent();
             if(isExisted) return SignUpResponseDto.duplicateEmail();
+
+            String nickname = dto.getNickname();
+            boolean isExisted2 = userRepository.findByNickname(nickname).isPresent();
+            if(isExisted2) return SignUpResponseDto.duplicateNickname();
 
             String password = dto.getPassword();
             String encodedPassword = passwordEncoder.encode(password);

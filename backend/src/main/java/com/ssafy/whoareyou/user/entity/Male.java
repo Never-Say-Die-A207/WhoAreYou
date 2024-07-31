@@ -5,16 +5,16 @@ import com.ssafy.whoareyou.facechat.entity.History;
 import com.ssafy.whoareyou.friend.entity.Friend;
 import com.ssafy.whoareyou.user.dto.request.auth.SignUpRequestDto;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Builder
 @Entity
 @Getter @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @DiscriminatorValue("male")
 public class Male extends User {
 
