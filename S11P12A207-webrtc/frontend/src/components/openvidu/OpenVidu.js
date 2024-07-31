@@ -152,7 +152,7 @@ function OpenVidu() {
         setRoom(undefined);
         setLocalTrack(undefined);
         setRemoteTracks([]);
-        // window.location.reload();
+        window.location.reload();
     }
 
     async function getRoomInfo(participantName) {
