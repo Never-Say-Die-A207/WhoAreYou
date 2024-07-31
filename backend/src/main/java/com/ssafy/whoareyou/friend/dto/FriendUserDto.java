@@ -9,5 +9,4 @@ import lombok.*;
 @AllArgsConstructor
 public class FriendUserDto {
     String nickname;
-    String maskName;
 }

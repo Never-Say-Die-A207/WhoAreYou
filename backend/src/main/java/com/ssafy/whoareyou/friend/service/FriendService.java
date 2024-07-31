@@ -69,8 +69,6 @@ public class FriendService {
         Friend friend = Friend.builder()
                 .male(male)
                 .female(female)
-                .maleMask(faceChat.getMaleMask())
-                .femaleMask(faceChat.getFemaleMask())
                 .chatRoom(chatRoom)
                 .build();
 
@@ -86,13 +84,11 @@ public class FriendService {
             if (isMale) {
                 dto = FriendUserDto.builder()
                         .nickname(friend.getFemale().getNickname())
-                        .maskName(friend.getFemaleMask())
                         .build();
             }
             else {
                 dto = FriendUserDto.builder()
                         .nickname(friend.getMale().getNickname())
-                        .maskName(friend.getMaleMask())
                         .build();
             }
 
