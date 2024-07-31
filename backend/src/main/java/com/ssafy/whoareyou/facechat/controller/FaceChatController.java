@@ -22,7 +22,7 @@ import java.util.Map;
 public class FaceChatController {
     private static final Logger log = LoggerFactory.getLogger(FaceChatController.class);
     private final FaceChatService faceChatService;
-    
+
     //post 하나로 처리
     @PostMapping("/")
     public ResponseEntity<?> enter(@RequestBody FaceChatRequest params) {
@@ -37,8 +37,9 @@ public class FaceChatController {
             AccessToken token = faceChatService.getToken(userId, mask, needsChange);
             return new ResponseEntity<Map<String, String>> (Map.of("token", token.toJwt()), HttpStatus.OK);
         } catch (UserNotFoundException | InvalidGenderException e) {
-            return new ResponseEntity<String>("회원 정보가 잘못 되었습니다.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>("Wrong user info.", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
+            log.info(e.getMessage());
             return new ResponseEntity<Void> (HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -49,10 +50,11 @@ public class FaceChatController {
             faceChatService.quitUser(userId);
             return new ResponseEntity<Void>(HttpStatus.OK);
         } catch (FaceChatNotFoundException e) {
-            return new ResponseEntity<String>("화상채팅 중이 아닙니다.", HttpStatus.OK);
+            return new ResponseEntity<String>("Not on face chat now.", HttpStatus.OK);
         } catch (UserNotFoundException | InvalidGenderException e){
-            return new ResponseEntity<String> ("회원 정보가 잘못 되었습니다.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String> ("Wrong user info.", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
+            log.info(e.getMessage());
             return new ResponseEntity<Void> (HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -64,8 +66,9 @@ public class FaceChatController {
             FaceChatInfoResponse infoResponse = faceChatService.getInfo(userId);
             return new ResponseEntity<Map<String, Object>>(Map.of("info", infoResponse),HttpStatus.OK);
         } catch (UserNotFoundException e){
-            return new ResponseEntity<String> ("회원 정보가 잘못 되었습니다.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String> ("Wrong user info.", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
+            log.info(e.getMessage());
             return new ResponseEntity<Void> (HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

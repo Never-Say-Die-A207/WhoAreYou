@@ -33,7 +33,7 @@ public class FaceChatService {
 
     private final UserRepository userRepository;
 
-//    @Value("(${livekit.server.url)")
+    //    @Value("(${livekit.server.url)")
 //    private String LIVEKIT_SERVER_URL;
     @Value("${livekit.api.key}")
     private String LIVEKIT_API_KEY;
@@ -41,7 +41,7 @@ public class FaceChatService {
     private String LIVEKIT_API_SECRET;
 
     public AccessToken getToken(Integer userId, String mask, boolean needsChange) {
-        log.info("방을 찾습니다...");
+        log.info("Searching...");
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         String gender = getGender(user).orElseThrow(InvalidGenderException::new);
 
@@ -58,25 +58,25 @@ public class FaceChatService {
 
             faceChat = getAvailableFaceChat(user, gender);
             if(faceChat == null){
-                log.info("적절한 방을 찾지 못해 새로운 방을 생성합니다.");
+                log.info("Create face chat.");
                 faceChat = createFaceChat(user, mask);
             }
             else{
-                log.info("방을 찾았습니다");
+                log.info("Success to find face chat");
                 faceChat.joinUser(user, mask);
                 createHistoryForBoth(faceChat);
             }
             faceChatRepository.saveFaceChatOrHistory(faceChat);
         }
         else{
-            log.info("이미 방에 속해있습니다.");
+            log.info("Already in face chat.");
         }
 
         return generateToken(user.getNickname(), user.getId(), String.valueOf(faceChat.getId()));
     }
 
     public void quitUser(Integer userId) {
-        log.info("방에서 나갑니다.");
+        log.info("quit.");
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         String gender = getGender(user).orElseThrow(InvalidGenderException::new);
 
@@ -100,7 +100,7 @@ public class FaceChatService {
 
     @Transactional(readOnly = true)
     public FaceChat getAvailableFaceChat(User user, String gender) {
-        return faceChatRepository.findAvailable(user, gender).orElseThrow(FaceChatNotFoundException::new);
+        return faceChatRepository.findAvailable(user, gender).orElse(null);
     }
 
     public FaceChat createFaceChat(User user, String mask) {
