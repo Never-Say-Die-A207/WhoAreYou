@@ -289,12 +289,12 @@ function OpenVidu() {
 
     async function quit() {
         const userId = localStorage.getItem('userId');
-    
+
         const response = await fetch(APPLICATION_SERVER_URL + 'facechat/' + userId, {
-                method: 'DELETE'
-            }
+            method: 'DELETE'
+        }
         );
-    
+
         return response;
     }
 

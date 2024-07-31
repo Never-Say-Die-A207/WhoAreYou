@@ -33,6 +33,7 @@ const Login = ({ onLoginSuccess }) => {
         try {
             const response = await api.post('/sign-in', form);
             localStorage.setItem('token', response.data.token);
+            localStorage.setItem('expirationTime', response.data.expirationTime);
             console.log('Login success:', response.data);
 
             // JWT 토큰 받아오기
