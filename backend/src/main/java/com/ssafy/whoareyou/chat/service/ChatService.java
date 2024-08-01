@@ -4,7 +4,6 @@ import com.ssafy.whoareyou.chat.dto.ReceivingMessage;
 import com.ssafy.whoareyou.chat.dto.SendingMessage;
 import com.ssafy.whoareyou.chat.entity.mongo.Chat;
 import com.ssafy.whoareyou.chat.entity.ChatRoom;
-import com.ssafy.whoareyou.chat.repository.ChatJpaRepository;
 import com.ssafy.whoareyou.chat.repository.ChatMongoRepository;
 import com.ssafy.whoareyou.chat.repository.ChatRoomJpaRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ import java.time.format.DateTimeFormatter;
 public class ChatService {
     private final ChatRoomService chatRoomService;
     private final ChatRoomJpaRepository chatRoomJpaRepository;
-    private final ChatJpaRepository chatJpaRepository;
     private final ChatMongoRepository chatMongoRepository;
 
     @Transactional

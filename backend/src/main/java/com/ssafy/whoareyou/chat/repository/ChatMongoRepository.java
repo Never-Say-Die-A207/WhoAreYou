@@ -9,5 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ChatMongoRepository extends MongoRepository<Chat, String> {
+    @Query("{chatRoomId :?0}")
     List<Chat> findByRoomId(int chatRoomId);
 }

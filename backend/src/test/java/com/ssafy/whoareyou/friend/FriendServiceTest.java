@@ -2,7 +2,6 @@ package com.ssafy.whoareyou.friend;
 
 import com.ssafy.whoareyou.chat.dto.SearchTargetChatRoom;
 import com.ssafy.whoareyou.chat.entity.ChatRoom;
-import com.ssafy.whoareyou.chat.repository.ChatJpaRepository;
 import com.ssafy.whoareyou.chat.repository.ChatRoomJpaRepository;
 import com.ssafy.whoareyou.chat.service.ChatRoomService;
 import com.ssafy.whoareyou.facechat.entity.FaceChat;
@@ -13,7 +12,6 @@ import com.ssafy.whoareyou.friend.repository.FriendJpaRepository;
 import com.ssafy.whoareyou.friend.service.FriendService;
 import com.ssafy.whoareyou.user.entity.Female;
 import com.ssafy.whoareyou.user.entity.Male;
-import com.ssafy.whoareyou.user.entity.User;
 import com.ssafy.whoareyou.user.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,7 +21,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,9 +43,6 @@ public class FriendServiceTest {
 
     @Mock
     ChatRoomJpaRepository chatRoomJpaRepository;
-
-    @Mock
-    ChatJpaRepository chatJpaRepository;
 
     @Mock
     FaceChatRepository faceChatRepository;
@@ -102,7 +96,7 @@ public class FriendServiceTest {
 
     //@Test
     void joinTest(){
-        ChatRoom chatRoom = new ChatRoom(1, null, null);
+        ChatRoom chatRoom = new ChatRoom(1, null);
 
         Mockito.when(chatRoomService.create()).thenReturn(chatRoom);
 

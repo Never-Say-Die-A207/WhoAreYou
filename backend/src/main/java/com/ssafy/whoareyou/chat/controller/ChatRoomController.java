@@ -17,7 +17,7 @@ public class ChatRoomController {
 
     @GetMapping("/{nickname}")
     public ResponseEntity<?> getChatRoom(HttpServletRequest request, @PathVariable("nickname") String nickname){
-        int userId = Integer.parseInt((String) request.getHeader(HttpHeaders.AUTHORIZATION));
+        int userId = Integer.parseInt(request.getHeader(HttpHeaders.AUTHORIZATION));
         return new ResponseEntity<>(service.getChatRoomId(userId, nickname), HttpStatus.OK);
     }
 

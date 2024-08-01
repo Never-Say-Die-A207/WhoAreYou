@@ -2,12 +2,11 @@ package com.ssafy.whoareyou.chatroom;
 
 import com.ssafy.whoareyou.chat.dto.SearchTargetChatRoom;
 import com.ssafy.whoareyou.chat.dto.SendingMessage;
-import com.ssafy.whoareyou.chat.entity.Chat;
+import com.ssafy.whoareyou.chat.entity.mongo.Chat;
 import com.ssafy.whoareyou.chat.entity.ChatRoom;
-import com.ssafy.whoareyou.chat.repository.ChatJpaRepository;
+import com.ssafy.whoareyou.chat.repository.ChatMongoRepository;
 import com.ssafy.whoareyou.chat.repository.ChatRoomJpaRepository;
 import com.ssafy.whoareyou.chat.service.ChatRoomService;
-import com.ssafy.whoareyou.facechat.entity.FaceChat;
 import com.ssafy.whoareyou.facechat.repository.FaceChatRepository;
 import com.ssafy.whoareyou.friend.entity.Friend;
 import com.ssafy.whoareyou.friend.repository.FriendJpaRepository;
@@ -39,7 +38,7 @@ public class ChatRoomServiceTest {
     ChatRoomJpaRepository chatRoomJpaRepository;
 
     @Mock
-    ChatJpaRepository chatJpaRepository;
+    ChatMongoRepository chatMongoRepository;
 
     @Mock
     FaceChatRepository faceChatRepository;
@@ -76,13 +75,12 @@ public class ChatRoomServiceTest {
         Assertions.assertEquals(result.getChatRoom().getId(), chatRoom.getId());
     }
 
-//    @Test
+    @Test
     void loadHistoryTest() {
         // 방 저장
         ChatRoom chatRoom = ChatRoom.builder()
                 .id(1)
                 .friends(null)
-                .chats(new ArrayList<>())
                 .build();
 
         // 친구 저장
@@ -96,25 +94,21 @@ public class ChatRoomServiceTest {
         Chat chat1 = Chat.builder()
                 .nickname("남자메세지")
                 .message("첫 메세지")
-                .chatRoom(chatRoom)
+                .chatRoomId(chatRoom.getId())
                 .time("처음")
                 .build();
         Chat chat2 = Chat.builder()
                 .nickname("남자메세지")
                 .message("중간 메세지")
-                .chatRoom(chatRoom)
+                .chatRoomId(chatRoom.getId())
                 .time("중간")
                 .build();
         Chat chat3 = Chat.builder()
                 .nickname("남자메세지")
                 .message("끝 메세지")
-                .chatRoom(chatRoom)
+                .chatRoomId(chatRoom.getId())
                 .time("끝")
                 .build();
-
-        chatRoom.getChats().add(chat1);
-        chatRoom.getChats().add(chat2);
-        chatRoom.getChats().add(chat3);
 
         List<Chat> chatList = new ArrayList<>();
         chatList.add(chat1);
@@ -125,7 +119,7 @@ public class ChatRoomServiceTest {
         Mockito.when(friendJpaRepository.findByGenderId(male1.getId(), female1.getId())).thenReturn(Optional.of(friend));
 
         // 채팅 가져오기
-        Mockito.when(chatJpaRepository.findByRoomId(chatRoom.getId())).thenReturn(chatList);
+        Mockito.when(chatMongoRepository.findByRoomId(chatRoom.getId())).thenReturn(chatList);
 
         //Sending Message로 만들기
         SendingMessage message1 = SendingMessage.builder()
