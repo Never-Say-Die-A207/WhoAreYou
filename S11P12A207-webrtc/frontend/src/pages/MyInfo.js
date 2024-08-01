@@ -28,7 +28,7 @@ const MyInfo = ({ onClose }) => {
 
     return (
         <div className="my-info-modal">
-            <h2>내정보</h2>
+            <h2><strong>내정보</strong></h2>
             <div className="my-info-content">
                 <div className="info-box">
                     <strong>이메일:</strong>
