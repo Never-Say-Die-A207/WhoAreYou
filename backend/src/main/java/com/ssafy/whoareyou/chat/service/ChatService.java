@@ -6,6 +6,7 @@ import com.ssafy.whoareyou.chat.entity.mongo.Chat;
 import com.ssafy.whoareyou.chat.entity.ChatRoom;
 import com.ssafy.whoareyou.chat.repository.ChatMongoRepository;
 import com.ssafy.whoareyou.chat.repository.ChatRoomJpaRepository;
+import com.ssafy.whoareyou.chat.service.kafka.KafkaConumerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,8 @@ public class ChatService {
     private final ChatMongoRepository chatMongoRepository;
 
     @Transactional
-    public SendingMessage send(int roomId, ReceivingMessage receivingMessage){
+    public SendingMessage send(ReceivingMessage receivingMessage){
+        int roomId = receivingMessage.getRoomId();;
         LocalTime now = LocalTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         String formattedTime = now.format(formatter);

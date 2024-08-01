@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SendingMessage {
-    public String sender;
-    public String message;
-    public String time;
+    private String sender;
+    private String message;
+    private String time;
 }

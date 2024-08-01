@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReceivingMessage {
-    public String nickname;
-    public String message;
+    private int roomId;
+    private String nickname;
+    private String message;
 }
