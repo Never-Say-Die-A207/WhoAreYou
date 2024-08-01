@@ -1,6 +1,6 @@
 package com.ssafy.whoareyou.chat.controller;
 
-import com.ssafy.whoareyou.chat.dto.SearchTargetChatRoom;
+import com.ssafy.whoareyou.friend.entity.SearchTargetDto;
 import com.ssafy.whoareyou.chat.service.ChatRoomService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class ChatRoomController {
      * @param dto
      * @return List<String>
      */    @PostMapping("/historys")
-    public ResponseEntity<?> loadHistory(@RequestBody SearchTargetChatRoom dto){
+    public ResponseEntity<?> loadHistory(@RequestBody SearchTargetDto dto){
         return new ResponseEntity<>(service.loadHistorys(dto), HttpStatus.OK);
     }
 }

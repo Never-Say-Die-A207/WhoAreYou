@@ -1,9 +1,9 @@
 package com.ssafy.whoareyou.friend.service;
 
-import com.ssafy.whoareyou.chat.dto.SearchTargetChatRoom;
+import com.ssafy.whoareyou.chat.repository.ChatMongoRepository;
+import com.ssafy.whoareyou.friend.entity.SearchTargetDto;
 import com.ssafy.whoareyou.chat.entity.ChatRoom;
 import com.ssafy.whoareyou.chat.service.ChatRoomService;
-import com.ssafy.whoareyou.facechat.entity.FaceChat;
 import com.ssafy.whoareyou.facechat.repository.FaceChatRepository;
 import com.ssafy.whoareyou.friend.dto.FriendUserDto;
 import com.ssafy.whoareyou.friend.entity.Friend;
@@ -18,13 +18,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class FriendService {
-    private final FaceChatRepository faceChatRepository;
+    private final ChatMongoRepository chatMongoRepository;
     private final ChatRoomService chatRoomService;
     private final UserRepository userRepository;
     private final FriendJpaRepository friendJpaRepository;
@@ -43,7 +42,7 @@ public class FriendService {
         return friendUsers;
     }
 
-    public int join(SearchTargetChatRoom dto) {
+    public int join(SearchTargetDto dto) {
         log.info("FaceChatRoom 가져오기");
 
         log.info("ChatRoom 생성");
@@ -96,4 +95,11 @@ public class FriendService {
         return friendUserDtos;
     }
 
+    public void delete(SearchTargetDto dto){
+        Friend friend = friendJpaRepository.findByGenderId(dto.getMaleId(), dto.getFemaleId())
+                .orElseThrow(() -> new NullPointerException("존재하지 않은 친구관계"));
+
+        chatMongoRepository.deleteByChatRoomId(friend.getChatRoom().getId());
+        friendJpaRepository.delete(friend);
+    }
 }

@@ -1,6 +1,6 @@
 package com.ssafy.whoareyou.friend;
 
-import com.ssafy.whoareyou.chat.dto.SearchTargetChatRoom;
+import com.ssafy.whoareyou.friend.entity.SearchTargetDto;
 import com.ssafy.whoareyou.chat.entity.ChatRoom;
 import com.ssafy.whoareyou.chat.repository.ChatRoomJpaRepository;
 import com.ssafy.whoareyou.chat.service.ChatRoomService;
@@ -117,7 +117,7 @@ public class FriendServiceTest {
 
         Mockito.when(friendJpaRepository.save(friend)).thenReturn(friend);
 
-        int result = friendSrvice.join(new SearchTargetChatRoom(male1.getId(), female1.getId()));
+        int result = friendSrvice.join(new SearchTargetDto(male1.getId(), female1.getId()));
         Assertions.assertEquals(result, chatRoom.getId());
     }
 }

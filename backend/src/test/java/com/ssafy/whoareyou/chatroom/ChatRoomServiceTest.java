@@ -1,6 +1,6 @@
 package com.ssafy.whoareyou.chatroom;
 
-import com.ssafy.whoareyou.chat.dto.SearchTargetChatRoom;
+import com.ssafy.whoareyou.friend.entity.SearchTargetDto;
 import com.ssafy.whoareyou.chat.dto.SendingMessage;
 import com.ssafy.whoareyou.chat.entity.mongo.Chat;
 import com.ssafy.whoareyou.chat.entity.ChatRoom;
@@ -146,7 +146,7 @@ public class ChatRoomServiceTest {
         messages.add(message3);
 
         //실제 테스트 결과 가져오기
-        List<SendingMessage> result = chatRoomService.loadHistorys(new SearchTargetChatRoom(male1.getId(), female1.getId()));
+        List<SendingMessage> result = chatRoomService.loadHistorys(new SearchTargetDto(male1.getId(), female1.getId()));
 
         //비교하기
         Assertions.assertEquals(result.get(0).getMessage(), message1.getMessage());

@@ -1,7 +1,6 @@
 package com.ssafy.whoareyou.friend.controller;
 
-import com.ssafy.whoareyou.chat.dto.SearchTargetChatRoom;
-import com.ssafy.whoareyou.chat.service.ChatRoomService;
+import com.ssafy.whoareyou.friend.entity.SearchTargetDto;
 import com.ssafy.whoareyou.friend.service.FriendService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,13 @@ public class FriendController {
      * @return HttpStatus.CREATED(201)
      */
     @PostMapping("/")
-    ResponseEntity<?> join(@RequestBody SearchTargetChatRoom dto){
+    ResponseEntity<?> join(@RequestBody SearchTargetDto dto){
         return new ResponseEntity<>(service.join(dto), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/")
+    ResponseEntity<?> delete(@RequestBody SearchTargetDto dto){
+        service.delete(dto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

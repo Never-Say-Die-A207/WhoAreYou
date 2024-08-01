@@ -1,6 +1,6 @@
 package com.ssafy.whoareyou.chat.service;
 
-import com.ssafy.whoareyou.chat.dto.SearchTargetChatRoom;
+import com.ssafy.whoareyou.friend.entity.SearchTargetDto;
 import com.ssafy.whoareyou.chat.dto.SendingMessage;
 import com.ssafy.whoareyou.chat.entity.mongo.Chat;
 import com.ssafy.whoareyou.chat.entity.ChatRoom;
@@ -49,7 +49,7 @@ public class ChatRoomService {
         return chatRoom.getId();
     }
 
-    public List<SendingMessage> loadHistorys(SearchTargetChatRoom dto){
+    public List<SendingMessage> loadHistorys(SearchTargetDto dto){
         log.info("loadHistory 시작");
         int maleId = dto.getMaleId();
         int femaleId = dto.getFemaleId();
