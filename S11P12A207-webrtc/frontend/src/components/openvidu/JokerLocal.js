@@ -5,7 +5,6 @@ import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry.js';
 import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
 import * as THREE from 'three';
 import './ThreeScene.css';
-import { EffectComposer, Bloom } from '@react-three/postprocessing';
 
 extend({ Line2, LineMaterial, LineGeometry });
 
@@ -19,9 +18,9 @@ const ShapeComponent = React.memo(({ landmarks, indices, color }) => {
       indices.forEach((index, i) => {
         const { x, y } = landmarks[index];
         if (i === 0) {
-          shape.moveTo((x * 4 - 2), -(y * 2.2 -1.1));
+          shape.moveTo((x * 4 - 2), -(y * 2.2 - 1.1));
         } else {
-          shape.lineTo((x * 4 - 2), -(y * 2.2 -1.1));
+          shape.lineTo((x * 4 - 2), -(y * 2.2 - 1.1));
         }
       });
 
@@ -37,7 +36,7 @@ const ShapeComponent = React.memo(({ landmarks, indices, color }) => {
 
   return (
     <mesh ref={ref}>
-      <meshBasicMaterial attach="material" color={color} side={THREE.DoubleSide} />
+      <meshStandardMaterial attach="material" color={color} emissive={color} emissiveIntensity={1.1} side={THREE.DoubleSide} />
     </mesh>
   );
 });
@@ -49,7 +48,7 @@ const LineComponent = React.memo(({ landmarks, indices, color, lineWidth }) => {
     if (landmarks) {
       const points = indices.map(index => {
         const { x, y } = landmarks[index];
-        return new THREE.Vector3((x * 4 - 2), -(y * 2.2-1.1), 0.1); // Z축 위치를 약간 앞으로 이동
+        return new THREE.Vector3((x * 4 - 2), -(y * 2.2 - 1.1), 0.1); // Z축 위치를 약간 앞으로 이동
       });
 
       const positions = new Float32Array(points.length * 3);
@@ -60,6 +59,7 @@ const LineComponent = React.memo(({ landmarks, indices, color, lineWidth }) => {
       const geometry = new LineGeometry();
       geometry.setPositions(positions);
 
+      if (ref.current.geometry) ref.current.geometry.dispose(); // 기존 geometry를 정리하여 메모리 누수 방지
       ref.current.geometry = geometry;
     }
   }, [landmarks, indices]);
@@ -77,7 +77,6 @@ const VideoTexture = ({ videoRef }) => {
 
   useEffect(() => {
     if (videoRef.current) {
-
       texture.minFilter = THREE.LinearFilter;
       texture.magFilter = THREE.LinearFilter;
       texture.format = THREE.RGBFormat;
@@ -90,7 +89,7 @@ const VideoTexture = ({ videoRef }) => {
 
       return () => {
         scene.remove(mesh);
-        texture.dispose();
+        texture.dispose(); // texture를 정리하여 메모리 누수 방지
       };
     }
   }, [videoRef, scene, texture]);
@@ -124,30 +123,20 @@ const JokerLocal = ({ landmarks, videoElement }) => {
   const leftEyebrowIndices = [336, 296, 334, 293, 300, 276, 283, 282, 295, 285, 336];
   const rightEyebrowIndices = [107, 66, 105, 63, 70, 46, 53, 52, 65, 55, 107];
 
-
-
-    return (
-    <div className="canvas-container" style={{position:'absolute', top:'0', left:'0', width: '100%', height: '100%' }}>
+  return (
+    <div className="canvas-container" style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '100%' }}>
       <Canvas
         camera={{ position: [0, 0, 5], fov: 25.4 }}
         style={{
-          // position: 'absolute',
-          // top: '0',
-          // left: '0',
           transform: 'scaleX(-1)',
           width: '100%',
           height: '100%',
-        //   zIndex: 10,
-        // 일반 동영상 같은 경우는 index값을 높여야함
           zIndex: 100,
         }}
-        
       >
-        <ambientLight intensity={0} />
-        <pointLight position={[10, 10, 10]}/>
-        {videoElement?.current && (
-          <VideoTexture videoRef={videoElement} />
-        )}
+        <ambientLight intensity={0.5} />
+        <pointLight position={[10, 10, 10]} intensity={1.5} />
+        {videoElement?.current && <VideoTexture videoRef={videoElement} />}
         {landmarks && (
           <>
             <ShapeComponent landmarks={landmarks} indices={faceOutlineIndices1} color="white" />
@@ -165,11 +154,7 @@ const JokerLocal = ({ landmarks, videoElement }) => {
            
 
           </>
-
         )}
-        <EffectComposer multisampling={0}>
-          <Bloom intensity={0.1} luminanceThreshold={0.8} luminanceSmoothing={0.4} height={40} />
-        </EffectComposer>
       </Canvas>
     </div>
   );

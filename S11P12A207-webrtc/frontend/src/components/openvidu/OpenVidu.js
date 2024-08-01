@@ -18,6 +18,7 @@ import { FaceMesh } from '@mediapipe/face_mesh';
 import * as cam from '@mediapipe/camera_utils';
 import api from '../../api/api';
 
+
 import RedFoxLocal from './RedFoxLocal';
 import SpiderManLocal from './SpiderManLocal';
 import VerticalCarousel from './VerticalCarousel';
@@ -30,6 +31,8 @@ import RedFoxRemote from './RedFoxRemote';
 
 // 반응형
 import { useMediaQuery, MediaQuery } from 'react-responsive';
+
+
 
 var APPLICATION_SERVER_URL = "http://3.36.120.21:4040/";
 var LIVEKIT_URL = "wss://myapp-yqvsqxqi.livekit.cloud/";
@@ -75,10 +78,14 @@ function OpenVidu() {
     const [mask, setMask] = useState('RedFox');
     const [maskRemote, setMaskRemote] = useState('');
 
+    const [roomId, setRoomId] = useState('');
+    const [myId, setMyId] = useState('');
+    const [partnerId, setPartnerId] = useState('');
+
+
     // 미리보기 코드
     const [previewStream, setPreviewStream] = useState(null);
     const videoPreviewRef = useRef(null);
-    const canvasRef = useRef(null);
     const [landmarks, setLandmarks] = useState(null);
     const [loading, setLoading] = useState(true);
     // const loading = false
@@ -90,6 +97,16 @@ function OpenVidu() {
     // function changeLoaclMaskValue(e) {
     //     setMask(e.target.value)
     // };
+
+
+    // 타이머
+    const [timeLeft, setTimeLeft] = useState(10); // 3분 = 180초로 변경
+    const timerRef = useRef(null);
+    const startTimeRef = useRef(null);
+
+
+    // 친구 추가 토글 상태
+    const [isFriend, setIsFriend] = useState(false);
 
 
     async function joinRoom() {
@@ -137,6 +154,7 @@ function OpenVidu() {
             // if (room.remoteParticipants.size > 0) {
             //     setLoading(false)
             // } 
+
         } catch (error) {
             console.log('There was an error connecting to the room:', error.message);
             await leaveRoom();
@@ -154,6 +172,7 @@ function OpenVidu() {
         setRoom(undefined);
         setLocalTrack(undefined);
         setRemoteTracks([]);
+        stopTimer();
         window.location.reload();
     }
 
@@ -170,8 +189,17 @@ function OpenVidu() {
         console.log('상대방 마스크 정보')
         console.log(body.info.mask)
         setMaskRemote(body.info.mask);
+        console.log('매칭 시작 시간')
+        console.log(body.info.startedAt)
+
         if (body.info.mask) {
+            setRoomId(body.info.roomId);
+            setPartnerId(body.info.partnerId);
+            
+
             setLoading(false)
+            // 타이머 시작
+            startTimer();
         }
         return body;
     }
@@ -208,9 +236,6 @@ function OpenVidu() {
         //         participantName: participantName
         //     })
         // });
-
-
-
 
         if (!response.ok) {
             const error = await response.json();
@@ -289,7 +314,6 @@ function OpenVidu() {
 
     async function quit() {
         const userId = localStorage.getItem('userId');
-
         const response = await fetch(APPLICATION_SERVER_URL + 'facechat/' + userId, {
             method: 'DELETE'
         }
@@ -297,6 +321,83 @@ function OpenVidu() {
 
         return response;
     }
+
+
+
+    const startTimer = () => {
+        startTimeRef.current = Date.now();
+        setTimeLeft(10); // 타이머 초기화 - 3분(180초)로 변경
+
+        const updateTimer = () => {
+            const elapsedTime = Math.floor((Date.now() - startTimeRef.current) / 1000);
+            setTimeLeft(10 - elapsedTime); // 3분(180초)으로 변경
+
+            if (elapsedTime < 10) { // 3분(180초)으로 변경
+                timerRef.current = requestAnimationFrame(updateTimer);
+            } else {
+                handleTimerEnd(); // 타이머가 끝났을 때 실행할 함수 호출
+            }
+        };
+
+        timerRef.current = requestAnimationFrame(updateTimer);
+    };
+
+
+    // 타이머 친구 추가 api요청 보내기
+    // const response = await fetch(APPLICATION_SERVER_URL + 'facechat/result/', {
+    //     method: 'POST',
+    //     headers: {
+    //         "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(room_id, my_id, remote_id, isfriend: friend)
+    // }
+
+
+    //타이머 끝나는 경우 코드 실행    
+    const handleTimerEnd = async () => {
+        const finalResult = {
+            roomId,
+            myId,
+            partnerId,
+            'friend': isFriend,
+        };
+
+        try {
+            const response = await api.post('/facechat/result/', finalResult);
+            if (response.message === 'OK') {
+                console.log('OK')
+            } else if (response.message === 'NO') {
+
+            };
+        } catch (error) {
+            console.log(error)
+        }
+        // 추가로 API 요청을 여기에 작성
+        // await api.post('/some-endpoint', { data: 'some data' });
+        leaveRoom(); // 타이머가 끝났을 때 방 나가기
+    };
+
+
+    // 타이머 중지
+    const stopTimer = () => {
+        if (timerRef.current) {
+            cancelAnimationFrame(timerRef.current);
+            timerRef.current = null;
+        }
+    };
+
+    // 타이머 포맷팅
+    const formatTime = (time) => {
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
+        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    };
+
+
+    // 친구 토글
+    const handleFriendToggle = () => {
+        setIsFriend(!isFriend);
+    };
 
 
     return (
@@ -310,7 +411,6 @@ function OpenVidu() {
                     {/* 방 입장 시작 */}
                     <div id='join-dialog'>
                         {/* 가면 미리보기 보는 화면 */}
-
                         <div style={{ position: 'relative', height: '91vh' }}>
                             {isSmallScreen ? (
                                 <MobileCarousel setMask={setMask} />
@@ -390,42 +490,6 @@ function OpenVidu() {
                                         // stopPreview();
                                     }}
                                     className='video-form'>
-                                    {/* <div>
-                                <label htmlFor='mask-name'>마스크 변경</label>
-                                <select
-                                    id='mask-name'
-                                    className='form-control'
-                                    value={mask}
-                                    onChange={changeLoaclMaskValue}
-                                > */}
-                                    {/* <option value='' defaultValue='마스크 선택'>마스크 선택</option> */}
-                                    {/* <option value='RedFox'>RedFox</option>
-                                    <option value="SpiderMan">SpiderMan</option>
-                                </select>
-                                </div> */}
-                                    {/* <div>
-                                        <label htmlFor='participant-name'>Participant</label>
-                                        <input
-                                            id='participant-name'
-                                            className='form-control'
-                                            type='text'
-                                            value={participantName}
-                                            onChange={(e) => setParticipantName(e.target.value)}
-                                            required
-                                        />
-                                    </div>
-                                    <div>
-                                        <label htmlFor='room-name'>Room</label>
-                                        <input
-                                            id='room-name'
-                                            className='form-control'
-                                            type='text'
-                                            value={roomName}
-                                            onChange={(e) => setRoomName(e.target.value)}
-                                            required
-                                        />
-                                    </div> */}
-
                                     <button
                                         className='btn btn-lg btn-success'
                                         type='submit'
@@ -433,6 +497,7 @@ function OpenVidu() {
                                     >
                                         매칭 시작!
                                     </button>
+
                                 </form>
                             )}
 
@@ -441,9 +506,10 @@ function OpenVidu() {
                     </div>
                 </div>
             ) : (
-                loading ? (  // Loading 상태일 때 로딩 메시지 표시
+                loading ? (
                     <div id='loading'>
-                        <h2>Loading...</h2>
+                        <div className="loading-spinner"></div>
+                        <div className="loading-text">매칭 중...</div>
                     </div>
                 ) : (
                 <div>
@@ -476,14 +542,21 @@ function OpenVidu() {
                                 )
                             )}
                         </div>
-
                     </div>
                     <div className='bottom'>
                         <RoomBottom expressionData={expressionData} />
                     </div>
+                    <div id='timer'>{formatTime(timeLeft)}</div>
+                    <div className='friend-toggle'>
+                        <label>
+                            <input type='checkbox' checked={isFriend} onChange={handleFriendToggle} />
+                            친구 추가
+                        </label>
+                    </div>
                 </div>
+            )
                 )
-            )}
+            }
         </>
     );
 }

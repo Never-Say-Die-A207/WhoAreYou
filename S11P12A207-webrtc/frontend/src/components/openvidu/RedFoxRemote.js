@@ -98,7 +98,7 @@ const VideoTexture = ({ videoRef }) => {
   return null;
 };
 
-const RedFox = ({ landmarks, videoElement }) => {
+const RedFoxRemote = ({ landmarks, videoElement }) => {
   const faceOutlineIndices1 = [10, 338, 297, 332, 284, 251, 389, 356, 454, 446, 467, 260, 259, 257, 258, 286, 414, 464, 351, 196, 193, 55, 107, 109, 10];
   const faceOutlineIndices2 = [10, 109, 67, 103, 54, 21, 162, 127, 234, 111, 226, 247, 30, 29, 27, 28, 56, 190, 243, 188, 197, 10];
   const faceOutlineIndices3 = [127, 156, 113, 130, 25, 110, 24, 23, 22, 26, 245, 193, 248, 4, 94, 167, 94, 167, 92, 216, 177, 93, 234, 127];
@@ -162,4 +162,4 @@ const RedFox = ({ landmarks, videoElement }) => {
   );
 };
 
-export default RedFox;
+export default RedFoxRemote;

@@ -14,12 +14,14 @@ function VideoComponentLocal({ track, participantIdentity, local = false, mask }
     const [landmarks, setLandmarks] = useState(null);
 
     useEffect(() => {
-        if (videoElement.current) {
+        if (videoElement.current && track) {
             track.attach(videoElement.current);
         }
 
         return () => {
-            track.detach();
+            if (track) {
+                track.detach();
+            }
         };
     }, [track]);
 
@@ -48,9 +50,11 @@ function VideoComponentLocal({ track, participantIdentity, local = false, mask }
             }
         };
 
-        videoElement.current.addEventListener('loadeddata', () => {
-            detectLandmarks();
-        });
+        if (videoElement.current) {
+            videoElement.current.addEventListener('loadeddata', () => {
+                detectLandmarks();
+            });
+        }
 
         return () => {
             if (faceMesh) {

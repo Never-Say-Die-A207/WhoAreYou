@@ -11,12 +11,14 @@ function VideoComponent({ track, participantIdentity, setExpressionData, local =
   const [landmarks, setLandmarks] = useState(null);
 
   useEffect(() => {
-      if (videoElement2.current) {
+      if (videoElement2.current && track) {
           track.attach(videoElement2.current);
       }
 
       return () => {
+        if (track) {
           track.detach();
+        }
       };
   }, [track]);
 
@@ -44,11 +46,11 @@ function VideoComponent({ track, participantIdentity, setExpressionData, local =
               requestAnimationFrame(detectLandmarks);
           }
       };
-
+      if (videoElement2.current) {
       videoElement2.current.addEventListener('loadeddata', () => {
           detectLandmarks();
       });
-
+    }
       return () => {
           if (faceMesh) {
               faceMesh.close();
@@ -65,6 +67,9 @@ function VideoComponent({ track, participantIdentity, setExpressionData, local =
       {/* <RedFoxRemote landmarks={landmarks} videoElement={videoElement2} /> */}
       {maskRemote === 'RedFox' && <RedFoxRemote landmarks={landmarks} videoElement={videoElement2} />}
       {maskRemote === 'SpiderMan' && <SpiderManRemote landmarks={landmarks} videoElement={videoElement2} />}
+      {maskRemote === 'SpiderManBlack' && <SpiderManRemote landmarks={landmarks} videoElement={videoElement2} />}
+      {maskRemote === 'Squid' && <SpiderManRemote landmarks={landmarks} videoElement={videoElement2} />}
+      {maskRemote === 'Joker' && <SpiderManRemote landmarks={landmarks} videoElement={videoElement2} />}
       <FaceRecognition videoElement={videoElement2} setExpressionData={setExpressionData} />
     </div>
   );
