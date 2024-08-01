@@ -4,6 +4,7 @@ import com.ssafy.whoareyou.user.dto.request.auth.EmailCheckRequestDto;
 import com.ssafy.whoareyou.user.dto.request.auth.NicknameCheckRequestDto;
 import com.ssafy.whoareyou.user.dto.request.auth.SignInRequestDto;
 import com.ssafy.whoareyou.user.dto.request.auth.SignUpRequestDto;
+import com.ssafy.whoareyou.user.dto.response.UserResponseDto;
 import com.ssafy.whoareyou.user.dto.response.auth.EmailCheckResponseDto;
 import com.ssafy.whoareyou.user.dto.response.auth.NicknameCheckResponseDto;
 import com.ssafy.whoareyou.user.dto.response.auth.SignInResponseDto;
@@ -12,9 +13,7 @@ import com.ssafy.whoareyou.user.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -53,5 +52,19 @@ public class AuthController {
     ){
         ResponseEntity<? super SignInResponseDto> response = authService.signIn(requestBody);
         return response;
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable int id){
+
+        System.out.println("아무말");
+        try {
+
+            UserResponseDto userResponseDto = authService.getUserById(id);
+            return ResponseEntity.ok(userResponseDto);
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

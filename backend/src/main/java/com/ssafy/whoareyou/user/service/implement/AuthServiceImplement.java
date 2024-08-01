@@ -5,6 +5,7 @@ import com.ssafy.whoareyou.user.dto.request.auth.NicknameCheckRequestDto;
 import com.ssafy.whoareyou.user.dto.request.auth.SignInRequestDto;
 import com.ssafy.whoareyou.user.dto.request.auth.SignUpRequestDto;
 import com.ssafy.whoareyou.user.dto.response.ResponseDto;
+import com.ssafy.whoareyou.user.dto.response.UserResponseDto;
 import com.ssafy.whoareyou.user.dto.response.auth.EmailCheckResponseDto;
 import com.ssafy.whoareyou.user.dto.response.auth.NicknameCheckResponseDto;
 import com.ssafy.whoareyou.user.dto.response.auth.SignInResponseDto;
@@ -127,6 +128,21 @@ public class AuthServiceImplement implements AuthService {
         }
 
         return SignInResponseDto.success(token);
+    }
+
+    @Override
+    public UserResponseDto getUserById(int id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+
+        return new UserResponseDto(
+                user.getEmail(),
+                user.getName(),
+                user.getNickname(),
+                user.getType(),
+                user.getSuccessCount(),
+                user.getMatchingCount()
+        );
     }
 
 

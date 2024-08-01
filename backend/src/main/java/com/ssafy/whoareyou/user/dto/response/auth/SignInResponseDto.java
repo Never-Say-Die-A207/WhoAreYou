@@ -21,9 +21,11 @@ public class SignInResponseDto extends ResponseDto {
         this.expirationTime = 3600;
     }
 
-    public static ResponseEntity<SignInResponseDto> success (String token){
+    public static ResponseEntity<SignInResponseDto> success(String token) {
         SignInResponseDto responseBody = new SignInResponseDto(token);
-        return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+        return ResponseEntity.status(HttpStatus.OK)
+                .header("Authorization", "Bearer " + token)
+                .body(responseBody);
     }
 
     public static ResponseEntity<ResponseDto> signInFail(){
