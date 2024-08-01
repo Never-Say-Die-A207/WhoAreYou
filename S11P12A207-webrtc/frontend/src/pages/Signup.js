@@ -111,6 +111,7 @@ const Signup = () => {
                                 <form
                                     className="zm-form zm-from--label-inline"
                                     onSubmit={onSubmit}
+                                    style={{ width: '100%' }}
                                 >
                                     <div className="zm-form-item is-no-asterisk">
                                         <div className="zm-form-item__content">
@@ -389,7 +390,8 @@ const Signup = () => {
                                             </label>
                                         </div>
                                     </div>
-                                    <Agree />
+                                    <Agree className="zm-form-item is-no-asterisk" onAgreeChange={(agreed) => console.log("동의 상태:", agreed)} /> {/* Agree 컴포넌트 추가 */}
+
                                     <div className="mgt-sm" style={{ display: 'flex', justifyContent: 'center' }}>
                                         <button
                                             style={{

@@ -10,24 +10,45 @@ const Agree = ({ onAgreeChange }) => {
     };
 
     return (
-        <div className="cont_division">
-            <span className='terms-agree'>
-                <strong>약관</strong>
-            </span>
-            <div className='agree_box'>
-                <ul className='agree_article'>
-                    <li>
-                        <div className='InBox'>
-                            <span className='Chk SizeL'>
-                                <input type='checkbox' className='check_mail' id='agreeAllPersonal'></input>
-                                <label className='check_all check_off Lbi' for="agreeAllPersonal"></label>
-                                <input type='hidden' name='hidden_check_all' value='0' id='hidden_check_all'></input>
-                            </span>
+        <div id='c-jointerms' className='jointerms'>
+            <div className='g-terms-checkbox'>
+                <div className='checkall checkall-first'>
+                    <div id='c-checkbox-item_checkall' className='c-checkbox_item'>
+                        <div className='wrapper'>
+                            <input type='checkbox' id='chk_checkall' aria-hidden='true' parent-id></input>
+                            <label for='chk_checkall' role='checkbox' aria-label='모두 확인하였으며 동의합니다.' aria-checked='false'>
+                                <i aria-hidden='true' className='icon icon-chk'></i>
+                                <span aria-hidden='true'>모두 확인하였으며 동의합니다.</span>
+                            </label>
                         </div>
-                        <p className='agree_txt'>위치기반 서비스 이용약관(선택), 마케팅 정보 수신 동의(이메일, SMS/MMS)(선택) 동의를 포함합니다.</p>
-                    </li>
+                    </div>
+                    <span className='message'>
+                        "전체 동의에는 필수 및 선택 정보에 대한 동의가 포함되어 있으며, &nbsp; 개별적으로 동의를 선택하실 수 있습니다. &nbsp; 선택 항목에 대한 동의를 거부하시는 경우에도 서비스 이용이 가능합니다."
+                    </span>
+                </div>
+                <div className='error-tip'></div>
+                <ul className='terms'>
+                    <div id='c-checkbox-item_join-terms-fourteen' className='c-checkbox-item'>
+                        <div className='wrapper'>
+                            <input type='checkbox' id='chk_join-terms-fourteen' aria-hidden='true' parent-id></input>
+                            <label for='chk_join-terms-fourteen' role='checkbox' aria-label='만 14세 이상입니다.' aria-checked='false'>
+                                <i aria-hidden='true' className='icon icon-chk'></i>
+                                <span aria-hidden='true'>[필수] 만 14세 이상입니다.</span>
+                            </label>
+                        </div>
+
+                    </div>
+                    <div id='c-checkbox-item_join-terms-service' className='c-checkbox-item'></div>
+                    <div id='c-checkbox-item_join-terms-commerce' className='c-checkbox-item'></div>
+                    <div id='c-checkbox-item_join-terms-privacy-collect-use' className='c-checkbox-item'></div>
+                    <div id='c-checkbox-item_agree-to-collect-third-part-information' className='c-checkbox-item'></div>
+                    <div id='c-checkbox-item_POLICY_AGREE_COLLECT' className='c-checkbox-item'></div>
+                    <div id='c-checkbox-item_agree-to-receive-ads' className='c-checkbox-item'></div>
+                    <div id='c-checkbox-item_POLICY_AGREE_EMAIL' className='c-checkbox-item c-checkbox-item__subitem'></div>
+                    <div id='c-checkbox-item_POLICY_AGREE_SMS' className='c-checkbox-item c-checkbox-item__subitem'></div>
+                    <div id='c-checkbox-item_POLICY_AGREE_MARKETING_PUSH' className='c-checkbox-item c-checkbox-item__subitem'></div>
+
                 </ul>
-                <ul className='agree_article depth2'></ul>
             </div>
 
             <input
