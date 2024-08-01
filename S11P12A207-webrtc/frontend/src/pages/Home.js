@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Login from './Login';
 import Logout from './Logout';
-import './Modal.css';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
 import mainimg from '../assets/mainimg.jpg';
