@@ -1,12 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import FriendList from './FriendList';
 import MessageList from './MessageList';
+import Modal from 'react-modal';
+import MyInfo from './MyInfo';
+
+Modal.setAppElement('#root');
 
 const Mypage = () => {
     const [messages, setMessages] = useState([]);
     const [friends, setFriends] = useState([]);
     const [selectedFriendId, setSelectedFriendId] = useState(null);
     const [newMessage, setNewMessage] = useState('');
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [isHovered, setIsHovered] = useState(false); // 호버 상태 추적
+
+    const openModal = () => {
+        setModalIsOpen(true);
+    };
+
+    const closeModal = () => {
+        setModalIsOpen(false);
+    };
 
     useEffect(() => {
         const fetchData = () => {
@@ -52,24 +66,34 @@ const Mypage = () => {
 
     return (
         <div style={styles.container}>
-            <div style={styles.friendList}>
-                {friends.length === 0 ? (
-                    <div style={styles.noFriendsMessage}>
-                        친구가 없습니다. 친구를 추가하세요!
-                    </div>
-                ) : (
-                    <ul style={styles.friendListItems}>
-                        {friends.map(friend => (
-                            <li
-                                key={friend.id}
-                                style={isFriendSelected(friend.id) ? styles.selectedFriendListItem : styles.friendListItem}
-                                onClick={() => handleFriendClick(friend.id)}
-                            >
-                                {friend.name}
-                            </li>
-                        ))}
-                    </ul>
-                )}
+            <div style={styles.friendSection}>
+                <button
+                    onClick={openModal}
+                    style={isHovered ? styles.infoButtonHovered : styles.infoButton}
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                >
+                    내정보
+                </button>
+                <div style={styles.friendList}>
+                    {friends.length === 0 ? (
+                        <div style={styles.noFriendsMessage}>
+                            친구가 없습니다. 친구를 추가하세요!
+                        </div>
+                    ) : (
+                        <ul style={styles.friendListItems}>
+                            {friends.map(friend => (
+                                <li
+                                    key={friend.id}
+                                    style={isFriendSelected(friend.id) ? styles.selectedFriendListItem : styles.friendListItem}
+                                    onClick={() => handleFriendClick(friend.id)}
+                                >
+                                    {friend.name}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
             </div>
             <div style={styles.chatArea}>
                 {selectedFriendId ? (
@@ -101,6 +125,15 @@ const Mypage = () => {
                     </div>
                 )}
             </div>
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={closeModal}
+                contentLabel="My Info Modal"
+                className="my-modal"
+                overlayClassName="my-overlay"
+            >
+                <MyInfo onClose={closeModal} />
+            </Modal>
         </div>
     );
 };
@@ -110,13 +143,44 @@ const styles = {
         display: 'flex',
         height: 'calc(100vh - 60px)',
     },
-    friendList: {
+    friendSection: {
         width: '20%',
+        display: 'flex',
+        flexDirection: 'column',
         borderRight: '1px solid #ccc',
         padding: '10px',
         boxSizing: 'border-box',
         overflowY: 'auto',
         height: 'calc(100vh - 60px)',
+    },
+    infoButton: {
+        padding: '10px',
+        border: '1px solid #ddd',
+        marginBottom: '10px',
+        cursor: 'pointer',
+        backgroundColor: 'rgb(170, 77, 203)',
+        color: 'white',
+        fontSize: '16px',
+        textAlign: 'center',
+        display: 'block',
+        transition: 'background-color 0.3s ease, color 0.3s ease',
+        width: '100%',
+    },
+    infoButtonHovered: {
+        padding: '10px',
+        border: '1px solid #ddd',
+        marginBottom: '10px',
+        cursor: 'pointer',
+        backgroundColor: 'rgb(150, 60, 180)', // 호버 시 배경색
+        color: 'white',
+        fontSize: '16px',
+        textAlign: 'center',
+        display: 'block',
+        transition: 'background-color 0.3s ease, color 0.3s ease',
+        width: '100%',
+    },
+    friendList: {
+        flex: 1,
     },
     chatArea: {
         width: '80%',

@@ -1,23 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import Modal from 'react-modal';
 import './Navbar.css';
-import './Modal.css'
-import MyInfo from './MyInfo';
 
-
-Modal.setAppElement('#root');
 
 const Navbar = () => {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalIsOpen(false);
-  };
 
   return (
     <header>
@@ -41,22 +27,10 @@ const Navbar = () => {
               <li className="nav-item">
                 <Link to='/mypage' className='nav-link'>마이페이지</Link>
               </li>
-              <li className="nav-item">
-                <button onClick={openModal} className='nav-link btn btn-link'>내정보</button>
-              </li>
             </ul>
           </div>
         </div>
       </nav>
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        contentLabel="My Info Modal"
-        className="my-modal"
-        overlayClassName="my-overlay"
-      >
-        <MyInfo onClose={closeModal} />
-      </Modal>
     </header>
   );
 };

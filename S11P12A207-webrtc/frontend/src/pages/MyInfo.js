@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import api from '../api/api';
-import './Modal.css'; // 커스텀 스타일 import
+import './Modal.css';
 
 const MyInfo = ({ onClose }) => {
-    const user = { email: '11@11', name: 'name', nickname: 'nickname', };
-
+    const user = { email: '11@11', name: 'name', nickname: 'nickname' };
 
     const [info, setInfo] = useState({
         email: '',
@@ -29,13 +28,22 @@ const MyInfo = ({ onClose }) => {
 
     return (
         <div className="my-info-modal">
-            <span className="close" onClick={onClose}>&times;</span>
             <h2>내정보</h2>
             <div className="my-info-content">
-                <p><strong>이메일:</strong> {email}</p>
-                <p><strong>이름:</strong> {name}</p>
-                <p><strong>닉네임:</strong> {nickname}</p>
+                <div className="info-box">
+                    <strong>이메일:</strong>
+                    <p>{email}</p>
+                </div>
+                <div className="info-box">
+                    <strong>이름:</strong>
+                    <p>{name}</p>
+                </div>
+                <div className="info-box">
+                    <strong>닉네임:</strong>
+                    <p>{nickname}</p>
+                </div>
             </div>
+            <button className="close" onClick={onClose}>닫기</button>
         </div>
     );
 };
