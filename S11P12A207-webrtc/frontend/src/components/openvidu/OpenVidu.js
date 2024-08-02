@@ -18,6 +18,7 @@ import { FaceMesh } from '@mediapipe/face_mesh';
 import * as cam from '@mediapipe/camera_utils';
 import api from '../../api/api';
 import { PropagateLoader } from 'react-spinners';
+import { CiLogout } from "react-icons/ci";
 
 import RedFoxLocal from './RedFoxLocal';
 import SpiderManLocal from './SpiderManLocal';
@@ -100,7 +101,7 @@ function OpenVidu() {
 
 
     // 타이머
-    const [timeLeft, setTimeLeft] = useState(1000); // 3분 = 180초로 변경
+    const [timeLeft, setTimeLeft] = useState(10); // 3분 = 180초로 변경
     const timerRef = useRef(null);
     const startTimeRef = useRef(null);
 
@@ -329,13 +330,13 @@ function OpenVidu() {
 
     const startTimer = () => {
         startTimeRef.current = Date.now();
-        setTimeLeft(1000); // 타이머 초기화 - 3분(180초)로 변경
+        setTimeLeft(10); // 타이머 초기화 - 3분(180초)로 변경
 
         const updateTimer = () => {
             const elapsedTime = Math.floor((Date.now() - startTimeRef.current) / 1000);
-            setTimeLeft(1000 - elapsedTime); // 3분(180초)으로 변경
+            setTimeLeft(10 - elapsedTime); // 3분(180초)으로 변경
 
-            if (elapsedTime < 1000) { // 3분(180초)으로 변경
+            if (elapsedTime < 10) { // 3분(180초)으로 변경
                 timerRef.current = requestAnimationFrame(updateTimer);
             } else {
                 handleTimerEnd(); // 타이머가 끝났을 때 실행할 함수 호출
@@ -402,7 +403,11 @@ function OpenVidu() {
         setIsFriend(!isFriend);
     };
 
-
+    //매칭 취소
+    const CancelMatching = () => {
+        window.location.reload();
+    };
+ 
     return (
         <>
             {!room ? (
@@ -498,7 +503,7 @@ function OpenVidu() {
                                         type='submit'
                                         disabled={!roomName || !participantName}
                                     >
-                                        매칭 시작!
+                                        상대방 찾기
                                     </button>
 
                                 </form>
@@ -511,14 +516,17 @@ function OpenVidu() {
             ) : (
                 loading ? (
                     <div id='loading'>
-                        <div>
-                            <PropagateLoader
-                                color="#aa4dcb"
-                                size={25}
-                            />
+                        <div style={{ position: 'absolute', top: '2%', right: '1%'}}>
+                            <button onClick={CancelMatching} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                            <CiLogout style ={{fontSize:'30px', transform: 'scaleX(-1)' }}/>
+                            </button>
                         </div>
+                    <div style={{ position: 'relative' }}>
+                        
+                        <PropagateLoader color="#aa4dcb" size={25} />
                         <div className="loading-text">상대방을 찾고 있습니다.</div>
                     </div>
+                </div>
                 ) : (
                     <div>
                         <div style={{ position: 'relative' }}>
