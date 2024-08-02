@@ -23,10 +23,20 @@ public class FaceChatInfoResponse {
         FaceChatInfoResponse infoResponse = new FaceChatInfoResponse();
 
         infoResponse.setRoomId(currentFaceChat.getId());
-        if (user instanceof Male)
+
+        if (user instanceof Male){
             infoResponse.setMask(currentFaceChat.getFemaleMask());
-        else if (user instanceof Female)
+
+            if(currentFaceChat.getFemale() != null)
+                infoResponse.setPartnerId(currentFaceChat.getFemale().getId());
+        }
+        else if (user instanceof Female){
             infoResponse.setMask(currentFaceChat.getMaleMask());
+
+            if(currentFaceChat.getFemale() != null)
+                infoResponse.setPartnerId(currentFaceChat.getMale().getId());
+        }
+
         infoResponse.setStartedAt(currentFaceChat.getStartedAt());
 
         return infoResponse;
