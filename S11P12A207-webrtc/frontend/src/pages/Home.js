@@ -68,7 +68,7 @@ const Home = () => {
                         </div>
                     ) : (
                         <div>
-                            <h2 style={{ fontSize: '3rem' }}>로그인해주세요</h2>
+                            <h2 style={{ fontSize: '3rem' }}>로그인</h2>
                             <Login onLoginSuccess={onLoginSuccess} />
 
                             {/* 회원가입 버튼 추가 */}
@@ -79,14 +79,16 @@ const Home = () => {
                                             cursor: 'pointer',
                                             color: 'white',
                                             backgroundColor: '#aa4dcb',
-                                            fontSize: '1.5rem',
-                                            width: '200px',
-                                            height: '50px',
+                                            fontSize: '1.2rem',
+                                            width: '50%',
+                                            // height: '50px',
                                             border: 'none',
                                             borderRadius: '5px',
-                                            textAlign: 'center'
+                                            textAlign: 'center',
+                                            fontWeight: 'bold',
+                                            padding: '10px'
                                         }}
-                                        onMouseOver={(e) => e.target.style.backgroundColor = '#8530e9'}
+                                        onMouseOver={(e) => e.target.style.backgroundColor = 'rgb(150, 60, 180)'}
                                         onMouseOut={(e) => e.target.style.backgroundColor = '#aa4dcb'}
                                         onClick={goToSignup} // 회원가입 함수 호출
                                     >

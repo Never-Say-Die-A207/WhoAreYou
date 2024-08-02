@@ -76,8 +76,8 @@
 }
 
 .btn-success:hover {
-    background-color: #672481 !important;
-    border-color: #672481 !important;
+    background-color: rgb(150, 60, 180) !important;
+    border-color: rgb(150, 60, 180) !important;
     cursor: pointer;
 }
 
@@ -101,8 +101,8 @@
 }
 
 .btn-success-mobile:hover {
-    background-color: #672481 !important;
-    border-color: #672481 !important;
+    background-color: rgb(150, 60, 180) !important;
+    border-color:rgb(150, 60, 180) !important;
     cursor: pointer;
 }
 
