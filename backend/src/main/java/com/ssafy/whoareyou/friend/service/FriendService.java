@@ -63,6 +63,12 @@ public class FriendService {
     }
 
     public void setRelation(ChatRoom chatRoom, Male male, Female female) {
+        boolean isPresent = friendJpaRepository.findByGenderId(male.getId(), female.getId()).isPresent();
+
+        if(isPresent) {
+            return;
+        }
+
         Friend friend = Friend.builder()
                 .male(male)
                 .female(female)
