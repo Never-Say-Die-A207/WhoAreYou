@@ -14,17 +14,18 @@ import java.time.LocalDateTime;
 @Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
 public class FaceChatInfoResponse {
-    private int id;
+    private int roomId;
+    private int partnerId;
     private String mask;
     private LocalDateTime startedAt;
 
     public static FaceChatInfoResponse createResponse(User user, FaceChat currentFaceChat) {
         FaceChatInfoResponse infoResponse = new FaceChatInfoResponse();
 
-        infoResponse.setId(currentFaceChat.getId());
-        if (user instanceof Male m)
+        infoResponse.setRoomId(currentFaceChat.getId());
+        if (user instanceof Male)
             infoResponse.setMask(currentFaceChat.getFemaleMask());
-        else if (user instanceof Female f)
+        else if (user instanceof Female)
             infoResponse.setMask(currentFaceChat.getMaleMask());
         infoResponse.setStartedAt(currentFaceChat.getStartedAt());
 

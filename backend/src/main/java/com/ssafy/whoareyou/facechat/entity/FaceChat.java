@@ -20,12 +20,20 @@ public class FaceChat {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="male_id")
     private Male male;
-    private String maleMask; //나중에 별도의 클래스로 분리
+
+    private String maleMask;
+
+    @Enumerated(EnumType.STRING)
+    private WantsFriendType maleWantsFriend;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="female_id")
     private Female female;
+
     private String femaleMask;
+
+    @Enumerated(EnumType.STRING)
+    private WantsFriendType femaleWantsFriend;
 
     public void joinUser(User user, String mask){
         boolean isEmptyRoom = true;
@@ -82,4 +90,12 @@ public class FaceChat {
         this.getMale().increaseMatchingCount();
         this.getFemale().increaseMatchingCount();
     }
+
+    public void setWantsFriend(User me, WantsFriendType wantsFriend) {
+        if(me instanceof Male m)
+            this.maleWantsFriend = wantsFriend;
+        else
+            this.femaleWantsFriend = wantsFriend;
+    }
+
 }

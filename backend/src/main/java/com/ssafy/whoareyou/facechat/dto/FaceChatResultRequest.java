@@ -8,8 +8,9 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FaceChatRequest {
-    private Integer userId;
-    private String mask;
-    private Boolean change;
+public class FaceChatResultRequest {
+    private Integer roomId;
+    private Integer myId;
+    private Integer partnerId;
+    private Boolean friend;
 }

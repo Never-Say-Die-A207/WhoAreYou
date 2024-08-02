@@ -13,6 +13,7 @@ import org.hibernate.NonUniqueResultException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -34,6 +35,12 @@ public class FaceChatRepository {
         else if(object instanceof History history) {
             em.persist(history);
         }
+    }
+
+    public void saveAndFlush(FaceChat faceChat) {
+        saveFaceChatOrHistory(faceChat);
+        em.flush();
+        em.clear();
     }
 
     public void deleteFaceChat(FaceChat faceChat) {
