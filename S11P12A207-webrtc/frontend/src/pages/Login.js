@@ -123,14 +123,16 @@ const Login = ({ onLoginSuccess }) => {
                                             cursor: 'pointer',
                                             color: 'white',
                                             backgroundColor: '#aa4dcb',
-                                            fontSize: '1.5rem',
-                                            width: '200px',
-                                            height: '50px',
+                                            fontSize: '1.2rem',
+                                            width: '50%',
+                                            // height: '50px',
                                             border: 'none',
                                             borderRadius: '5px',
-                                            textAlign: 'center'
+                                            textAlign: 'center',
+                                            fontWeight: 'bold',
+                                            padding: '10px'
                                         }}
-                                        onMouseOver={(e) => e.target.style.backgroundColor = '#8530e9'}
+                                        onMouseOver={(e) => e.target.style.backgroundColor = 'rgb(150, 60, 180)'}
                                         onMouseOut={(e) => e.target.style.backgroundColor = '#aa4dcb'}
                                         onClick={onSubmit}
                                     >

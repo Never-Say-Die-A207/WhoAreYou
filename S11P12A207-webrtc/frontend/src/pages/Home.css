@@ -40,6 +40,10 @@ div{
 .mainpage-pic {
     width: 100%;
 }
+
+.layout-aside {
+    margin-right: 1rem;
+}
 /* .layout-aside img{
     max-width: 100%;
 } */
