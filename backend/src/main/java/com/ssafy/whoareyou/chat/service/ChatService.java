@@ -19,7 +19,6 @@ import java.time.format.DateTimeFormatter;
 @Service
 @RequiredArgsConstructor
 public class ChatService {
-    private final ChatRoomService chatRoomService;
     private final ChatRoomJpaRepository chatRoomJpaRepository;
     private final ChatMongoRepository chatMongoRepository;
 
@@ -36,7 +35,9 @@ public class ChatService {
                 .time(formattedTime)
                 .build();
 
-        ChatRoom chatRoom = chatRoomJpaRepository.findById(roomId).orElse(chatRoomService.create());
+        ChatRoom chatRoom = chatRoomJpaRepository.findById(roomId)
+                .orElseThrow(() -> new NullPointerException("존재하지 않은 방"));
+
         Chat chat = Chat.builder()
                 .nickname(receivingMessage.getNickname())
                 .message(receivingMessage.getMessage())
