@@ -79,11 +79,6 @@ function OpenVidu() {
     const [mask, setMask] = useState('RedFox');
     const [maskRemote, setMaskRemote] = useState('');
 
-    // const [roomId, setRoomId] = useState('');
-    // const [myId, setMyId] = useState('');
-    // const [partnerId, setPartnerId] = useState('');
-
-
     // 미리보기 코드
     const [previewStream, setPreviewStream] = useState(null);
     const videoPreviewRef = useRef(null);
@@ -110,8 +105,6 @@ function OpenVidu() {
     const [isFriend, setIsFriend] = useState(false);
 
     const userId = localStorage.getItem('userId');
-    const [partnerId, setPartnerId] = useState('');
-    const [roomId, setroomId] = useState('');
 
     //매칭 시작 시간
 
@@ -183,32 +176,6 @@ function OpenVidu() {
     }
 
 
-    // async function getRoomInfo(participantName) {
-    //     setLoading(true)
-    //     var requestURL = APPLICATION_SERVER_URL + 'facechat/info/' + participantName;
-    //     const response = await fetch(requestURL, {
-    //         headers: {
-    //             'ngrok-skip-browser-warning': 'skip-browser-warning'
-    //         },
-    //     });
-
-    //     const body = await response.json();
-    //     console.log('상대방 마스크 정보')
-    //     console.log(body.info.mask)
-    //     setMaskRemote(body.info.mask);
-    //     console.log('매칭 시작 시간')
-    //     console.log(body.info.startedAt);
-    //     setRoomId(body.info.roomId);
-    //     console.log(roomId);
-
-
-    //     setLoading(false)
-    //     // 타이머 시작
-    //     startTimer();
-
-    //     return body;
-    // }
-
     function getRoomInfo(participantName) {
         setLoading(true);
 
@@ -226,16 +193,13 @@ function OpenVidu() {
                 setMaskRemote(body.info.mask);
                 console.log('매칭 시작 시간');
                 console.log(body.info.startedAt);
-                
-                setPartnerId(body.info.partnerId);
-                console.log('partnerId:', partnerId)
-                setroomId(body.info.roomId);
-                console.log('roomId:', roomId)
-                
+                console.log('partnerId:', body.info.partnerId)
+                console.log('roomId:', body.info.roomId)
+
                 setLoading(false);
 
                 // 타이머 시작
-                startTimer();
+                startTimer(body.info.roomId, body.info.partnerId);
 
                 return body;
             })
@@ -267,17 +231,6 @@ function OpenVidu() {
         );
 
 
-        // const response = await fetch(APPLICATION_SERVER_URL + 'token', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({
-        //         roomName: roomName,
-        //         participantName: participantName
-        //     })
-        // });
-
         if (!response.ok) {
             const error = await response.json();
             throw new Error(`Failed to get token: ${error.errorMessage}`);
@@ -286,8 +239,6 @@ function OpenVidu() {
         const data = await response.json();
         return data.token;
     }
-
-
 
 
     //미리보기 코드
@@ -364,8 +315,7 @@ function OpenVidu() {
     }
 
 
-
-    const startTimer = () => {
+    const startTimer = (ri, pi) => {
         startTimeRef.current = Date.now();
         setTimeLeft(10); // 타이머 초기화 - 3분(180초)로 변경
 
@@ -376,7 +326,7 @@ function OpenVidu() {
             if (elapsedTime < 10) { // 3분(180초)으로 변경
                 timerRef.current = requestAnimationFrame(updateTimer);
             } else {
-                handleTimerEnd(); // 타이머가 끝났을 때 실행할 함수 호출
+                handleTimerEnd(ri, pi); // 타이머가 끝났을 때 실행할 함수 호출
             }
         };
 
@@ -384,51 +334,17 @@ function OpenVidu() {
     };
 
 
-    // 타이머 친구 추가 api요청 보내기
-    // const response = await fetch(APPLICATION_SERVER_URL + 'facechat/result/', {
-    //     method: 'POST',
-    //     headers: {
-    //         "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(room_id, my_id, remote_id, isfriend: friend)
-    // }
-
-
-    // //타이머 끝나는 경우 코드 실행    
-    // const handleTimerEnd = async () => {
-    //     const finalResult = {
-    //         myId,
-    //         partnerId,
-    //         roomId,
-    //         'friend': !isFriend
-    //     };
-    //     console.log(finalResult);
-
-    //     try {
-    //         const response = await api.post('/facechat/result/', finalResult);
-    //         if (response.message === 'OK') {
-    //             console.log('OK');
-    //         } else if (response.message === 'NO') {
-    //             console.log('NO');
-    //         };
-    //     } catch (error) {
-    //         console.log('handleTimerEnd error:', error);
-    //     }
-    //     // 추가로 API 요청을 여기에 작성
-    //     // await api.post('/some-endpoint', { data: 'some data' });
-    //     // leaveRoom(); // 타이머가 끝났을 때 방 나가기
-    // };
-
     // 타이머 끝나는 경우 코드 실행
-    const handleTimerEnd = () => {
+    const handleTimerEnd = (roomId, partnerId) => {
         const finalResult = {
             'myId': userId,
             'partnerId': partnerId,
             'roomId': roomId,
             'friend': !isFriend
         };
+        console.log(finalResult);
 
-        fetch(APPLICATION_SERVER_URL + 'facechat/result/', {
+        fetch(APPLICATION_SERVER_URL + 'facechat/result', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
