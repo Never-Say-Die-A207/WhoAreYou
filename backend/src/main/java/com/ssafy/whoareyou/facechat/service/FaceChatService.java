@@ -193,8 +193,7 @@ public class FaceChatService {
 
         if (maleWantsFriend != null && femaleWantsFriend != null) {
             if (maleWantsFriend == WantsFriendType.YES && femaleWantsFriend == WantsFriendType.YES) {
-                m.increaseSuccessCount();
-                f.increaseSuccessCount();
+                me.increaseSuccessCount();
 
                 result = friendService.join(new SearchTargetDto(m.getId(), f.getId()));
             }
