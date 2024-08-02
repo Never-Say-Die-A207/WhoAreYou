@@ -17,7 +17,7 @@ import Preview from './Preview';
 import { FaceMesh } from '@mediapipe/face_mesh';
 import * as cam from '@mediapipe/camera_utils';
 import api from '../../api/api';
-import {PropagateLoader } from 'react-spinners';
+import { PropagateLoader } from 'react-spinners';
 
 import RedFoxLocal from './RedFoxLocal';
 import SpiderManLocal from './SpiderManLocal';
@@ -110,7 +110,7 @@ function OpenVidu() {
 
 
     //매칭 시작 시간
-    
+
 
     async function joinRoom() {
         const room = new Room();
@@ -198,7 +198,7 @@ function OpenVidu() {
         if (body.info.mask) {
             setRoomId(body.info.roomId);
             setPartnerId(body.info.partnerId);
-            
+
 
             setLoading(false)
             // 타이머 시작
@@ -333,7 +333,7 @@ function OpenVidu() {
 
         const updateTimer = () => {
             const elapsedTime = Math.floor((Date.now() - startTimeRef.current) / 1000);
-            setTimeLeft(10 - elapsedTime); // 3분(180초)으로 변경
+            setTimeLeft(1000 - elapsedTime); // 3분(180초)으로 변경
 
             if (elapsedTime < 1000) { // 3분(180초)으로 변경
                 timerRef.current = requestAnimationFrame(updateTimer);
@@ -512,58 +512,64 @@ function OpenVidu() {
                 loading ? (
                     <div id='loading'>
                         <div>
-                        <PropagateLoader
-                        color = "#aa4dcb"
-                        size = {25}
-                        />
+                            <PropagateLoader
+                                color="#aa4dcb"
+                                size={25}
+                            />
                         </div>
                         <div className="loading-text">상대방을 찾고 있습니다.</div>
                     </div>
                 ) : (
-                <div>
-                    <div id='room'>
-                        <div id='room-header'>
-                            <h2 id='room-title'>{roomName}</h2>
-                            <button className='btn btn-danger' id='leave-room-button' onClick={leaveRoom}>
-                                Leave Room
-                            </button>
-                        </div>
-                        <div id='layout-container'>
-                            {localTrack && (
-                                <VideoComponentLocal track={localTrack} participantIdentity={participantName} local={true} mask={mask} />
-                            )}
-                            {remoteTracks.map((remoteTrack) =>
-                                remoteTrack.trackPublication.kind === 'video' ? (
-                                    <VideoComponent
-                                        key={remoteTrack.trackPublication.trackSid}
-                                        track={remoteTrack.trackPublication.videoTrack}
-                                        participantIdentity={remoteTrack.participantIdentity}
-                                        setExpressionData={setExpressionData} // setExpressionData 전달
-                                        maskRemote={maskRemote}
-                                    />
+                    <div>
+                        <div style={{ position: 'relative' }}>
+                        <div id='timer'>남은 시간 : {formatTime(timeLeft)}</div>
+                            <div id='room'>
+                                <div id='room-header'>
+                                    {/* <h2 id='room-title'>{roomName}</h2> */}
 
-                                ) : (
-                                    <AudioComponent
-                                        key={remoteTrack.trackPublication.trackSid}
-                                        track={remoteTrack.trackPublication.audioTrack}
-                                    />
-                                )
-                            )}
+                                </div>
+                                <div id='layout-container'>
+                                    {localTrack && (
+                                        <VideoComponentLocal track={localTrack} participantIdentity={participantName} local={true} mask={mask} />
+                                    )}
+                                    {remoteTracks.map((remoteTrack) =>
+                                        remoteTrack.trackPublication.kind === 'video' ? (
+                                            <VideoComponent
+                                                key={remoteTrack.trackPublication.trackSid}
+                                                track={remoteTrack.trackPublication.videoTrack}
+                                                participantIdentity={remoteTrack.participantIdentity}
+                                                setExpressionData={setExpressionData} // setExpressionData 전달
+                                                maskRemote={maskRemote}
+                                            />
+
+                                        ) : (
+                                            <AudioComponent
+                                                key={remoteTrack.trackPublication.trackSid}
+                                                track={remoteTrack.trackPublication.audioTrack}
+                                            />
+                                        )
+                                    )}
+                                </div>
+                            </div>
+                            <div className='bottom'>
+                                <RoomBottom expressionData={expressionData} leaveRoom={leaveRoom}/>
+                                {/* <button className='btn btn-danger' id='leave-room-button' onClick={leaveRoom}>
+                                    Leave Room
+                                </button> */}
+                            </div>
+                           
+
+                        </div>
+                        <div className='friend-toggle'>
+                            <label>
+                                <input type='checkbox' checked={isFriend} onChange={handleFriendToggle} />
+                                친구 추가
+                            </label>
                         </div>
                     </div>
-                    <div className='bottom'>
-                        <RoomBottom expressionData={expressionData} />
-                    </div>
-                    <div id='timer'>{formatTime(timeLeft)}</div>
-                    <div className='friend-toggle'>
-                        <label>
-                            <input type='checkbox' checked={isFriend} onChange={handleFriendToggle} />
-                            친구 추가
-                        </label>
-                    </div>
-                </div>
-            )
+
                 )
+            )
             }
         </>
     );

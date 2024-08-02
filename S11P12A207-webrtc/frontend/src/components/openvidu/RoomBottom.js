@@ -1,7 +1,7 @@
 import React from 'react';
 import './RoomBottom.css';
 
-function RoomBottom({ expressionData }) {
+function RoomBottom({ expressionData, leaveRoom }) {
   const { borderClass, imageSrc } = expressionData;
 
   // 로깅을 통해 RoomBottom이 받아온 데이터 확인
@@ -13,7 +13,7 @@ function RoomBottom({ expressionData }) {
         {imageSrc && <img src={imageSrc} alt="expression" className="bottom-image" />}
       </div>
       <div>
-        <button className="bottom-button">
+        <button className="bottom-button" onClick={leaveRoom}>
           홈으로 가기
         </button>
         <button className="bottom-button">

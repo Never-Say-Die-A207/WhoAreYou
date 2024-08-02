@@ -121,7 +121,7 @@
     width: 100%;
     max-width: 1000px;
     /* padding: 0 20px; */
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
 }
 
 #room-title {
@@ -199,10 +199,10 @@
 /* 타이머 */
 #timer {
     position: absolute;
-    top: 10px;
+    top: 0%;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 24px;
+    font-size: 16px;
     font-weight: bold;
     color: white;
     background: rgba(0, 0, 0, 0.5);
@@ -213,8 +213,8 @@
 
 .friend-toggle {
     position: absolute;
-    bottom: 20px;
-    right: 20px;
+    bottom: 2%;
+    right: 2%;
     font-size: 18px;
     color: white;
     background: rgba(0, 0, 0, 0.5);
