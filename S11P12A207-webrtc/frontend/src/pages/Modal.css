@@ -1,5 +1,5 @@
 /* 오버레이 스타일 */
-.my-overlay {
+.my-overlay, .modal-overlay {
   background-color: rgba(0, 0, 0, 0.6); /* 어두운 배경 */
   width: 100%;
   height: 100vh;
@@ -9,14 +9,14 @@
   left: 0;
 }
 
-.my-info-modal {
+.my-info-modal, .modal-content {
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
 /* 모달 스타일 */
-.my-modal {
+.my-modal, .modal-content {
   width: 360px;
   max-width: 90%;
   height: auto;
@@ -37,7 +37,7 @@
 }
 
 /* 모달 제목 스타일 */
-.my-info-modal h2 {
+.my-info-modal h2, .modal-content h2 {
   color: #fff; /* 흰색 글씨 */
   font-size: 24px;
   margin-bottom: 20px;
@@ -64,19 +64,14 @@
   justify-content: space-between;
 }
 
-.my-info-content .info-box strong {
+.my-info-content .info-box strong, .my-info-content .info-box p {
   color: rgb(255, 255, 255); /* 흰색 글씨 */
   display: block;
-}
-
-.my-info-content .info-box p {
-  color: rgb(255, 255, 255); /* 흰색 글씨 */
-  display: block;
-  margin: 0px;
+  margin: 0;
 }
 
 /* 닫기 버튼 스타일 */
-.my-info-modal .close {
+.my-info-modal .close, .modal-content .close {
   margin-top: 20px;
   padding: 10px 20px;
   border-radius: 5px;
@@ -89,7 +84,7 @@
   align-self: center; /* 가운데 정렬 */
 }
 
-.my-info-modal .close:hover {
+.my-info-modal .close:hover, .modal-content .close:hover {
   background-color: rgb(130, 50, 160); /* 호버 시 색상 */
   color: #fff; /* 흰색 글씨 유지 */
 }
