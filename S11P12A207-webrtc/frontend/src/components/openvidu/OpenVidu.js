@@ -79,9 +79,9 @@ function OpenVidu() {
     const [mask, setMask] = useState('RedFox');
     const [maskRemote, setMaskRemote] = useState('');
 
-    const [roomId, setRoomId] = useState('');
-    const [myId, setMyId] = useState('');
-    const [partnerId, setPartnerId] = useState('');
+    // const [roomId, setRoomId] = useState('');
+    // const [myId, setMyId] = useState('');
+    // const [partnerId, setPartnerId] = useState('');
 
 
     // 미리보기 코드
@@ -109,6 +109,9 @@ function OpenVidu() {
     // 친구 추가 토글 상태
     const [isFriend, setIsFriend] = useState(false);
 
+    const userId = localStorage.getItem('userId');
+    const [partnerId, setPartnerId] = useState('');
+    const [roomId, setroomId] = useState('');
 
     //매칭 시작 시간
 
@@ -138,9 +141,8 @@ function OpenVidu() {
                     { trackPublication: publication, participantIdentity: participant.identity }
                 ]);
 
-                const userId = localStorage.getItem('userId')
                 const body = getRoomInfo(userId)
-                console.log(body)
+                console.log(body);
             }
         );
         console.log(room.remoteParticipants.size);
@@ -180,33 +182,68 @@ function OpenVidu() {
         window.location.reload();
     }
 
-    async function getRoomInfo(participantName) {
-        setLoading(true)
+
+    // async function getRoomInfo(participantName) {
+    //     setLoading(true)
+    //     var requestURL = APPLICATION_SERVER_URL + 'facechat/info/' + participantName;
+    //     const response = await fetch(requestURL, {
+    //         headers: {
+    //             'ngrok-skip-browser-warning': 'skip-browser-warning'
+    //         },
+    //     });
+
+    //     const body = await response.json();
+    //     console.log('상대방 마스크 정보')
+    //     console.log(body.info.mask)
+    //     setMaskRemote(body.info.mask);
+    //     console.log('매칭 시작 시간')
+    //     console.log(body.info.startedAt);
+    //     setRoomId(body.info.roomId);
+    //     console.log(roomId);
+
+
+    //     setLoading(false)
+    //     // 타이머 시작
+    //     startTimer();
+
+    //     return body;
+    // }
+
+    function getRoomInfo(participantName) {
+        setLoading(true);
+
         var requestURL = APPLICATION_SERVER_URL + 'facechat/info/' + participantName;
-        const response = await fetch(requestURL, {
+
+        fetch(requestURL, {
             headers: {
                 'ngrok-skip-browser-warning': 'skip-browser-warning'
             },
-        });
+        })
+            .then(response => response.json())
+            .then(body => {
+                console.log('상대방 마스크 정보');
+                console.log(body.info.mask);
+                setMaskRemote(body.info.mask);
+                console.log('매칭 시작 시간');
+                console.log(body.info.startedAt);
+                
+                setPartnerId(body.info.partnerId);
+                console.log('partnerId:', partnerId)
+                setroomId(body.info.roomId);
+                console.log('roomId:', roomId)
+                
+                setLoading(false);
 
-        const body = await response.json();
-        console.log('상대방 마스크 정보')
-        console.log(body.info.mask)
-        setMaskRemote(body.info.mask);
-        console.log('매칭 시작 시간')
-        console.log(body.info.startedAt)
+                // 타이머 시작
+                startTimer();
 
-        if (body.info.mask) {
-            setRoomId(body.info.roomId);
-            setPartnerId(body.info.partnerId);
-
-
-            setLoading(false)
-            // 타이머 시작
-            startTimer();
-        }
-        return body;
+                return body;
+            })
+            .catch(error => {
+                console.error('getRoomInfo error:', error);
+            });
     }
+
 
     //마스크 이름 넣기 주석 
     async function getToken(mask, participantName) {
@@ -357,28 +394,58 @@ function OpenVidu() {
     // }
 
 
-    //타이머 끝나는 경우 코드 실행    
-    const handleTimerEnd = async () => {
+    // //타이머 끝나는 경우 코드 실행    
+    // const handleTimerEnd = async () => {
+    //     const finalResult = {
+    //         myId,
+    //         partnerId,
+    //         roomId,
+    //         'friend': !isFriend
+    //     };
+    //     console.log(finalResult);
+
+    //     try {
+    //         const response = await api.post('/facechat/result/', finalResult);
+    //         if (response.message === 'OK') {
+    //             console.log('OK');
+    //         } else if (response.message === 'NO') {
+    //             console.log('NO');
+    //         };
+    //     } catch (error) {
+    //         console.log('handleTimerEnd error:', error);
+    //     }
+    //     // 추가로 API 요청을 여기에 작성
+    //     // await api.post('/some-endpoint', { data: 'some data' });
+    //     // leaveRoom(); // 타이머가 끝났을 때 방 나가기
+    // };
+
+    // 타이머 끝나는 경우 코드 실행
+    const handleTimerEnd = () => {
         const finalResult = {
-            roomId,
-            myId,
-            partnerId,
-            'friend': isFriend,
+            'myId': userId,
+            'partnerId': partnerId,
+            'roomId': roomId,
+            'friend': !isFriend
         };
 
-        try {
-            const response = await api.post('/facechat/result/', finalResult);
-            if (response.message === 'OK') {
-                console.log('OK')
-            } else if (response.message === 'NO') {
-
-            };
-        } catch (error) {
-            console.log(error)
-        }
-        // 추가로 API 요청을 여기에 작성
-        // await api.post('/some-endpoint', { data: 'some data' });
-        leaveRoom(); // 타이머가 끝났을 때 방 나가기
+        fetch(APPLICATION_SERVER_URL + 'facechat/result/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(finalResult)
+        })
+            .then(response => response.json())
+            .then(result => {
+                if (result.message === 'OK') {
+                    console.log('OK');
+                } else if (result.message === 'NO') {
+                    console.log('NO');
+                }
+            })
+            .catch(error => {
+                console.log('handleTimerEnd error:', error);
+            });
     };
 
 
@@ -401,13 +468,14 @@ function OpenVidu() {
     // 친구 토글
     const handleFriendToggle = () => {
         setIsFriend(!isFriend);
+        console.log(isFriend);
     };
 
     //매칭 취소
     const CancelMatching = () => {
         window.location.reload();
     };
- 
+
     return (
         <>
             {!room ? (
@@ -516,21 +584,21 @@ function OpenVidu() {
             ) : (
                 loading ? (
                     <div id='loading'>
-                        <div style={{ position: 'absolute', top: '2%', right: '1%'}}>
+                        <div style={{ position: 'absolute', top: '2%', right: '1%' }}>
                             <button onClick={CancelMatching} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
-                            <CiLogout style ={{fontSize:'30px', transform: 'scaleX(-1)' }}/>
+                                <CiLogout style={{ fontSize: '30px', transform: 'scaleX(-1)' }} />
                             </button>
                         </div>
-                    <div style={{ position: 'relative' }}>
-                        
-                        <PropagateLoader color="#aa4dcb" size={25} />
-                        <div className="loading-text">상대방을 찾고 있습니다.</div>
+                        <div style={{ position: 'relative' }}>
+
+                            <PropagateLoader color="#aa4dcb" size={25} />
+                            <div className="loading-text">상대방을 찾고 있습니다.</div>
+                        </div>
                     </div>
-                </div>
                 ) : (
                     <div>
                         <div style={{ position: 'relative' }}>
-                        <div id='timer'>남은 시간 : {formatTime(timeLeft)}</div>
+                            <div id='timer'>남은 시간 : {formatTime(timeLeft)}</div>
                             <div id='room'>
                                 <div id='room-header'>
                                     {/* <h2 id='room-title'>{roomName}</h2> */}
@@ -560,12 +628,12 @@ function OpenVidu() {
                                 </div>
                             </div>
                             <div className='bottom'>
-                                <RoomBottom expressionData={expressionData} leaveRoom={leaveRoom}/>
+                                <RoomBottom expressionData={expressionData} leaveRoom={leaveRoom} />
                                 {/* <button className='btn btn-danger' id='leave-room-button' onClick={leaveRoom}>
                                     Leave Room
                                 </button> */}
                             </div>
-                           
+
 
                         </div>
                         <div className='friend-toggle'>
