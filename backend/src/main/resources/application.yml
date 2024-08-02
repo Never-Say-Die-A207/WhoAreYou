@@ -1,16 +1,18 @@
+server:
+  port: 4040
+
 spring:
   application:
     name: whoareyou
 
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://database:3306/whoareyou?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    #    url: jdbc:mysql://mysql:3306/whoareyou?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
     url: jdbc:mysql://localhost:3306/whoareyou?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
-#    url: jdbc:mysql://localhost:3306/chat_test?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: root
 
-# update 방식 실행 시작
+  #   update 방식 시작
   jpa:
     show-sql: true
     hibernate:
@@ -19,22 +21,23 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
-# update 방식 실행 종료
+  #     update 방식 끝
 
-# create 방식 실행 시작
-#  jpa:
-#    show-sql: true
-#    hibernate:
-#      ddl-auto: create
-#    properties:
-#      hibernate:
-#        format_sql: true
-#        dialect: org.hibernate.dialect.MySQL8Dialect
-#    defer-datasource-initialization: true
-#  sql:
-#    init:
-#      mode: always
-# create 방식 실행 종료
+  # create 방식 시작
+  #  jpa:
+  #    show-sql: true
+  #    hibernate:
+  #      ddl-auto: create
+  #    properties:
+  #      hibernate:
+  #        format_sql: true
+  #        dialect: org.hibernate.dialect.MySQL8Dialect
+  #    defer-datasource-initialization: true
+  #
+  #  sql:
+  #    init:
+  #      mode: always
+  # create 방식 끝
 
   security:
     oauth2:
@@ -67,19 +70,41 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
-server:
-  port: 4040
-
-secret-key: ThisStatementIsJwtSecretKeyDoNotUseThisStatement
-
-livekit:
-  api:
-    key: APIXAD86V8PHHZ2
-    secret: Bi1l6R02usl4OirnJ1LMfPHaZuaGeaT8aAp41WzLXyf
-  server:
-    url: wss://myapp-yqvsqxqi.livekit.cloud
-
-
-logging:
-  level:
-    org.hibernate.orm.jdbc.bind: trace
+#---
+#spring:
+#  config:
+#    activate:
+#      on-profile: deploy
+#
+#  datasource:
+#    url: jdbc:mysql://mysql:3306/whoareyou?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+#  jpa:
+#    show-sql: true
+#    hibernate:
+#      ddl-auto: update
+#    properties:
+#      hibernate:
+#        format_sql: true
+#        dialect: org.hibernate.dialect.MySQL8Dialect
+#
+#---
+#spring:
+#  config:
+#    activate:
+#      on-profile: develop
+#
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/whoareyou?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+#  jpa:
+#    show-sql: true
+#    hibernate:
+#      ddl-auto: create
+#    properties:
+#      hibernate:
+#        format_sql: true
+#        dialect: org.hibernate.dialect.MySQL8Dialect
+#    defer-datasource-initialization: true
+#
+#  sql:
+#    init:
+#      mode: always
