@@ -1,0 +1,179 @@
+/* Global styles for elements */
+div {
+    display: block;
+    unicode-bidi: isolate;
+}
+
+ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+    unicode-bidi: isolate;
+}
+
+label {
+    cursor: pointer;
+}
+
+i {
+    font-style: italic;
+}
+
+input {
+    vertical-align: middle;
+    line-height: normal;
+    color: inherit;
+    font: inherit;
+    margin: 0;
+}
+
+input[type='checkbox'] {
+    box-sizing: border-box;
+    padding: 0;
+}
+
+input[type="checkbox" i] {
+    background-color: initial;
+    cursor: default;
+    appearance: auto;
+    border: initial;
+}
+
+/* .g-terms-checkbox styles */
+.g-terms-checkbox {
+    border-top: 1px solid #f1f4f6;
+    color: #111;
+}
+
+.g-terms-checkbox>.checkall-first {
+    padding-top: 20px;
+}
+
+.g-terms-checkbox>.checkall {
+    margin-bottom: 8px;
+}
+
+.g-terms-checkbox * {
+    box-sizing: border-box;
+}
+
+.g-terms-checkbox>.error-tip {
+    font-size: 12px;
+    line-height: 1.25;
+    color: #cb1400;
+    display: none;
+}
+
+.g-terms-checkbox>.terms {
+    margin-top: 16px;
+    padding: 18px 16px;
+    border: 1px solid #ccc;
+    width: 100%;
+    overflow: hidden;
+}
+
+.g-terms-checkbox .message {
+    font-size: 12px;
+    line-height: 1.4;
+    color: #555;
+    margin-top: 6px;
+    margin-left: 26px;
+    display: block;
+}
+
+.g-terms-checkbox .icon {
+    display: inline-block;
+    background-size: cover;
+    background-repeat: no-repeat;
+    outline: none;
+    width: 20px;
+    height: 20px;
+
+}
+
+/* .c-checkbox-item styles */
+.c-checkbox-item {
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+}
+
+.c-checkbox-item .wrapper {
+    display: flex;
+    align-items: center;
+    flex: 1 0 auto;
+    width: 100%;
+}
+
+.c-checkbox-item .wrapper input {
+    display: none; /* 숨김 */
+}
+
+.c-checkbox-item .wrapper label {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex: 1 auto;
+    margin-right: 25px;
+}
+
+.c-checkbox-item .wrapper label .icon-chk:before {
+    content: ''; /* 커스텀 체크박스를 위한 빈 컨텐츠 */
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: #fff; /* 백그라운드 기본 값 */
+    border: 1px solid #ccc; /* 테두리 */
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.c-checkbox-item .wrapper input:checked + label .icon-chk:before {
+    background: #111; /* 체크된 상태 배경색 */
+    content: '\2713'; /* 체크 표시 */
+    color: #fff; /* 체크 표시 색상 */
+    text-align: center;
+    line-height: 20px;
+}
+
+.c-checkbox-item .wrapper .icon-chk {
+    min-width: 20px;
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}
+
+.c-checkbox-item .icon {
+    vertical-align: bottom;
+}
+
+.c-checkbox-item .wrapper label span {
+    display: block;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+.g-terms-checkbox>.c-checkbox-item>.wrapper {
+    padding-bottom: 12px;
+}
+
+.c-checkbox-item .icon-right-arrow {
+    cursor: pointer;
+    float: right;
+    border: 0;
+    background-color: #fff;
+    font-size: 0;
+    flex-shrink: 0;
+}
+
+button {
+    text-transform: none;
+    overflow: visible;
+    color: inherit;
+    font: inherit;
+    margin: 0;
+}

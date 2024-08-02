@@ -1,0 +1,140 @@
+.login-page .signup-container {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #dcdcdc;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    gap: 20px; /* 추가된 부분 */
+}
+
+.signup-title {
+    margin-bottom: 20px; /* 동일한 간격을 위해 추가 */
+}
+
+.layout-main {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* 동일한 간격을 위해 추가 */
+}
+
+.zm-input__inner {
+    width: 100%;
+    height: 50px;
+    font-size: 1rem;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.zm-input__label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #999;
+}
+
+.layout-main-slot {
+    justify-content: center;
+}
+
+/* 라디오 버튼 스타일 */
+.form-check-input {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #aa4dcb;
+    border-radius: 50%;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+}
+
+.form-check-input:checked {
+    background-color: #aa4dcb;
+    border-color: #aa4dcb;
+}
+
+.form-check-input:checked::before {
+    content: '';
+    display: block;
+    width: 60%;
+    height: 60%;
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.form-check-input:hover {
+    border-color: #8713b1;
+}
+
+.zm-input__inner:focus {
+    border-color: #aa4dcb;
+    outline: none;
+}
+
+.email_input {
+    position: relative;
+    flex: 1;
+}
+
+.zm-input__inner .email_input_input {
+    width: 100%;
+    height: 50px;
+    box-sizing: border-box;
+    padding-right: 10px;
+    font-size: 1rem;
+}
+
+.zm-input__label .email_label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: #999;
+}
+
+.email_button {
+    color: white;
+    background-color: #aa4dcb;
+    height: 50px;
+}
+
+.password_div {
+    position: relative;
+    width: 100%;
+}
+
+.zm-input__inner .password_input {
+    width: 100%;
+    height: 50px;
+    box-sizing: border-box;
+    padding: 0 10px;
+    font-size: 1rem;
+}
+
+.zm-input__label .password_label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    pointer-events: none;
+    color: #999;
+}
+
+.check_gender {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}

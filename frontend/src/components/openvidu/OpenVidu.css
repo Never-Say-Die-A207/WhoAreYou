@@ -1,17 +1,21 @@
 #join {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* justify-content: space-between;
+    align-items: center; */
+    height: 100%
 }
 
 #join-dialog {
-    width: 70%;
-    max-width: 900px;
-    padding: 60px;
+    /* display: flex;
+    flex-direction: column; */
+    /* width: 80%; */
+    /* max-width: 900px; */
+    /* padding-left: 30px; */
+    /* padding-bottom: 30px; */
+    /* margin-left:30px; */
     border-radius: 6px;
-    background-color: #f0f0f0;
+    /* background-color: #f0f0f0; */
 }
 
 #join-dialog h2 {
@@ -51,7 +55,13 @@
 
 #join-dialog button {
     display: block;
-    margin: 20px auto 0;
+    margin: 0 auto;
+    width: 100%;
+    padding: 15px;
+    border: 0px solid;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
 }
 
 .btn {
@@ -59,14 +69,43 @@
 }
 
 .btn-success {
-    background-color: #06d362;
-    border-color: #06d362;
+    background-color: #aa4dcb !important;
+    border-color: #aa4dcb !important;
+    color: white;
+
 }
 
 .btn-success:hover {
-    background-color: #1abd61;
-    border-color: #1abd61;
+    background-color: rgb(150, 60, 180) !important;
+    border-color: rgb(150, 60, 180) !important;
+    cursor: pointer;
 }
+
+/* 매칭 시작 버튼 모바일 */
+.btn-mobile {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    padding: 15px;
+    border: 0px solid;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.btn-success-mobile {
+    background-color: #aa4dcb !important;
+    border-color: #aa4dcb !important;
+    color: white;
+
+}
+
+.btn-success-mobile:hover {
+    background-color: rgb(150, 60, 180) !important;
+    border-color:rgb(150, 60, 180) !important;
+    cursor: pointer;
+}
+
 
 #room {
     display: flex;
@@ -82,7 +121,7 @@
     width: 100%;
     max-width: 1000px;
     /* padding: 0 20px; */
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
 }
 
 #room-title {
@@ -107,13 +146,100 @@
     /* padding: 10px;  */
 }
 
+/* Add these styles to your OpenVidu.css */
+
+
+.bottom {
+    width: 100%;
+}
+
+.video-form {
+    position: absolute;
+    bottom: 5%;
+    left: 45%;
+    z-index: 101;
+}
+
+
+.video-form-mobile {
+    position: absolute;
+    bottom: 20%;
+    right: 5%;
+    z-index: 101;
+    width: 20%;
+}
+
+
+/* OpenVidu.css */
+
+/* 로딩 애니메이션 */
+.loading-text {
+    color: black;
+    font-size: 1.5rem;
+    margin-top: 40px;
+}
+
+
+#loading {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+
+
+
+
+
+/* 타이머 */
+#timer {
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
+    border-radius: 5px;
+    z-index: 1000;
+}
+
+.friend-toggle {
+    position: absolute;
+    bottom: 2%;
+    right: 2%;
+    font-size: 18px;
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 1000;
+}
+
+.friend-toggle label {
+    display: flex;
+    align-items: center;
+}
+
+.friend-toggle input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+
 
 /* Media Queries */
 @media screen and (max-width: 768px) {
-    #join-dialog {
+    /* #join-dialog {
         width: 90%;
         padding: 30px;
-    }
+    } */
 
     #join-dialog h2 {
         font-size: 50px;
@@ -125,10 +251,10 @@
 }
 
 @media screen and (max-width: 480px) {
-    #join-dialog {
+    /* #join-dialog {
         width: 100%;
         padding: 20px;
-    }
+    } */
 
     #join-dialog h2 {
         font-size: 40px;

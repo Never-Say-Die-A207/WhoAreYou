@@ -9,51 +9,54 @@ import SpiderManRemote from './SpiderManRemote';
 function VideoComponent({ track, participantIdentity, setExpressionData, local = false, maskRemote }) {
   const videoElement2 = useRef(null);
   const [landmarks, setLandmarks] = useState(null);
-  const cameraRef = useRef(null); // Camera reference to stop it later
 
   useEffect(() => {
-    if (videoElement2.current && track) {
-      track.attach(videoElement2.current);
+      if (videoElement2.current && track) {
+          track.attach(videoElement2.current);
+      }
 
+      return () => {
+        if (track) {
+          track.detach();
+        }
+      };
+  }, [track]);
+
+  useEffect(() => {
       const faceMesh = new FaceMesh({
-        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
+          locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
       });
 
       faceMesh.setOptions({
-        maxNumFaces: 1,
-        minDetectionConfidence: 0.5,
-        minTrackingConfidence: 0.5,
+          maxNumFaces: 1,
+          minDetectionConfidence: 0.5,
+          minTrackingConfidence: 0.5,
       });
 
       faceMesh.onResults((results) => {
-        if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
-          const landmarks = results.multiFaceLandmarks[0];
-          setLandmarks(landmarks); // landmarks 상태 업데이트
-        }
-      });
-
-      const camera = new cam.Camera(videoElement2.current, {
-        onFrame: async () => {
-          if (videoElement2.current) {
-            await faceMesh.send({ image: videoElement2.current });
+          if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
+              const landmarks = results.multiFaceLandmarks[0];
+              setLandmarks(landmarks);
           }
-        },
-        width: 1280,
-        height: 720,
       });
-      camera.start();
-      cameraRef.current = camera;
-    }
 
-    return () => {
-      if (track) {
-        track.detach();
-      }
-      if (cameraRef.current) {
-        cameraRef.current.stop();
-      }
-    };
-  }, [track]);
+      const detectLandmarks = async () => {
+          if (videoElement2.current) {
+              await faceMesh.send({ image: videoElement2.current });
+              requestAnimationFrame(detectLandmarks);
+          }
+      };
+      if (videoElement2.current) {
+      videoElement2.current.addEventListener('loadeddata', () => {
+          detectLandmarks();
+      });
+    }
+      return () => {
+          if (faceMesh) {
+              faceMesh.close();
+          }
+      };
+  }, []);
 
   return (
     <div id={"camera-" + participantIdentity} className="video-container">
@@ -61,9 +64,12 @@ function VideoComponent({ track, participantIdentity, setExpressionData, local =
         <p>{participantIdentity + (local ? " (You)" : "")}</p>
       </div>
       <video ref={videoElement2} id={track.sid} style={{ display: 'none' }} />
-      <RedFoxRemote landmarks={landmarks} videoElement={videoElement2} />
-      {/* {maskRemote === 'RedFox' && <RedFoxRemote landmarks={landmarks} videoElement={videoElement2} />}
-      {maskRemote === 'SpiderMan' && <SpiderManRemote landmarks={landmarks} videoElement={videoElement2} />} */}
+      {/* <RedFoxRemote landmarks={landmarks} videoElement={videoElement2} /> */}
+      {maskRemote === 'RedFox' && <RedFoxRemote landmarks={landmarks} videoElement={videoElement2} />}
+      {maskRemote === 'SpiderMan' && <SpiderManRemote landmarks={landmarks} videoElement={videoElement2} />}
+      {maskRemote === 'SpiderManBlack' && <SpiderManRemote landmarks={landmarks} videoElement={videoElement2} />}
+      {maskRemote === 'Squid' && <SpiderManRemote landmarks={landmarks} videoElement={videoElement2} />}
+      {maskRemote === 'Joker' && <SpiderManRemote landmarks={landmarks} videoElement={videoElement2} />}
       <FaceRecognition videoElement={videoElement2} setExpressionData={setExpressionData} />
     </div>
   );

@@ -3,6 +3,10 @@ services:
     build: ./backend
     image: taegun1011/whoareyou_backend
 
+  frontend:
+    build: ./frontend
+    image: taegun1011/whoareyou_frontend
+
 # services:
 #   database:
 #     image: mysql:8.0.27

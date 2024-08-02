@@ -1,13 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Login from './Login';
-import './Modal.css';
+import Logout from './Logout';
 import { useNavigate } from 'react-router-dom';
+import './Home.css';
+import mainimg from '../assets/mainimg.jpg';
 
 const Home = () => {
     const [loginModal, setLoginModal] = useState(false);
+    const [userId, setUserId] = useState(null);
     const navigate = useNavigate();
 
-    const onLogin = (e) => {
+    useEffect(() => {
+        const storedUserId = localStorage.getItem('userId');
+        if (storedUserId) {
+            setUserId(storedUserId);
+        }
+    }, []);
+
+    const onLoginSuccess = (userId) => {
+        setUserId(userId);
+        setLoginModal(false);
+    };
+
+    const onLogout = () => {
+        setUserId(null);
+    };
+
+    const onLogin = () => {
         setLoginModal(true);
     };
 
@@ -16,53 +35,71 @@ const Home = () => {
     };
 
     const onMatching = () => {
-        navigate('/matching')
+        navigate('/matching');
+    };
+
+    const mypage = () => {
+        navigate('/mypage');
+    };
+
+    // 회원가입 페이지로 이동하는 함수 추가
+    const goToSignup = () => {
+        navigate('/signup');
     };
 
     return (
-        <div style={{ display: 'flex', height: '100vh' }}>
-            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <h1 style={{ fontSize: '3rem' }}>홈이야</h1>
-            </div>
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <button
-                    onClick={onLogin}
-                    style={{
-                        cursor: 'pointer',
-                        color: 'white',
-                        backgroundColor: '#87CEFA',
-                        fontSize: '1.5rem',
-                        width: '200px',
-                        height: '50px',
-                        marginBottom: '20px',
-                        border: 'none',
-                        borderRadius: '5px',
-                        textAlign: 'center'
-                    }}
-                    onMouseOver={(e) => e.target.style.backgroundColor = '#6CA0DC'} // 호버 적용
-                    onMouseOut={(e) => e.target.style.backgroundColor = '#87CEFA'} // 호버 해제
-                >
-                    로그인
-                </button>
-                {loginModal && <Login onClose={closeLogin} />}
-                <button
-                    onClick={onMatching}
-                    style={{
-                        cursor: 'pointer',
-                        color: 'white',
-                        backgroundColor: '#87CEFA',
-                        fontSize: '1.5rem',
-                        width: '200px',
-                        height: '50px',
-                        border: 'none',
-                        borderRadius: '5px',
-                        textAlign: 'center'
-                    }}
-                    onMouseOver={(e) => e.target.style.backgroundColor = '#6CA0DC'} // 호버 적용
-                    onMouseOut={(e) => e.target.style.backgroundColor = '#87CEFA'} // 호버 해제
-                >
-                    매칭하기
-                </button>
+        <div className='login-page'>
+            <div style={{ display: 'flex', height: '100vh', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <div className='layout-aside'>
+                    <div className='layout-body login-page-view' data-lang='ko-KO'>
+                        <div className='layout-aside'>
+                            <img src={mainimg} alt="Main" className='mainpage-pic'/>
+                        </div>
+                    </div>
+                </div>
+
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingTop: '15px', gap:'10px' }}>
+                    {userId ? (
+                        <div>
+                            <h2 style={{ fontSize: '3rem' }}>안녕하세요 {userId}님 반갑습니다.</h2>
+                            <div style={{ paddingTop: '30px' }}>
+                                <Logout onLogout={onLogout} />
+                            </div>
+                        </div>
+                    ) : (
+                        <div>
+                            <h2 style={{ fontSize: '3rem' }}>로그인</h2>
+                            <Login onLoginSuccess={onLoginSuccess} />
+
+                            {/* 회원가입 버튼 추가 */}
+                            <div className='mgt-sm'>
+                                <div style={{ paddingTop: '30px' }}>
+                                    <button
+                                        style={{
+                                            cursor: 'pointer',
+                                            color: 'white',
+                                            backgroundColor: '#aa4dcb',
+                                            fontSize: '1.2rem',
+                                            width: '50%',
+                                            // height: '50px',
+                                            border: 'none',
+                                            borderRadius: '5px',
+                                            textAlign: 'center',
+                                            fontWeight: 'bold',
+                                            padding: '10px'
+                                        }}
+                                        onMouseOver={(e) => e.target.style.backgroundColor = 'rgb(150, 60, 180)'}
+                                        onMouseOut={(e) => e.target.style.backgroundColor = '#aa4dcb'}
+                                        onClick={goToSignup} // 회원가입 함수 호출
+                                    >
+                                        회원가입
+                                    </button>
+                                </div>
+                         
+                            </div>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );

@@ -2,38 +2,52 @@ RoomBottom.css
 
 .room-bottom-container {
   padding: 20px;
-  border-radius: 10px;
-  display: flex;
+  /* display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center; */
+  width: 100%;
 }
 
 .room-bottom-container.joy {
   background-color: yellow;
+  width: 100%;
+  height: 100%;
 }
 
 .room-bottom-container.sadness {
   background-color: blue;
+  width: 100%;
+  height: 100%;
 }
 
 .room-bottom-container.anger {
   background-color: red;
+  width: 100%;
+  height: 100%;
 }
 
 .room-bottom-container.disgust {
   background-color: green;
+  width: 100%;
+  height: 100%;
 }
 
 .room-bottom-container.embrassment {
   background-color: pink;
+  width: 100%;
+  height: 100%;
 }
 
 .room-bottom-container.fear {
   background-color: purple;
+  width: 100%;
+  height: 100%;
 }
 
 .room-bottom-container.ennui {
   background-color: rgb(73, 12, 154);
+  width: 100%;
+  height: 100%;
 }
 
 .bottom-button {
@@ -41,6 +55,9 @@ RoomBottom.css
 }
 
 .bottom-image {
-  width: 100px;
-  height: 100px;
+  height: 100%;
+}
+
+.room-bottom {
+  height: 20dvh;
 }

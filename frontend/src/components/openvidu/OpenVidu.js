@@ -16,14 +16,30 @@ import FaceRecognition from './FaceRecognition';
 import Preview from './Preview';
 import { FaceMesh } from '@mediapipe/face_mesh';
 import * as cam from '@mediapipe/camera_utils';
+import api from '../../api/api';
+import { PropagateLoader } from 'react-spinners';
+import { CiLogout } from "react-icons/ci";
+
 import RedFoxLocal from './RedFoxLocal';
 import SpiderManLocal from './SpiderManLocal';
+import VerticalCarousel from './VerticalCarousel';
+import MobileCarousel from './MobileCarousel';
+import JokerLocal from './JokerLocal';
+import PinkFoxLocal from './PinkFoxLocal';
+import SpiderManBlackLocal from './SpiderManBlackLocal';
+import SquidLocal from './SquidLocal';
+import RedFoxRemote from './RedFoxRemote';
 
-// var APPLICATION_SERVER_URL = "https://grown-donkey-awfully.ngrok-free.app/";
-// var LIVEKIT_URL = "wss://myapp-yqvsqxqi.livekit.cloud/";
+// 반응형
+import { useMediaQuery, MediaQuery } from 'react-responsive';
 
-let APPLICATION_SERVER_URL = "";
-let LIVEKIT_URL = "";
+
+
+var APPLICATION_SERVER_URL = "http://3.36.120.21:4040/";
+var LIVEKIT_URL = "wss://myapp-yqvsqxqi.livekit.cloud/";
+
+// let APPLICATION_SERVER_URL = "";
+// let LIVEKIT_URL = "";
 
 configureUrls();
 
@@ -48,6 +64,9 @@ function configureUrls() {
     }
 }
 
+
+
+
 function OpenVidu() {
     const [room, setRoom] = useState(undefined);
     const [localTrack, setLocalTrack] = useState(undefined);
@@ -63,18 +82,49 @@ function OpenVidu() {
     // 미리보기 코드
     const [previewStream, setPreviewStream] = useState(null);
     const videoPreviewRef = useRef(null);
-    const canvasRef = useRef(null);
     const [landmarks, setLandmarks] = useState(null);
+    const [loading, setLoading] = useState(true);
+    // const loading = false
+
+    //반응형
+    const isSmallScreen = useMediaQuery({ maxWidth: 576 });
 
     //룸시작 코드
+    // function changeLoaclMaskValue(e) {
+    //     setMask(e.target.value)
+    // };
 
-    function changeLoaclMaskValue(e) {
-        setMask(e.target.value)
-    };
+
+    // 타이머
+    const [timeLeft, setTimeLeft] = useState(10); // 3분 = 180초로 변경
+    const timerRef = useRef(null);
+    const startTimeRef = useRef(null);
+
+
+    // 친구 추가 토글 상태
+    const [isFriend, setIsFriend] = useState(false);
+
+    const userId = localStorage.getItem('userId');
+
+    //매칭 시작 시간
+
 
     async function joinRoom() {
         const room = new Room();
         setRoom(room);
+
+        // room.on(RoomEvent.TrackSubscribed, async (track, _publication, participant) => {
+        //     if(room.remoteParticipants.size){
+        //         const roomInfo = await getRoomInfo(document.getElementById("participant-name").value);
+        //         console.log('roominfo')
+        //         console.log(roomInfo);
+        //     }
+        //     // addTrack(track, participant.identity);
+        //     }
+        // );
+        // setLoading(room.remoteParticipants.size);
+        // console.log(room.remoteParticipants);
+        // console.log(loading);
 
         room.on(
             RoomEvent.TrackSubscribed,
@@ -83,11 +133,12 @@ function OpenVidu() {
                     ...prev,
                     { trackPublication: publication, participantIdentity: participant.identity }
                 ]);
-                const body = getRoomInfo(participantName)
-                console.log(body)
+
+                const body = getRoomInfo(userId)
+                console.log(body);
             }
         );
-
+        console.log(room.remoteParticipants.size);
         room.on(RoomEvent.TrackUnsubscribed, (_track, publication) => {
             setRemoteTracks((prev) => prev.filter((track) => track.trackPublication.trackSid !== publication.trackSid));
         });
@@ -97,6 +148,12 @@ function OpenVidu() {
             await room.connect(LIVEKIT_URL, token);
             await room.localParticipant.enableCameraAndMicrophone();
             setLocalTrack(room.localParticipant.videoTrackPublications.values().next().value.videoTrack);
+            console.log(room.remoteParticipants);
+            // setLoading(room.remoteParticipants.size)
+            // if (room.remoteParticipants.size > 0) {
+            //     setLoading(false)
+            // } 
+
         } catch (error) {
             console.log('There was an error connecting to the room:', error.message);
             await leaveRoom();
@@ -107,60 +164,72 @@ function OpenVidu() {
         // Leave the room by calling 'disconnect' method over the Room object
         // Stop local video and audio tracks
 
+        await quit();
+
         await room?.disconnect();
         // Reset the state
         setRoom(undefined);
         setLocalTrack(undefined);
         setRemoteTracks([]);
+        stopTimer();
         window.location.reload();
     }
 
-    async function getRoomInfo(participantName) {
+
+    function getRoomInfo(participantName) {
+        setLoading(true);
+
         var requestURL = APPLICATION_SERVER_URL + 'facechat/info/' + participantName;
-        const response = await fetch(requestURL, {
+
+        fetch(requestURL, {
             headers: {
                 'ngrok-skip-browser-warning': 'skip-browser-warning'
             },
-        });
+        })
+            .then(response => response.json())
+            .then(body => {
+                console.log('상대방 마스크 정보');
+                console.log(body.info.mask);
+                setMaskRemote(body.info.mask);
+                console.log('매칭 시작 시간');
+                console.log(body.info.startedAt);
+                console.log('partnerId:', body.info.partnerId)
+                console.log('roomId:', body.info.roomId)
 
-        const body = await response.json();
-        console.log('상대방 마스크 정보')
-        console.log(body)
-        setMaskRemote(body.info.mask);
-        return body;
+                setLoading(false);
+
+                // 타이머 시작
+                startTimer(body.info.roomId, body.info.partnerId);
+
+                return body;
+            })
+            .catch(error => {
+                console.error('getRoomInfo error:', error);
+            });
     }
+
 
     //마스크 이름 넣기 주석 
     async function getToken(mask, participantName) {
+        const userId = localStorage.getItem('userId')
         console.log('내 마스크 정보')
         console.log(mask)
-        // // 다른 사람 통신 주석
-        // const mask_data = {
-        //     'userId': participantName,
-        //     'mask': mask,
-        // };
+        // // // 다른 사람 통신 주석
+        const mask_data = {
+            'userId': userId,
+            'mask': mask,
+            'needsChange': false,
+        };
 
-        // const response = await fetch(APPLICATION_SERVER_URL + 'facechat/', {
-        //         method: 'POST',
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //             'ngrok-skip-browser-warning': 'skip-browser-warning'
-        //         },
-        //         body: JSON.stringify(mask_data)
-        //     }
-        // );
-
-
-        const response = await fetch(APPLICATION_SERVER_URL + 'token', {
+        const response = await fetch(APPLICATION_SERVER_URL + 'facechat/', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-                roomName: roomName,
-                participantName: participantName
-            })
-        });
+            body: JSON.stringify(mask_data)
+        }
+        );
+
 
         if (!response.ok) {
             const error = await response.json();
@@ -170,6 +239,7 @@ function OpenVidu() {
         const data = await response.json();
         return data.token;
     }
+
 
     //미리보기 코드
     useEffect(() => {
@@ -207,6 +277,7 @@ function OpenVidu() {
                 height: 720,
             });
             camera.start();
+            // videoPreviewRef.current = camera
         }
     }, [previewStream, videoPreviewRef]);  // videoPreviewRef도 의존성 배열에 추가
 
@@ -233,113 +304,265 @@ function OpenVidu() {
         }
     };
 
+    async function quit() {
+        const userId = localStorage.getItem('userId');
+        const response = await fetch(APPLICATION_SERVER_URL + 'facechat/' + userId, {
+            method: 'DELETE'
+        }
+        );
+
+        return response;
+    }
 
 
+    const startTimer = (ri, pi) => {
+        startTimeRef.current = Date.now();
+        setTimeLeft(10); // 타이머 초기화 - 3분(180초)로 변경
+
+        const updateTimer = () => {
+            const elapsedTime = Math.floor((Date.now() - startTimeRef.current) / 1000);
+            setTimeLeft(10 - elapsedTime); // 3분(180초)으로 변경
+
+            if (elapsedTime < 10) { // 3분(180초)으로 변경
+                timerRef.current = requestAnimationFrame(updateTimer);
+            } else {
+                handleTimerEnd(ri, pi); // 타이머가 끝났을 때 실행할 함수 호출
+            }
+        };
+
+        timerRef.current = requestAnimationFrame(updateTimer);
+    };
 
 
+    // 타이머 끝나는 경우 코드 실행
+    const handleTimerEnd = (roomId, partnerId) => {
+        const finalResult = {
+            'myId': userId,
+            'partnerId': partnerId,
+            'roomId': roomId,
+            'friend': !isFriend
+        };
+        console.log(finalResult);
+
+        fetch(APPLICATION_SERVER_URL + 'facechat/result', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(finalResult)
+        })
+            .then(response => response.json())
+            .then(result => {
+                if (result.message === 'OK') {
+                    console.log('OK');
+                } else if (result.message === 'NO') {
+                    console.log('NO');
+                }
+            })
+            .catch(error => {
+                console.log('handleTimerEnd error:', error);
+            });
+    };
+
+
+    // 타이머 중지
+    const stopTimer = () => {
+        if (timerRef.current) {
+            cancelAnimationFrame(timerRef.current);
+            timerRef.current = null;
+        }
+    };
+
+    // 타이머 포맷팅
+    const formatTime = (time) => {
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
+        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    };
+
+
+    // 친구 토글
+    const handleFriendToggle = () => {
+        setIsFriend(!isFriend);
+        console.log(isFriend);
+    };
+
+    //매칭 취소
+    const CancelMatching = () => {
+        window.location.reload();
+    };
 
     return (
         <>
             {!room ? (
                 <div id='join'>
-                    <div id='join-dialog'>
-                        <h2>Join a Video Room</h2>
-                        <div style={{ position: 'relative' }}>
-                            <video ref={videoPreviewRef} autoPlay muted style={{
-                                width: '100%', height: 'auto', transform: 'scaleX(-1)'
-                            }}></video>
-                            {/* <canvas ref={canvasRef} className="output_canvas" width="1280" height="720" style={{ position: 'absolute', top: 0, left: 0 }}></canvas> */}
-                            {mask === 'RedFox' && <RedFoxLocal landmarks={landmarks} videoElement3={videoPreviewRef} />}
-                            {mask === 'SpiderMan' && <SpiderManLocal landmarks={landmarks} videoElement3={videoPreviewRef} />}
-                        </div>
-                        <form
-                            onSubmit={(e) => {
-                                e.preventDefault();
-                                joinRoom();
-                                // stopPreview();
-                            }}
-                        >
-                            <div>
-                                <label htmlFor='mask-name'>마스크 변경</label>
-                                <select
-                                    id='mask-name'
-                                    className='form-control'
-                                    value={mask}
-                                    onChange={changeLoaclMaskValue}
-                                >
-                                    {/* <option value='' defaultValue='마스크 선택'>마스크 선택</option> */}
-                                    <option value='RedFox'>RedFox</option>
-                                    <option value="SpiderMan">SpiderMan</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label htmlFor='participant-name'>Participant</label>
-                                <input
-                                    id='participant-name'
-                                    className='form-control'
-                                    type='text'
-                                    value={participantName}
-                                    onChange={(e) => setParticipantName(e.target.value)}
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor='room-name'>Room</label>
-                                <input
-                                    id='room-name'
-                                    className='form-control'
-                                    type='text'
-                                    value={roomName}
-                                    onChange={(e) => setRoomName(e.target.value)}
-                                    required
-                                />
-                            </div>
+                    {/* <JokerLocal landmarks={landmarks} videoElement3={videoPreviewRef} /> */}
+                    {/* <RedFoxLocal landmarks={landmarks} videoElement3={videoPreviewRef}/> */}
+                    {/* 슬라이더 만들기 */}
 
-                            <button
-                                className='btn btn-lg btn-success'
-                                type='submit'
-                                disabled={!roomName || !participantName}
-                            >
-                                Join!
-                            </button>
-                        </form>
+                    {/* 방 입장 시작 */}
+                    <div id='join-dialog'>
+                        {/* 가면 미리보기 보는 화면 */}
+                        <div style={{ position: 'relative', height: '92vh' }}>
+                            {isSmallScreen ? (
+                                <MobileCarousel setMask={setMask} />
+                            ) : (
+                                <VerticalCarousel setMask={setMask} />
+                            )}
+
+                            <video ref={videoPreviewRef} autoPlay muted style={{
+                                width: '100%', height: '100%', transform: 'scaleX(-1)', visibility: 'hidden',
+                            }}></video>
+                            {/* <RedFoxRemote landmarks={landmarks} videoElement={videoPreviewRef} /> */}
+                            {/* <canvas ref={canvasRef} className="output_canvas" width="1280" height="720" style={{ position: 'absolute', top: 0, left: 0 }}></canvas> */}
+                            {mask === 'RedFox' && <RedFoxLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
+                            {mask === 'SpiderMan' && <SpiderManLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
+                            {mask === 'Joker' && <JokerLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
+                            {/* {mask === 'PinkFox' && <PinkFoxLocal landmarks={landmarks} videoElement3={videoPreviewRef} />} */}
+                            {mask === 'SpiderManBlack' && <SpiderManBlackLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
+                            {mask === 'Squid' && <SquidLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
+                            {isSmallScreen ? (
+                                // 모바일 꾸미기
+                                <form
+                                    onSubmit={(e) => {
+                                        e.preventDefault();
+                                        joinRoom();
+                                        // stopPreview();
+                                    }}
+                                    className='video-form-mobile'>
+                                    {/* <div>
+                            <label htmlFor='mask-name'>마스크 변경</label>
+                            <select
+                                id='mask-name'
+                                className='form-control'
+                                value={mask}
+                                onChange={changeLoaclMaskValue}
+                            > */}
+                                    {/* <option value='' defaultValue='마스크 선택'>마스크 선택</option> */}
+                                    {/* <option value='RedFox'>RedFox</option>
+                                <option value="SpiderMan">SpiderMan</option>
+                            </select>
+                            </div> */}
+                                    {/* <div>
+                                        <label htmlFor='participant-name'>Participant</label>
+                                        <input
+                                            id='participant-name'
+                                            className='form-control'
+                                            type='text'
+                                            value={participantName}
+                                            onChange={(e) => setParticipantName(e.target.value)}
+                                            required
+                                        />
+                                    </div> */}
+                                    {/* <div>
+                                        <label htmlFor='room-name'>Room</label>
+                                        <input
+                                            id='room-name'
+                                            className='form-control'
+                                            type='text'
+                                            value={roomName}
+                                            onChange={(e) => setRoomName(e.target.value)}
+                                            required
+                                        />
+                                    </div> */}
+
+                                    <button
+                                        className='btn-mobile btn-lg-mobile btn-success-mobile'
+                                        type='submit'
+                                        disabled={!roomName || !participantName}
+                                    >
+                                        매칭!
+                                    </button>
+                                </form>
+                            ) : (
+                                <form
+                                    onSubmit={(e) => {
+                                        e.preventDefault();
+                                        joinRoom();
+                                        // stopPreview();
+                                    }}
+                                    className='video-form'>
+                                    <button
+                                        className='btn btn-lg btn-success'
+                                        type='submit'
+                                        disabled={!roomName || !participantName}
+                                    >
+                                        상대방 찾기
+                                    </button>
+
+                                </form>
+                            )}
+
+                        </div>
+
                     </div>
                 </div>
             ) : (
-                <div id='room'>
-                    <div id='room-header'>
-                        <h2 id='room-title'>{roomName}</h2>
-                        <button className='btn btn-danger' id='leave-room-button' onClick={leaveRoom}>
-                            Leave Room
-                        </button>
-                    </div>
-                    <div id='layout-container'>
-                        {localTrack && (
-                            <VideoComponentLocal track={localTrack} participantIdentity={participantName} local={true} mask={mask} />
-                        )}
-                        {remoteTracks.map((remoteTrack) =>
-                            remoteTrack.trackPublication.kind === 'video' ? (
-                                <VideoComponent
-                                    key={remoteTrack.trackPublication.trackSid}
-                                    track={remoteTrack.trackPublication.videoTrack}
-                                    participantIdentity={remoteTrack.participantIdentity}
-                                    setExpressionData={setExpressionData} // setExpressionData 전달
-                                    maskRemote={maskRemote}
-                                />
+                loading ? (
+                    <div id='loading'>
+                        <div style={{ position: 'absolute', top: '2%', right: '1%' }}>
+                            <button onClick={CancelMatching} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                                <CiLogout style={{ fontSize: '30px', transform: 'scaleX(-1)' }} />
+                            </button>
+                        </div>
+                        <div style={{ position: 'relative' }}>
 
-                            ) : (
-                                <AudioComponent
-                                    key={remoteTrack.trackPublication.trackSid}
-                                    track={remoteTrack.trackPublication.audioTrack}
-                                />
-                            )
-                        )}
+                            <PropagateLoader color="#aa4dcb" size={25} />
+                            <div className="loading-text">상대방을 찾고 있습니다.</div>
+                        </div>
                     </div>
-                    <div className='room-bottom'>
-                        <RoomBottom expressionData={expressionData} />
+                ) : (
+                    <div>
+                        <div style={{ position: 'relative' }}>
+                            <div id='timer'>남은 시간 : {formatTime(timeLeft)}</div>
+                            <div id='room'>
+                                <div id='room-header'>
+                                    {/* <h2 id='room-title'>{roomName}</h2> */}
+
+                                </div>
+                                <div id='layout-container'>
+                                    {localTrack && (
+                                        <VideoComponentLocal track={localTrack} participantIdentity={participantName} local={true} mask={mask} />
+                                    )}
+                                    {remoteTracks.map((remoteTrack) =>
+                                        remoteTrack.trackPublication.kind === 'video' ? (
+                                            <VideoComponent
+                                                key={remoteTrack.trackPublication.trackSid}
+                                                track={remoteTrack.trackPublication.videoTrack}
+                                                participantIdentity={remoteTrack.participantIdentity}
+                                                setExpressionData={setExpressionData} // setExpressionData 전달
+                                                maskRemote={maskRemote}
+                                            />
+
+                                        ) : (
+                                            <AudioComponent
+                                                key={remoteTrack.trackPublication.trackSid}
+                                                track={remoteTrack.trackPublication.audioTrack}
+                                            />
+                                        )
+                                    )}
+                                </div>
+                            </div>
+                            <div className='bottom'>
+                                <RoomBottom expressionData={expressionData} leaveRoom={leaveRoom} />
+                                {/* <button className='btn btn-danger' id='leave-room-button' onClick={leaveRoom}>
+                                    Leave Room
+                                </button> */}
+                            </div>
+
+
+                        </div>
+                        <div className='friend-toggle'>
+                            <label>
+                                <input type='checkbox' checked={isFriend} onChange={handleFriendToggle} />
+                                친구 추가
+                            </label>
+                        </div>
                     </div>
-                </div>
-            )}
+
+                )
+            )
+            }
         </>
     );
 }

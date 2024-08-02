@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import api from '../api/api';
+import './Signup.css';
+import './Modal.css'; // 추가된 스타일 파일 가져오기
+import Agree from './Agree';
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -9,144 +12,232 @@ const Signup = () => {
         name: '',
         nickname: '',
         password: '',
-        checkpassword: '',
         gender: '',
     });
     const [emailCheck, setEmailCheck] = useState('중복확인');
     const [nicknameCheck, setNicknameCheck] = useState('중복확인');
-    const [passwordMatch, setPasswordMatch] = useState(null);
+    const [passwordMatch, setPasswordMatch] = useState({
+        checkpassword: '',
+    });
 
-    const { email, name, nickname, password, checkpassword, gender } = form;
+    const [showModal, setShowModal] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
+    const [agreements, setAgreements] = useState({
+        chk_join_terms_fourteen: false,
+        chk_join_terms_service: false,
+        chk_join_terms_privacy_collect_use: false,
+        chk_agree_to_collect_third_part_information: false,
+    });
+
+    const { email, name, nickname, password, gender } = form;
+    const { checkpassword } = passwordMatch;
 
     const onChange = (e) => {
         const value = e.target.value;
         const id = e.target.id;
-        console.log(id, value)
         setForm({
             ...form,
-            [id]: value
+            [id]: value,
         });
+    };
 
-        if (id === 'checkpassword') {
-            setPasswordMatch(value === form.password);
-        }
+    const onCheck = (e) => {
+        const value = e.target.value;
+        const id = e.target.id;
+        setPasswordMatch({
+            [id]: value,
+        });
     };
 
     const onRadioChange = (e) => {
         const value = e.target.value;
-        console.log(value)
         setForm({
             ...form,
-            gender: value
+            gender: value,
         });
     };
 
-    const checkEmail = async () => {
-        const emailForm = {
-            email
-        };
+    const checkEmail = async (e) => {
+        e.preventDefault();
+        const emailForm = { email };
         try {
             const response = await api.post('/email-check', emailForm);
-            console.log('Email Check api:', response.data);
-            if (response.data.code == 'SU') {
+            if (response.data.code === 'SU') {
                 setEmailCheck('가능');
-            } else {
-                setEmailCheck('불가능');
-            };
+            }
         } catch (error) {
-            console.error('Email Check api error:', error);
-        };
+            if (error.response.data.code === 'DE') {
+                setEmailCheck('불가능');
+            }
+        }
     };
 
-    const checkNickname = async () => {
-        const nicknameForm = {
-            nickname
-        };
+    const checkNickname = async (e) => {
+        e.preventDefault();
+        const nicknameForm = { nickname };
         try {
             const response = await api.post('/nickname-check', nicknameForm);
-            console.log('Nickname Check api:', response.data);
-            if (response.data.code == 'SU') {
+            if (response.data.code === 'SU') {
                 setNicknameCheck('가능');
-            } else {
-                setNicknameCheck('불가능');
-            };
+            }
         } catch (error) {
-            console.error('Nickname Check api error:', error);
-        };
+            if (error.response.data.code === 'DE') {
+                setNicknameCheck('불가능');
+            }
+        }
     };
 
     const onSubmit = async (e) => {
         e.preventDefault();
+        if (password !== checkpassword) {
+            alert('비밀번호가 일치하지 않습니다.');
+            return;
+        }
+
+        const requiredAgreements = ['chk_join_terms_fourteen', 'chk_join_terms_service', 'chk_join_terms_privacy_collect_use', 'chk_agree_to_collect_third_part_information'];
+        const allRequiredAgreed = requiredAgreements.every(key => agreements[key]);
+
+        if (!allRequiredAgreed) {
+            setModalMessage('필수 동의 항목을 모두 체크해야 회원가입이 가능합니다.');
+            setShowModal(true);
+            return;
+        }
+
         try {
             const response = await api.post('/sign-up', form);
-            console.log('Signup success:', response.data);
-            navigate('/login');
+            navigate('/');
         } catch (error) {
             console.error('Signup error:', error);
+            setModalMessage('회원가입에 실패했습니다.');
+            setShowModal(true);
         }
     };
 
-    const goBack = () => {
-        navigate(-1);
+    const closeModal = () => {
+        setShowModal(false);
     };
 
-
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', justifyContent: 'center' }}>
-            <h1>회원가입</h1>
-            <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
-                <div>
-                    <label htmlFor='email'>이메일</label>
-                    <input type='email' id='email' value={email} onChange={onChange}></input>
-                    <button onClick={checkEmail}>{emailCheck}</button>
-                </div>
-                <div>
-                    <label htmlFor='name'>이름</label>
-                    <input type='text' id='name' value={name} onChange={onChange}></input>
-                </div>
-                <div>
-                    <label htmlFor='nickname'>닉네임</label>
-                    <input type='text' id='nickname' value={nickname} onChange={onChange}></input>
-                    <button onClick={checkNickname}>{nicknameCheck}</button>
-                </div>
-                <div>
-                    <label htmlFor='password'>비밀번호</label>
-                    <input type='password' id='password' value={password} onChange={onChange}></input>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <label htmlFor='checkpassword'>비밀번호 확인</label>
-                    <input type='password' id='checkpassword' value={checkpassword} onChange={onChange}></input>
-                    {passwordMatch !== null && (
-                        <p
-                            style={{
-                                color: passwordMatch ? 'blue' : 'red',
-                                opacity: 0.5,
-                                fontSize: '0.9rem',
-                                margin: 0
-                            }}
-                        >
-                            {passwordMatch ? '일치' : '불일치'}
-                        </p>
-                    )}
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <label htmlFor='radio'>성별</label>
-                    <div id='radio' style={{ display: 'flex', flexDirection: 'row', gap: '10px' }}>
-                        <p style={{ margin: 0 }}>
-                            <input type='radio' id='gender' value='male' checked={gender === 'male'} onChange={onRadioChange} />
-                            남
-                        </p>
-                        <p style={{ margin: 0 }}>
-                            <input type='radio' id='gender' value='female' checked={gender === 'female'} onChange={onRadioChange} />
-                            여
-                        </p>
+        <div className="login-page">
+            <div className="layout-body login-page-view" data-lang="ko-KO">
+                <div className="signup-container">
+                    <h1 className="signup-title">회원가입</h1>
+                    <div className="layout-main">
+                        <div className="layout-main-slot">
+                            <div className="form-width-sm">
+                                <form className="zm-form zm-from--label-inline" onSubmit={onSubmit} style={{ width: '100%' }}>
+                                    <div className="zm-form-item is-no-asterisk">
+                                        <div className="zm-form-item__content">
+                                            <div className={`zm-input zm-input--xLarge ${email ? '' : 'is-empty'} zm-input--suffix zm-input--show-label`} style={{ display: 'flex', alignItems: 'center' }}>
+                                                <div className='email_input'>
+                                                    <input type="email" autoComplete="email" name="email" placeholder="이메일 주소" aria-required="true" aria-label="이메일 주소" id="email" maxLength="99" className="zm-input__inner email_input_input" value={email} onChange={onChange} />
+                                                    {!email && (
+                                                        <label htmlFor="email" className="zm-input__label email_label" style={{ transform: 'translate(-50%, -50%)' }}>
+                                                            이메일 주소
+                                                        </label>
+                                                    )}
+                                                </div>
+                                                <button className='email_button' onClick={checkEmail}>
+                                                    {emailCheck}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="zm-form-item zm-form-password is-no-asterisk">
+                                        <div className="zm-form-item__content">
+                                            <div className={`zm-input zm-input--xLarge ${password ? '' : 'is-empty'} zm-input--suffix zm-input--show-label`} style={{ display: 'flex', alignItems: 'center' }}>
+                                                <div className='password_div'>
+                                                    <input type="password" autoComplete="password" name="password" placeholder="비밀번호" aria-required="true" aria-label="비밀번호" id="password" maxLength="99" className="zm-input__inner password_input" value={password} onChange={onChange} />
+                                                    {!password && (
+                                                        <label htmlFor="password" className="zm-input__label password_label" style={{ transform: 'translate(-50%, -50%)' }}>
+                                                            비밀번호
+                                                        </label>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="zm-form-item zm-form-password is-no-asterisk">
+                                        <div className="zm-form-item__content">
+                                            <div className={`zm-input zm-input--xLarge ${password ? '' : 'is-empty'} zm-input--suffix zm-input--show-label`} style={{ display: 'flex', alignItems: 'center' }}>
+                                                <div className='password_div'>
+                                                    <input type="password" autoComplete="password" name="password" placeholder="비밀번호확인" aria-required="true" aria-label="비밀번호확인" id="checkpassword" maxLength="99" className="zm-input__inner password_input" value={checkpassword} onChange={onCheck} />
+                                                    {!checkpassword && (
+                                                        <label htmlFor="checkpassword" className="zm-input__label password_label" style={{ transform: 'translate(-50%, -50%)' }}>
+                                                            비밀번호확인
+                                                        </label>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="zm-form-item is-no-asterisk">
+                                        <div className="zm-form-item__content">
+                                            <div className={`zm-input zm-input--xLarge ${nickname ? '' : 'is-empty'} zm-input--suffix zm-input--show-label`} style={{ display: 'flex', alignItems: 'center' }}>
+                                                <div className='email_input'>
+                                                    <input type="text" autoComplete="text" name="nickname" placeholder="닉네임" aria-required="true" aria-label="닉네임" id="nickname" maxLength="99" className="zm-input__inner email_input_input" value={nickname} onChange={onChange} />
+                                                    {!nickname && (
+                                                        <label htmlFor="nickname" className="zm-input__label email_label" style={{ transform: 'translate(-50%, -50%)' }}>
+                                                            닉네임
+                                                        </label>
+                                                    )}
+                                                </div>
+                                                <button className='email_button' onClick={checkNickname}>
+                                                    {nicknameCheck}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="zm-form-item is-no-asterisk">
+                                        <div className="zm-form-item__content">
+                                            <div className={`zm-input zm-input--xLarge ${nickname ? '' : 'is-empty'} zm-input--suffix zm-input--show-label`} style={{ display: 'flex', alignItems: 'center' }}>
+                                                <div className='email_input'>
+                                                    <input type="text" autoComplete="text" name="name" placeholder="이름" aria-required="true" aria-label="이름" id="name" maxLength="99" className="zm-input__inner email_input_input" value={name} onChange={onChange} />
+                                                    {!name && (
+                                                        <label htmlFor="name" className="zm-input__label email_label" style={{ transform: 'translate(-50%, -50%)' }}>
+                                                            이름
+                                                        </label>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', marginTop: '20px' }}>
+                                        <div className="form-check">
+                                            <input className="form-check-input" type="radio" name="gender" id="male" value="male" checked={gender === 'male'} onChange={onRadioChange} />
+                                            <label className="form-check-label" htmlFor="male">
+                                                남자
+                                            </label>
+                                        </div>
+                                        <div className="form-check">
+                                            <input className="form-check-input" type="radio" name="gender" id="female" value="female" checked={gender === 'female'} onChange={onRadioChange} />
+                                            <label className="form-check-label" htmlFor="female">
+                                                여자
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <Agree className="zm-form-item is-no-asterisk" onAgreeChange={(agreedStatus) => setAgreements(agreedStatus)} />
+                                    <div className="mgt-sm" style={{ display: 'flex', justifyContent: 'center' }}>
+                                        <button style={{ cursor: 'pointer', color: 'white', backgroundColor: '#aa4dcb', fontSize: '1.5rem', width: '500px', height: '50px', border: 'none', borderRadius: '5px', textAlign: 'center' }} onMouseOver={(e) => (e.target.style.backgroundColor = '#8530e9')} onMouseOut={(e) => (e.target.style.backgroundColor = '#aa4dcb')} type="submit">
+                                            회원가입
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div className="form-width-sm form-group re-captcha" style={{ fontSize: '14px' }}></div>
+                        </div>
                     </div>
                 </div>
-                <div>
-                    <button type='submit'>회원가입</button>
-                    <button onClick={goBack}>뒤로가기</button>
+            </div>
+            {showModal && (
+                <div className="my-overlay"> {/* 오버레이 스타일 적용 */}
+                    <div className="my-modal"> {/* 모달 스타일 적용 */}
+                        <h2>회원가입 오류</h2>
+                        <p>{modalMessage}</p>
+                        <button className="close" onClick={closeModal}>확인</button>
+                    </div>
                 </div>
-            </form>
+            )}
         </div>
     );
 };
