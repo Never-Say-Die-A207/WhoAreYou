@@ -70,6 +70,7 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
+#환경분리 테스트
 #---
 #spring:
 #  config:

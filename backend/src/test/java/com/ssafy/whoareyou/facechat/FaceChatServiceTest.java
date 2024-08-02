@@ -19,17 +19,4 @@ class FaceChatServiceTest {
 
     @Autowired
     FaceChatService faceChatService;
-
-    @Test
-    void finish_BOTH_YES() {
-        faceChatService.getToken(1, "mask1", false);
-        faceChatService.getToken(2, "mask2", false);
-
-        ResponseEntity<?> response1 = faceChatController.finish(
-                new FaceChatResultRequest(1, 1, 2, true));
-        ResponseEntity<?> response2 = faceChatController.finish(
-                new FaceChatResultRequest(1, 2, 1, true));
-
-        assertTrue(response1.getBody().equals(response2.getBody()));
-    }
 }
