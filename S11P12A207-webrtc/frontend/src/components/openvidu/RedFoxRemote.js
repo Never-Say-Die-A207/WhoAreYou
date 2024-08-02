@@ -37,7 +37,7 @@ const ShapeComponent = React.memo(({ landmarks, indices, color }) => {
 
   return (
     <mesh ref={ref}>
-      <meshBasicMaterial attach="material" color={color} side={THREE.DoubleSide} />
+      <meshStandardMaterial attach="material" color={color} emissive={color} emissiveIntensity={1} side={THREE.DoubleSide} />
     </mesh>
   );
 });
@@ -154,9 +154,9 @@ const RedFoxRemote = ({ landmarks, videoElement }) => {
         {landmarks && (<>
           <VideoTexture videoRef={videoElement} />
         </>)}
-        <EffectComposer multisampling={0}>
+        {/* <EffectComposer multisampling={0}>
           <Bloom intensity={0.2} luminanceThreshold={0.8} luminanceSmoothing={0.4} height={40} />
-        </EffectComposer>
+        </EffectComposer> */}
       </Canvas>
     </div>
   );

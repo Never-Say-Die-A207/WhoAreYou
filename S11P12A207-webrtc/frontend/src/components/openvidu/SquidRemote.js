@@ -37,7 +37,7 @@ const ShapeComponent = React.memo(({ landmarks, indices, color }) => {
 
   return (
     <mesh ref={ref}>
-      <meshBasicMaterial attach="material" color={color} side={THREE.DoubleSide} />
+      <meshStandardMaterial attach="material" color={color} emissive={color} emissiveIntensity={1.5} side={THREE.DoubleSide} />
     </mesh>
   );
 });
@@ -102,7 +102,7 @@ const SquidRemote = ({ landmarks, videoElement }) => {
   const faceOutlineIndices = [10, 338, 297, 332, 284, 251, 389, 356, 454, 323, 361, 288, 397, 365, 379, 378, 400, 377, 152, 148, 176, 149, 150, 136, 172, 58, 132, 93, 234, 127, 162, 21, 54, 103, 67, 109, 10];
   const triangle = [9, 50, 280, 9]
   const line = [205, 425]
- 
+
   return (
     <div className="canvas-container" style={{ position: 'relative', width: '100%', height: '100%' }}>
       <Canvas
@@ -122,24 +122,24 @@ const SquidRemote = ({ landmarks, videoElement }) => {
       >
         <ambientLight intensity={0} />
         <pointLight position={[10, 10, 10]} />
-
+        {landmarks && (<>
+          <VideoTexture videoRef={videoElement} />
+        </>)}
         {landmarks && (
           <>
-          <ShapeComponent landmarks={landmarks} indices={faceOutlineIndices} color="black" />
+            <ShapeComponent landmarks={landmarks} indices={faceOutlineIndices} color="black" />
             <LineComponent landmarks={landmarks} indices={triangle} color="white" lineWidth={6} />
             <LineComponent landmarks={landmarks} indices={line} color="white" lineWidth={0.5} />
-    
+
 
 
           </>
 
         )}
-        {landmarks && (<>
-          <VideoTexture videoRef={videoElement} />
-        </>)}
-        <EffectComposer multisampling={0}>
+        
+        {/* <EffectComposer multisampling={0}>
           <Bloom intensity={0.1} luminanceThreshold={0.8} luminanceSmoothing={0.4} height={40} />
-        </EffectComposer>
+        </EffectComposer> */}
       </Canvas>
     </div>
   );

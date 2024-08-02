@@ -37,7 +37,7 @@ const ShapeComponent = React.memo(({ landmarks, indices, color }) => {
 
   return (
     <mesh ref={ref}>
-      <meshBasicMaterial attach="material" color={color} side={THREE.DoubleSide} />
+      <meshStandardMaterial attach="material" color={color} emissive={color} emissiveIntensity={1.1} side={THREE.DoubleSide} />
     </mesh>
   );
 });
@@ -124,7 +124,7 @@ const JokerRemote = ({ landmarks, videoElement }) => {
   const leftEyebrowIndices = [336, 296, 334, 293, 300, 276, 283, 282, 295, 285, 336];
   const rightEyebrowIndices = [107, 66, 105, 63, 70, 46, 53, 52, 65, 55, 107];
 
-  
+
   return (
     <div className="canvas-container" style={{ position: 'relative', width: '100%', height: '100%' }}>
       <Canvas
@@ -161,14 +161,14 @@ const JokerRemote = ({ landmarks, videoElement }) => {
             <ShapeComponent landmarks={landmarks} indices={GreenEye4} color="green" />
             <ShapeComponent landmarks={landmarks} indices={topLipIndices} color="red" />
             <ShapeComponent landmarks={landmarks} indices={bottomLipIndices} color="red" />
-           
+
           </>
 
         )}
 
-<EffectComposer multisampling={0}>
+        {/* <EffectComposer multisampling={0}>
           <Bloom intensity={0.1} luminanceThreshold={0.8} luminanceSmoothing={0.4} height={40} />
-        </EffectComposer>
+        </EffectComposer> */}
       </Canvas>
     </div>
   );

@@ -133,16 +133,16 @@ const RedFoxLocal = ({ landmarks, videoElement }) => {
             <ShapeComponent landmarks={landmarks} indices={faceOutlineIndices2} color='white' />
             <ShapeComponent landmarks={landmarks} indices={faceOutlineIndices3} color='white' />
             <ShapeComponent landmarks={landmarks} indices={faceOutlineIndices4} color='white' />
-            <ShapeComponent landmarks={landmarks} indices={RedEye1} color='red' emissiveColor='red'/>
-            <ShapeComponent landmarks={landmarks} indices={RedEye2} color='red' emissiveColor='red' />
-            <ShapeComponent landmarks={landmarks} indices={head} color='red' emissiveColor='red' />
-            <LineComponent landmarks={landmarks} indices={faceline} color='red' emissiveColor='red' lineWidth={3.5} />
-            <LineComponent landmarks={landmarks} indices={faceline2} color='red' emissiveColor='red' lineWidth={3.5} />
-            <LineComponent landmarks={landmarks} indices={faceline3} color='red' emissiveColor='red' lineWidth={3.5} />
-            <LineComponent landmarks={landmarks} indices={faceline4} color='red' emissiveColor='red' lineWidth={3.5} />
-            <LineComponent landmarks={landmarks} indices={nose1} color="black" emissiveColor='black' lineWidth={3} />
-            <LineComponent landmarks={landmarks} indices={nose2} color="black" emissiveColor='black' lineWidth={3} />
-            <LineComponent landmarks={landmarks} indices={nose3} color="black" emissiveColor='black' lineWidth={3} />
+            <ShapeComponent landmarks={landmarks} indices={RedEye1} color='red' />
+            <ShapeComponent landmarks={landmarks} indices={RedEye2} color='red'  />
+            <ShapeComponent landmarks={landmarks} indices={head} color='red'  />
+            <LineComponent landmarks={landmarks} indices={faceline} color='red'  lineWidth={3.5} />
+            <LineComponent landmarks={landmarks} indices={faceline2} color='red'  lineWidth={3.5} />
+            <LineComponent landmarks={landmarks} indices={faceline3} color='red'  lineWidth={3.5} />
+            <LineComponent landmarks={landmarks} indices={faceline4} color='red'  lineWidth={3.5} />
+            <LineComponent landmarks={landmarks} indices={nose1} color="black"  lineWidth={3} />
+            <LineComponent landmarks={landmarks} indices={nose2} color="black"  lineWidth={3} />
+            <LineComponent landmarks={landmarks} indices={nose3} color="black"  lineWidth={3} />
           </>
         )}
       </Canvas>

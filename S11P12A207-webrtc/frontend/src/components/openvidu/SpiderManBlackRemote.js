@@ -37,7 +37,8 @@ const ShapeComponent = React.memo(({ landmarks, indices, color }) => {
 
   return (
     <mesh ref={ref}>
-      <meshBasicMaterial attach="material" color={color} side={THREE.DoubleSide} />
+      <meshStandardMaterial attach="material" color={color} emissive={color} emissiveIntensity={1.5} side={THREE.DoubleSide} />
+
     </mesh>
   );
 });
@@ -104,7 +105,7 @@ const SpiderManBlackRemote = ({ landmarks, videoElement }) => {
   const whiteEye1 = [244, 189, 221, 222, 223, 224, 225, 124, 35, 31, 228, 229, 230, 231, 232, 233, 244]
   const whiteEye2 = [464, 413, 441, 442, 443, 444, 445, 353, 265, 261, 448, 449, 450, 451, 452, 453, 464]
   const faceline = [229, 101, 218, 438, 330, 449]
-  const faceline2 = [137, 207, 191, 415, 427, 366 ]
+  const faceline2 = [137, 207, 191, 415, 427, 366]
   const faceline3 = [140, 3, 248, 369]
   const faceline4 = [170, 174, 232]
   const faceline5 = [230, 138]
@@ -118,8 +119,8 @@ const SpiderManBlackRemote = ({ landmarks, videoElement }) => {
   const faceline13 = [52, 108, 337, 282]
   const faceOutlineIndices = [10, 338, 297, 332, 284, 251, 389, 356, 454, 323, 361, 288, 397, 365, 379, 378, 400, 377, 152, 148, 176, 149, 150, 136, 172, 58, 132, 93, 234, 127, 162, 21, 54, 103, 67, 109, 10];
 
- 
- 
+
+
   return (
     <div className="canvas-container" style={{ position: 'relative', width: '100%', height: '100%' }}>
       <Canvas
@@ -139,38 +140,38 @@ const SpiderManBlackRemote = ({ landmarks, videoElement }) => {
       >
         <ambientLight intensity={0} />
         <pointLight position={[10, 10, 10]} />
-
+        {landmarks && (<>
+          <VideoTexture videoRef={videoElement} />
+        </>)}
         {landmarks && (
           <>
-                     <ShapeComponent landmarks={landmarks} indices={faceOutlineIndices} color="#292929" />
-                        <ShapeComponent landmarks={landmarks} indices={whiteEye1} color="white" />
-                        <ShapeComponent landmarks={landmarks} indices={whiteEye2} color="white" />
-                        <LineComponent landmarks={landmarks} indices={faceline} color="#9a9a9a" lineWidth={1.2} />
-                        <LineComponent landmarks={landmarks} indices={faceline2} color="#9a9a9a" lineWidth={1.2} />
-                        <LineComponent landmarks={landmarks} indices={faceline3} color="#9a9a9a" lineWidth={1.2} />
-                        <LineComponent landmarks={landmarks} indices={faceline4} color="#9a9a9a" lineWidth={1.2} />
-                        <LineComponent landmarks={landmarks} indices={faceline5} color="#9a9a9a" lineWidth={1.2} />
-                        <LineComponent landmarks={landmarks} indices={faceline6} color="#9a9a9a" lineWidth={1.2} />
-                        <LineComponent landmarks={landmarks} indices={faceline7} color="#9a9a9a" lineWidth={1.2} />
-                        <LineComponent landmarks={landmarks} indices={faceline8} color="#9a9a9a" lineWidth={1.2} />
-                        <LineComponent landmarks={landmarks} indices={faceline9} color="#9a9a9a" lineWidth={1.2} />
-                        <LineComponent landmarks={landmarks} indices={faceline10} color="#9a9a9a" lineWidth={1.2} />
-                        <LineComponent landmarks={landmarks} indices={faceline11} color="#9a9a9a" lineWidth={1.2} />
-                        <LineComponent landmarks={landmarks} indices={faceline12} color="#9a9a9a" lineWidth={1.2} />
-                        <LineComponent landmarks={landmarks} indices={faceline13} color="#9a9a9a" lineWidth={1.2} />
-                        <ShapeComponent landmarks={landmarks} indices={BlackEye1} color="black" />
-                        <ShapeComponent landmarks={landmarks} indices={BlackEye2} color="black" />
+            <ShapeComponent landmarks={landmarks} indices={faceOutlineIndices} color="#292929" />
+            <ShapeComponent landmarks={landmarks} indices={whiteEye1} color="white" />
+            <ShapeComponent landmarks={landmarks} indices={whiteEye2} color="white" />
+            <LineComponent landmarks={landmarks} indices={faceline} color="#9a9a9a" lineWidth={1.2} />
+            <LineComponent landmarks={landmarks} indices={faceline2} color="#9a9a9a" lineWidth={1.2} />
+            <LineComponent landmarks={landmarks} indices={faceline3} color="#9a9a9a" lineWidth={1.2} />
+            <LineComponent landmarks={landmarks} indices={faceline4} color="#9a9a9a" lineWidth={1.2} />
+            <LineComponent landmarks={landmarks} indices={faceline5} color="#9a9a9a" lineWidth={1.2} />
+            <LineComponent landmarks={landmarks} indices={faceline6} color="#9a9a9a" lineWidth={1.2} />
+            <LineComponent landmarks={landmarks} indices={faceline7} color="#9a9a9a" lineWidth={1.2} />
+            <LineComponent landmarks={landmarks} indices={faceline8} color="#9a9a9a" lineWidth={1.2} />
+            <LineComponent landmarks={landmarks} indices={faceline9} color="#9a9a9a" lineWidth={1.2} />
+            <LineComponent landmarks={landmarks} indices={faceline10} color="#9a9a9a" lineWidth={1.2} />
+            <LineComponent landmarks={landmarks} indices={faceline11} color="#9a9a9a" lineWidth={1.2} />
+            <LineComponent landmarks={landmarks} indices={faceline12} color="#9a9a9a" lineWidth={1.2} />
+            <LineComponent landmarks={landmarks} indices={faceline13} color="#9a9a9a" lineWidth={1.2} />
+            <ShapeComponent landmarks={landmarks} indices={BlackEye1} color="black" />
+            <ShapeComponent landmarks={landmarks} indices={BlackEye2} color="black" />
 
 
           </>
 
         )}
-        {landmarks && (<>
-          <VideoTexture videoRef={videoElement} />
-        </>)}
-        <EffectComposer multisampling={0}>
+
+        {/* <EffectComposer multisampling={0}>
           <Bloom intensity={0.1} luminanceThreshold={0.8} luminanceSmoothing={0.4} height={40} />
-        </EffectComposer>
+        </EffectComposer> */}
       </Canvas>
     </div>
   );
