@@ -159,10 +159,10 @@ public class FaceChatService {
         }
 
         faceChat.setWantsFriend(me, wantsFriend);
-        faceChatRepository.saveFaceChatOrHistory(faceChat);
+        faceChatRepository.saveAndFlush(faceChat);
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_UNCOMMITTED)
     public Integer finishFaceChat(Integer faceChatId, Integer myId, Integer partnerId) {
         Male m;
         Female f;
@@ -184,6 +184,9 @@ public class FaceChatService {
         Integer result = null;
 
         FaceChat updatedFaceChat = faceChatRepository.findById(faceChatId).orElseThrow(FaceChatNotFoundException::new);
+        log.info("User Info - my id : " + myId + ", partner id : " + partnerId);
+        log.info("updatedFaceChat.getMaleWantsFriend() = " + updatedFaceChat.getMaleWantsFriend());
+        log.info("updatedFaceChat.getFemaleWantsFriend() = " + updatedFaceChat.getFemaleWantsFriend());
 
         WantsFriendType maleWantsFriend = updatedFaceChat.getMaleWantsFriend();
         WantsFriendType femaleWantsFriend = updatedFaceChat.getFemaleWantsFriend();
@@ -196,7 +199,7 @@ public class FaceChatService {
                 result = friendService.join(faceChatId, new SearchTargetChatRoom(m.getId(), f.getId()));
             }
             quitUser(myId);
-            quitUser(partnerId);
+//            quitUser(partnerId);
         }
 
         return result;

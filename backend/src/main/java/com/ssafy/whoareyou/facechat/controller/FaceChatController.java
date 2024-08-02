@@ -104,7 +104,7 @@ public class FaceChatController {
             }
 
             log.info("Someone Disagreed... Nothing happens");
-            return new ResponseEntity<Map<String, String>> (Map.of("message", "NO"), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<Map<String, String>> (Map.of("message", "NO"), HttpStatus.OK);
         } catch (UserNotFoundException e){
             log.info("Wrong user info");
             return new ResponseEntity<String> (HttpStatus.BAD_REQUEST);
