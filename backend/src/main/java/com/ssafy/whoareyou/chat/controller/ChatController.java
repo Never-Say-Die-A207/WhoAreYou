@@ -32,6 +32,7 @@ public class ChatController {
     @MessageMapping("/messages")
     public ResponseEntity<?> chat(ReceivingMessage message){
         log.info("소켓 시작");
+        log.info("roomId" + message.getRoomId());
         SendingMessage result = service.send(message);
         kafkaConumerService.listen(message.getRoomId(), result);
 
