@@ -18,6 +18,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addInterceptor(new InterceptorHandler(provider))
                 .addPathPatterns("/chat-rooms/**")
                 .addPathPatterns("/friends/**")
-                .excludePathPatterns("/css/**", "/images/**", "/js/**");
+                .excludePathPatterns("/**", "/css/**", "/images/**", "/js/**");
     }
 }

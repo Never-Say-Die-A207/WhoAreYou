@@ -1,9 +1,9 @@
 package com.ssafy.whoareyou.friend.service;
 
-import com.ssafy.whoareyou.chat.dto.SearchTargetChatRoom;
+import com.ssafy.whoareyou.chat.repository.ChatMongoRepository;
+import com.ssafy.whoareyou.friend.entity.SearchTargetDto;
 import com.ssafy.whoareyou.chat.entity.ChatRoom;
 import com.ssafy.whoareyou.chat.service.ChatRoomService;
-import com.ssafy.whoareyou.facechat.entity.FaceChat;
 import com.ssafy.whoareyou.facechat.repository.FaceChatRepository;
 import com.ssafy.whoareyou.friend.dto.FriendUserDto;
 import com.ssafy.whoareyou.friend.entity.Friend;
@@ -18,13 +18,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class FriendService {
-    private final FaceChatRepository faceChatRepository;
+    private final ChatMongoRepository chatMongoRepository;
     private final ChatRoomService chatRoomService;
     private final UserRepository userRepository;
     private final FriendJpaRepository friendJpaRepository;
@@ -43,10 +42,8 @@ public class FriendService {
         return friendUsers;
     }
 
-    public int join(int faceChatRoomId, SearchTargetChatRoom dto) {
+    public int join(SearchTargetDto dto) {
         log.info("FaceChatRoom 가져오기");
-        FaceChat faceChat = faceChatRepository.findById(faceChatRoomId)
-                .orElseThrow(() -> new NullPointerException("존재하지 않는 FaceChatRoom"));
 
         log.info("ChatRoom 생성");
         ChatRoom chatRoom = chatRoomService.create();
@@ -60,12 +57,12 @@ public class FriendService {
                 .orElseThrow(() -> new NullPointerException("존재하지 않는 유저"));
 
         log.info("친구관계 생성");
-        setRelation(faceChat, chatRoom, (Male) male, (Female) female);
+        setRelation(chatRoom, (Male) male, (Female) female);
 
         return chatRoom.getId();
     }
 
-    public void setRelation(FaceChat faceChat, ChatRoom chatRoom, Male male, Female female) {
+    public void setRelation(ChatRoom chatRoom, Male male, Female female) {
         Friend friend = Friend.builder()
                 .male(male)
                 .female(female)
@@ -98,4 +95,11 @@ public class FriendService {
         return friendUserDtos;
     }
 
+    public void delete(SearchTargetDto dto){
+        Friend friend = friendJpaRepository.findByGenderId(dto.getMaleId(), dto.getFemaleId())
+                .orElseThrow(() -> new NullPointerException("존재하지 않은 친구관계"));
+
+        chatMongoRepository.deleteByChatRoomId(friend.getChatRoom().getId());
+        friendJpaRepository.delete(friend);
+    }
 }

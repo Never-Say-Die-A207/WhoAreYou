@@ -10,8 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface ChatRoomJpaRepository extends JpaRepository<ChatRoom, Integer> {
-    Optional<ChatRoom> findById(int id);
-
     @Query("select cr from ChatRoom cr " +
             "inner join Friend f on f.chatRoom.id = cr.id " +
             "where f.male.id = :maleId and f.female.id = :femaleId ")

@@ -1,7 +1,6 @@
 package com.ssafy.whoareyou.friend.controller;
 
-import com.ssafy.whoareyou.chat.dto.SearchTargetChatRoom;
-import com.ssafy.whoareyou.chat.service.ChatRoomService;
+import com.ssafy.whoareyou.friend.entity.SearchTargetDto;
 import com.ssafy.whoareyou.friend.service.FriendService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +24,17 @@ public class FriendController {
     /**
      * 사용자와 roomId에 해당하는 ChatRoom의 Relation을 만들기 위한 API.
      * 만들어진 Relation은 사용자와 ChatRoom의 다대다 관계를 중재하는 조인 테이블.
-     * @param faceChatRoomId
+     * @param dto
      * @return HttpStatus.CREATED(201)
      */
-    @PostMapping("/{faceChatRoomId}")
-    ResponseEntity<?> join(@PathVariable("faceChatRoomId") int faceChatRoomId, @RequestBody SearchTargetChatRoom dto){
-        return new ResponseEntity<>(service.join(faceChatRoomId, dto), HttpStatus.CREATED);
+    @PostMapping("/")
+    ResponseEntity<?> join(@RequestBody SearchTargetDto dto){
+        return new ResponseEntity<>(service.join(dto), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/")
+    ResponseEntity<?> delete(@RequestBody SearchTargetDto dto){
+        service.delete(dto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

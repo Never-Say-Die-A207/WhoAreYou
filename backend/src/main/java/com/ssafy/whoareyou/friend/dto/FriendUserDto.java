@@ -8,5 +8,5 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FriendUserDto {
-    String nickname;
+    private String nickname;
 }

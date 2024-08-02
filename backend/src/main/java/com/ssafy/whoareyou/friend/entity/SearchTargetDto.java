@@ -1,4 +1,4 @@
-package com.ssafy.whoareyou.chat.dto;
+package com.ssafy.whoareyou.friend.entity;
 
 import lombok.*;
 
@@ -7,6 +7,6 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SearchTargetChatRoom {
+public class SearchTargetDto {
     int maleId, femaleId;
 }

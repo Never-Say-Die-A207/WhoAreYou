@@ -1,6 +1,5 @@
 package com.ssafy.whoareyou.facechat.service;
 
-import com.ssafy.whoareyou.chat.dto.SearchTargetChatRoom;
 import com.ssafy.whoareyou.chat.service.ChatRoomService;
 import com.ssafy.whoareyou.facechat.dto.FaceChatInfoResponse;
 import com.ssafy.whoareyou.facechat.entity.FaceChat;
@@ -8,6 +7,7 @@ import com.ssafy.whoareyou.facechat.entity.History;
 import com.ssafy.whoareyou.facechat.entity.WantsFriendType;
 import com.ssafy.whoareyou.facechat.exception.FaceChatNotFoundException;
 import com.ssafy.whoareyou.facechat.repository.FaceChatRepository;
+import com.ssafy.whoareyou.friend.entity.SearchTargetDto;
 import com.ssafy.whoareyou.friend.service.FriendService;
 import com.ssafy.whoareyou.user.entity.Female;
 import com.ssafy.whoareyou.user.entity.Male;
@@ -184,9 +184,9 @@ public class FaceChatService {
         Integer result = null;
 
         FaceChat updatedFaceChat = faceChatRepository.findById(faceChatId).orElseThrow(FaceChatNotFoundException::new);
-        log.info("User Info - my id : " + myId + ", partner id : " + partnerId);
-        log.info("updatedFaceChat.getMaleWantsFriend() = " + updatedFaceChat.getMaleWantsFriend());
-        log.info("updatedFaceChat.getFemaleWantsFriend() = " + updatedFaceChat.getFemaleWantsFriend());
+//        log.info("User Info - my id : " + myId + ", partner id : " + partnerId);
+//        log.info("updatedFaceChat.getMaleWantsFriend() = " + updatedFaceChat.getMaleWantsFriend());
+//        log.info("updatedFaceChat.getFemaleWantsFriend() = " + updatedFaceChat.getFemaleWantsFriend());
 
         WantsFriendType maleWantsFriend = updatedFaceChat.getMaleWantsFriend();
         WantsFriendType femaleWantsFriend = updatedFaceChat.getFemaleWantsFriend();
@@ -196,7 +196,7 @@ public class FaceChatService {
                 m.increaseSuccessCount();
                 f.increaseSuccessCount();
 
-                result = friendService.join(faceChatId, new SearchTargetChatRoom(m.getId(), f.getId()));
+                result = friendService.join(new SearchTargetDto(m.getId(), f.getId()));
             }
             quitUser(myId);
 //            quitUser(partnerId);

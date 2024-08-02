@@ -1,6 +1,6 @@
 package com.ssafy.whoareyou.chat.controller;
 
-import com.ssafy.whoareyou.chat.dto.SearchTargetChatRoom;
+import com.ssafy.whoareyou.friend.entity.SearchTargetDto;
 import com.ssafy.whoareyou.chat.service.ChatRoomService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public class ChatRoomController {
 
     @GetMapping("/{nickname}")
     public ResponseEntity<?> getChatRoom(HttpServletRequest request, @PathVariable("nickname") String nickname){
-        int userId = Integer.parseInt((String) request.getHeader(HttpHeaders.AUTHORIZATION));
+        int userId = Integer.parseInt(request.getHeader(HttpHeaders.AUTHORIZATION));
         return new ResponseEntity<>(service.getChatRoomId(userId, nickname), HttpStatus.OK);
     }
 
@@ -28,7 +28,7 @@ public class ChatRoomController {
      * @param dto
      * @return List<String>
      */    @PostMapping("/historys")
-    public ResponseEntity<?> loadHistory(@RequestBody SearchTargetChatRoom dto){
+    public ResponseEntity<?> loadHistory(@RequestBody SearchTargetDto dto){
         return new ResponseEntity<>(service.loadHistorys(dto), HttpStatus.OK);
     }
 }

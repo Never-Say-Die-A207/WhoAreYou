@@ -1,5 +1,6 @@
 package com.ssafy.whoareyou.chat.entity;
 
+import com.ssafy.whoareyou.chat.entity.mongo.Chat;
 import com.ssafy.whoareyou.friend.entity.Friend;
 import jakarta.persistence.*;
 import lombok.*;
@@ -20,7 +21,4 @@ public class ChatRoom {
 
     @OneToMany(mappedBy = "chatRoom")
     private List<Friend> friends;
-
-    @OneToMany(mappedBy = "chatRoom")
-    private List<Chat> chats;
 }
