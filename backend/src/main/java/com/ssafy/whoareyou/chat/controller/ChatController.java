@@ -5,6 +5,7 @@ import com.ssafy.whoareyou.chat.dto.SendingMessage;
 import com.ssafy.whoareyou.chat.service.ChatService;
 import com.ssafy.whoareyou.chat.service.kafka.KafkaConumerService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -13,10 +14,12 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.util.HtmlUtils;
 
 import java.time.LocalDateTime;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class ChatController {
@@ -35,12 +38,13 @@ public class ChatController {
      * @return
      */
     @MessageMapping("/messages")
+    @SendTo("/sub/rooms/{roomId}")
     public ResponseEntity<?> chat(ReceivingMessage message){
+        log.info("소켓 시작");
         SendingMessage result = service.send(message);
         kafkaConumerService.listen(message.getRoomId(), result);
 
+        log.info("소켓 종료");
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-    // 2024/07/03 방 나누는 거 하는 중~~
 }
