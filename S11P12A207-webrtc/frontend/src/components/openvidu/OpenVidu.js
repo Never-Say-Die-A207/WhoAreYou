@@ -17,7 +17,7 @@ import Preview from './Preview';
 import { FaceMesh } from '@mediapipe/face_mesh';
 import * as cam from '@mediapipe/camera_utils';
 import api from '../../api/api';
-
+import {PropagateLoader } from 'react-spinners';
 
 import RedFoxLocal from './RedFoxLocal';
 import SpiderManLocal from './SpiderManLocal';
@@ -100,7 +100,7 @@ function OpenVidu() {
 
 
     // 타이머
-    const [timeLeft, setTimeLeft] = useState(10); // 3분 = 180초로 변경
+    const [timeLeft, setTimeLeft] = useState(1000); // 3분 = 180초로 변경
     const timerRef = useRef(null);
     const startTimeRef = useRef(null);
 
@@ -108,6 +108,9 @@ function OpenVidu() {
     // 친구 추가 토글 상태
     const [isFriend, setIsFriend] = useState(false);
 
+
+    //매칭 시작 시간
+    
 
     async function joinRoom() {
         const room = new Room();
@@ -326,13 +329,13 @@ function OpenVidu() {
 
     const startTimer = () => {
         startTimeRef.current = Date.now();
-        setTimeLeft(10); // 타이머 초기화 - 3분(180초)로 변경
+        setTimeLeft(1000); // 타이머 초기화 - 3분(180초)로 변경
 
         const updateTimer = () => {
             const elapsedTime = Math.floor((Date.now() - startTimeRef.current) / 1000);
             setTimeLeft(10 - elapsedTime); // 3분(180초)으로 변경
 
-            if (elapsedTime < 10) { // 3분(180초)으로 변경
+            if (elapsedTime < 1000) { // 3분(180초)으로 변경
                 timerRef.current = requestAnimationFrame(updateTimer);
             } else {
                 handleTimerEnd(); // 타이머가 끝났을 때 실행할 함수 호출
@@ -411,7 +414,7 @@ function OpenVidu() {
                     {/* 방 입장 시작 */}
                     <div id='join-dialog'>
                         {/* 가면 미리보기 보는 화면 */}
-                        <div style={{ position: 'relative', height: '91vh' }}>
+                        <div style={{ position: 'relative', height: '92vh' }}>
                             {isSmallScreen ? (
                                 <MobileCarousel setMask={setMask} />
                             ) : (
@@ -508,8 +511,13 @@ function OpenVidu() {
             ) : (
                 loading ? (
                     <div id='loading'>
-                        <div className="loading-spinner"></div>
-                        <div className="loading-text">매칭 중...</div>
+                        <div>
+                        <PropagateLoader
+                        color = "#aa4dcb"
+                        size = {25}
+                        />
+                        </div>
+                        <div className="loading-text">상대방을 찾고 있습니다.</div>
                     </div>
                 ) : (
                 <div>
