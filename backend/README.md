@@ -17,6 +17,8 @@
 - ctrl + u : 입력 중인 커서 앞까지 삭제 = 줄 삭제
 
 ### docker 명령어
-- docker prune : 안 쓰는 이미지 정리
+- docker image prune : 안 쓰는 이미지 정리
+- docker exec -it 컨테이너ID(또는 이름) bash : 해당 컨테이너에 bash 셸로 접속 = 직접 실행해보거나 내부 설정을 변경할 수 있다
+- docker logs 컨테이너ID(또는 이름) : 해당 컨테이너에서 발생한 로그 내역을 출력
 
 ### 자주 발생하는 오류
