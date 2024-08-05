@@ -6,8 +6,8 @@ spring:
     name: whoareyou
 
   datasource:
-    #    url: jdbc:mysql://mysql:3306/whoareyou?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
-    url: jdbc:mysql://localhost:3306/whoareyou?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://mysql:3306/whoareyou?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+#    url: jdbc:mysql://localhost:3306/whoareyou?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: root
