@@ -9,4 +9,14 @@
 
 2. Linux 
 * sudo netstat -ntlp | grep :포트번호
-* kill 프로세스아이디
+  * sudo를 해야 프로세스 번호를 확인할 수 있음
+* sudo kill 프로세스아이디
+
+
+### linux CLI 명령어
+- ctrl + u : 입력 중인 커서 앞까지 삭제 = 줄 삭제
+
+### docker 명령어
+- docker prune : 안 쓰는 이미지 정리
+
+### 자주 발생하는 오류
