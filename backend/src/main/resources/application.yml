@@ -70,6 +70,20 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
+secret-key: ThisStatementIsJwtSecretKeyDoNotUseThisStatement
+
+livekit:
+  api:
+    key: APIXAD86V8PHHZ2
+    secret: Bi1l6R02usl4OirnJ1LMfPHaZuaGeaT8aAp41WzLXyf
+  server:
+    url: wss://myapp-yqvsqxqi.livekit.cloud
+
+
+logging:
+  level:
+    org.hibernate.orm.jdbc.bind: trace
+
 #환경분리 테스트
 #---
 #spring:
