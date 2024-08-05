@@ -340,7 +340,7 @@ function OpenVidu() {
             'myId': userId,
             'partnerId': partnerId,
             'roomId': roomId,
-            'friend': !isFriend
+            'friend': isFriend
         };
         console.log(finalResult);
 
@@ -380,11 +380,9 @@ function OpenVidu() {
         return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     };
 
-
     // 친구 토글
     const handleFriendToggle = () => {
         setIsFriend(!isFriend);
-        console.log(isFriend);
     };
 
     //매칭 취소
@@ -554,7 +552,7 @@ function OpenVidu() {
                         </div>
                         <div className='friend-toggle'>
                             <label>
-                                <input type='checkbox' checked={isFriend} onChange={handleFriendToggle} />
+                                <input type='checkbox' checked={isFriend} onClick={handleFriendToggle} />
                                 친구 추가
                             </label>
                         </div>

@@ -61,3 +61,10 @@ RoomBottom.css
 .room-bottom {
   height: 20dvh;
 }
+
+
+.emotion-count {
+  font-size: 16px;
+  font-weight: bold;
+  color: #000; /* 텍스트 색상 */
+}

@@ -68,7 +68,7 @@ const Home = () => {
                         </div>
                     ) : (
                         <div>
-                            <h2 style={{ fontSize: '3rem' }}>로그인</h2>
+                            <h2 style={{ fontSize: '2rem', marginBottom:'2rem', marginTop:'1rem', fontWeight:'500' }}>로그인</h2>
                             <Login onLoginSuccess={onLoginSuccess} />
 
                             {/* 회원가입 버튼 추가 */}

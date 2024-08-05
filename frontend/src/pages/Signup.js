@@ -90,7 +90,19 @@ const Signup = () => {
     const onSubmit = async (e) => {
         e.preventDefault();
         if (password !== checkpassword) {
-            alert('비밀번호가 일치하지 않습니다.');
+            setModalMessage('비밀번호가 일치하지 않습니다.');
+            setShowModal(true);
+            return;
+        }
+
+        if (emailCheck !== '가능') {
+            setModalMessage('이메일을 확인하세요.');
+            setShowModal(true);
+            return;
+        }
+        if (nicknameCheck !== '가능') {
+            setModalMessage('닉네임을 확인하세요.');
+            setShowModal(true);
             return;
         }
 
@@ -105,6 +117,8 @@ const Signup = () => {
 
         try {
             const response = await api.post('/sign-up', form);
+            setModalMessage('회원가입이 완료되었습니다.');
+            setShowModal(true);
             navigate('/');
         } catch (error) {
             console.error('Signup error:', error);
@@ -202,7 +216,7 @@ const Signup = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', marginTop: '20px' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '50px', marginTop: '20px', fontSize:'1.3rem', fontWeight:'600', marginBottom:'1.5rem' }}>
                                         <div className="form-check">
                                             <input className="form-check-input" type="radio" name="gender" id="male" value="male" checked={gender === 'male'} onChange={onRadioChange} />
                                             <label className="form-check-label" htmlFor="male">
@@ -218,7 +232,7 @@ const Signup = () => {
                                     </div>
                                     <Agree className="zm-form-item is-no-asterisk" onAgreeChange={(agreedStatus) => setAgreements(agreedStatus)} />
                                     <div className="mgt-sm" style={{ display: 'flex', justifyContent: 'center' }}>
-                                        <button style={{ cursor: 'pointer', color: 'white', backgroundColor: '#aa4dcb', fontSize: '1.5rem', width: '500px', height: '50px', border: 'none', borderRadius: '5px', textAlign: 'center' }} onMouseOver={(e) => (e.target.style.backgroundColor = '#8530e9')} onMouseOut={(e) => (e.target.style.backgroundColor = '#aa4dcb')} type="submit">
+                                        <button style={{ cursor: 'pointer', color: 'white', backgroundColor: '#aa4dcb', fontSize: '1.5rem', width: '100%', height: '50px', border: 'none', borderRadius: '5px', textAlign: 'center' }} onMouseOver={(e) => (e.target.style.backgroundColor = '#8530e9')} onMouseOut={(e) => (e.target.style.backgroundColor = '#aa4dcb')} type="submit">
                                             회원가입
                                         </button>
                                     </div>

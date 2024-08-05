@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import api from '../api/api';
 import { useNavigate } from 'react-router-dom';
 import Naver from './Naver';
-// named import
 import { jwtDecode } from 'jwt-decode';
 
 const Login = ({ onLoginSuccess }) => {
@@ -22,10 +21,6 @@ const Login = ({ onLoginSuccess }) => {
             ...form,
             [id]: value
         });
-    };
-
-    const onLogin = () => {
-        navigate('/signup');
     };
 
     const onSubmit = async (e) => {
@@ -140,11 +135,12 @@ const Login = ({ onLoginSuccess }) => {
                                     </button>
                                 </div>
                                 <p id='agree-terms' className='agree-terms mgt-md'>
-                                    "나는 로그인함으로써 who are you? 개인정보 처리방침 및 이용 약관에 동의합니다."
+                                    "나는 로그인함으로써 <br></br>who are you? 개인정보 처리방침 및 이용 약관에 동의합니다."
                                 </p>
                             </div>
                         </form>
                     </div>
+                    <hr></hr>
                     <div className='form-width-sm'>
                         <div className='zm-login-methods form-width'>
                             <p id='js_ride_methods_title' className='zm-login-methods__title'>

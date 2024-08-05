@@ -2,15 +2,33 @@ import React from 'react';
 import './RoomBottom.css';
 
 function RoomBottom({ expressionData, leaveRoom }) {
-  const { borderClass, imageSrc } = expressionData;
-
-  // 로깅을 통해 RoomBottom이 받아온 데이터 확인
-  // console.log('Received expressionData in RoomBottom:', expressionData);
+  const { borderClass, imageSrc, count } = expressionData;
 
   return (
     <div className='room-bottom'>
       <div className={`room-bottom-container ${borderClass}`}>
-        {imageSrc && <img src={imageSrc} alt="expression" className="bottom-image" />}
+        {imageSrc && (
+          <div style={{ position: 'relative' }}>
+            <img src={imageSrc} alt="expression" className="bottom-image" />
+            {/* 카운트를 표현하는 요소 추가 */}
+            {count > 0 && (
+              <div 
+                className="emotion-count" 
+                style={{
+                  position: 'absolute',
+                  top: '0',
+                  right: '0',
+                  zIndex: '1',
+                  backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                  borderRadius: '5px',
+                  padding: '5px',
+                }}
+              >
+                {count}
+              </div>
+            )}
+          </div>
+        )}
       </div>
       <div>
         <button className="bottom-button" onClick={leaveRoom}>

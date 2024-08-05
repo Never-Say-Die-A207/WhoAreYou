@@ -19,14 +19,15 @@ const Logout = ({ onLogout }) => {
                 cursor: 'pointer',
                 color: 'white',
                 backgroundColor: '#aa4dcb',
-                fontSize: '1.5rem',
+                fontSize: '1.2rem',
                 width: '200px',
                 height: '50px',
                 border: 'none',
                 borderRadius: '5px',
-                textAlign: 'center'
+                textAlign: 'center',
+                fontWeight: '600'
             }}
-            onMouseOver={(e) => e.target.style.backgroundColor = '#8530e9'}
+            onMouseOver={(e) => e.target.style.backgroundColor = 'rgb(150, 60, 180)'}
             onMouseOut={(e) => e.target.style.backgroundColor = '#aa4dcb'}
             onClick={onClick}
         >

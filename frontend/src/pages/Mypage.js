@@ -3,6 +3,8 @@ import FriendList from './FriendList';
 import MessageList from './MessageList';
 import Modal from 'react-modal';
 import MyInfo from './MyInfo';
+import api from '../api/api';
+import SockJS from 'sockjs-client';
 
 Modal.setAppElement('#root');
 
@@ -10,9 +12,13 @@ const Mypage = () => {
     const [messages, setMessages] = useState([]);
     const [friends, setFriends] = useState([]);
     const [selectedFriendId, setSelectedFriendId] = useState(null);
+    const [selectedFriendNickname, setSelectedFriendNickname] = useState(null);
     const [newMessage, setNewMessage] = useState('');
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [isHovered, setIsHovered] = useState(false); // 호버 상태 추적
+    const [isHovered, setIsHovered] = useState(false);
+    const [roomId, setRoomId] = useState(null)
+
+    const userId = localStorage.getItem('userId');
 
     const openModal = () => {
         setModalIsOpen(true);
@@ -23,31 +29,53 @@ const Mypage = () => {
     };
 
     useEffect(() => {
-        const fetchData = () => {
-            const dummyFriends = [
-                { id: 1, name: '홍길동' },
-                { id: 2, name: '김철수' },
-                { id: 3, name: '이영희' },
-                { id: 4, name: '박지민' },
-                { id: 5, name: '최민호' },
-            ];
-
-            const dummyMessages = [
-                { id: 1, sender: '홍길동', text: '안녕하세요!', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) },
-                { id: 2, sender: '나', text: '안녕하세요! 잘 지내세요?', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
-            ];
-
-            setFriends(dummyFriends);
-            setMessages(dummyMessages);
+        const fetchData = async () => {
+            try {
+                const response = await api.get('/friends/');
+                const friendsData = response.data;
+                setFriends(friendsData);
+            } catch (error) {
+                console.log('getFriends error:', error);
+            }
         };
 
         fetchData();
     }, []);
 
+    useEffect(() => {
+        if (selectedFriendId) {
+            const fetchChatRoomAndHistory = async () => {
+                try {
+                    const chatRoomIdResponse = await api.get(`/chat-rooms/${selectedFriendNickname}`);
+                    const chatRoomId = chatRoomIdResponse.data;
+                    console.log('Chat room id:', chatRoomId);
+
+                    const chatHistoryResponse = await api.post('/chat-rooms/historys', {
+                        userId,
+                        friendId: selectedFriendId
+                    });
+                    const chatHistory = chatHistoryResponse.data;
+                    console.log('chat history:', chatHistory);
+                    setRoomId(chatHistory);
+                } catch (error) {
+                    console.error('Error room or history:', error);
+                }
+            };
+
+            fetchChatRoomAndHistory();
+        }
+    }, [selectedFriendId]);
+
     const handleSendMessage = () => {
         if (newMessage.trim()) {
-            setMessages([...messages, { id: messages.length + 1, sender: '나', text: newMessage, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
+            const message = {
+                userId,
+                friendId: selectedFriendId,
+                message: newMessage
+            };
+
             setNewMessage('');
+            setMessages(prevMessages => [...prevMessages, { ...message, sender: '나' }]);
         }
     };
 
@@ -58,8 +86,9 @@ const Mypage = () => {
         }
     };
 
-    const handleFriendClick = (friendId) => {
+    const handleFriendClick = (friendId, friendNickname) => {
         setSelectedFriendId(friendId);
+        setSelectedFriendNickname(friendNickname);
     };
 
     const isFriendSelected = (friendId) => selectedFriendId === friendId;
@@ -86,9 +115,9 @@ const Mypage = () => {
                                 <li
                                     key={friend.id}
                                     style={isFriendSelected(friend.id) ? styles.selectedFriendListItem : styles.friendListItem}
-                                    onClick={() => handleFriendClick(friend.id)}
+                                    onClick={() => handleFriendClick(friend.id, friend.nickname)}
                                 >
-                                    {friend.name}
+                                    {friend.nickname}
                                 </li>
                             ))}
                         </ul>

@@ -19,7 +19,7 @@ const FriendList = ({ friends, onSelectFriend }) => {
                         onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#e0b9e3'}
                         onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#f0f0f0'}
                     >
-                        {friend.name}
+                        {friend.nickname}
                     </li>
                 ))}
             </ul>
