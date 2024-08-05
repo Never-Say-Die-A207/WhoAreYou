@@ -51,8 +51,10 @@ public class ChatRoomService {
 
     public List<SendingMessage> loadHistorys(SearchTargetDto dto){
         log.info("loadHistory 시작");
-        int maleId = dto.getMaleId();
-        int femaleId = dto.getFemaleId();
+        boolean isMale = userRepository.findById(dto.getMaleId()).orElseThrow(() -> new NullPointerException("존재하지 않은 유저")) instanceof Male;
+
+        int maleId = isMale ? dto.getMaleId() : dto.getFemaleId();
+        int femaleId = isMale ? dto.getMaleId() : dto.getFemaleId();
 
         ChatRoom chatRoom = friendJpaRepository.findByGenderId(maleId, femaleId).orElseThrow(
                 () -> new NullPointerException("존재하지 않은 친구관계")

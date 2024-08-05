@@ -87,11 +87,13 @@ public class FriendService {
             if (isMale) {
                 dto = FriendUserDto.builder()
                         .nickname(friend.getFemale().getNickname())
+                        .id(friend.getFemale().getId())
                         .build();
             }
             else {
                 dto = FriendUserDto.builder()
                         .nickname(friend.getMale().getNickname())
+                        .id(friend.getMale().getId())
                         .build();
             }
 
