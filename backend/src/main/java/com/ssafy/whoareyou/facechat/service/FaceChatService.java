@@ -50,7 +50,7 @@ public class FaceChatService {
     private String LIVEKIT_API_SECRET;
 
     public AccessToken getToken(Integer userId, String mask, boolean needsChange) {
-        log.info("Searching...");
+        log.info("FaceChatService.getToken() : Get Token");
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         String gender = getGender(user).orElseThrow(InvalidGenderException::new);
 
@@ -67,38 +67,48 @@ public class FaceChatService {
 
             faceChat = getAvailableFaceChat(user, gender);
             if(faceChat == null){
-                log.info("Create face chat.");
+                log.info("FaceChatService.getToken() : Failed to find available face chat for user " + userId);
+                log.info("FaceChatService.getToken() : Create new face chat");
                 faceChat = createFaceChat(user, mask);
             }
             else{
-                log.info("Success to find face chat");
+                log.info("FaceChatService.getToken() : Success to find available face chat for user " + userId);
                 faceChat.joinUser(user, mask);
                 createHistoryForBoth(faceChat);
             }
             faceChatRepository.saveFaceChatOrHistory(faceChat);
         }
         else{
-            log.info("Already in face chat.");
+            log.info("FaceChatService.getToken() : User " + userId + " is Already in face chat.");
         }
 
         return generateToken(user.getNickname(), user.getId(), String.valueOf(faceChat.getId()));
     }
 
     public void quitUser(Integer userId) {
-        log.info("quit.");
+        log.info("FaceChatService.quitUser() : Start to quit User " + userId);
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         String gender = getGender(user).orElseThrow(InvalidGenderException::new);
 
-        FaceChat faceChat = faceChatRepository.findMy(user, gender).orElseThrow(FaceChatNotFoundException::new);
+        FaceChat faceChat = faceChatRepository.findMy(user, gender).orElse(null);
+        if(faceChat == null){
+            log.info("FaceChatService.quitUser() : This user is not in any face chat. Nothing happens");
+            return;
+        }
 
+        log.info("FaceChatService.quitUser() : Remove user " + userId + " from face chat " + faceChat.getId());
         Boolean noOneLeft = faceChat.removeUser(user);
 
-        if(noOneLeft)
+        if(noOneLeft){
+            log.info("FaceChatService.quitUser() : Now face chat " + faceChat.getId() + " is empty.");
             faceChatRepository.deleteFaceChat(faceChat);
+        }
     }
 
     @Transactional(readOnly = true)
     public FaceChatInfoResponse getInfo(Integer userId) {
+        log.info("FaceChatService : Get FaceChat Info of User " + userId);
+
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         String gender = getGender(user).orElseThrow(InvalidGenderException::new);
 
@@ -198,7 +208,6 @@ public class FaceChatService {
                 result = friendService.join(new SearchTargetDto(m.getId(), f.getId()));
             }
             quitUser(myId);
-//            quitUser(partnerId);
         }
 
         return result;
@@ -218,5 +227,18 @@ public class FaceChatService {
         else if(user instanceof Female)
             return Optional.of("female");
         return Optional.empty();
+    }
+
+    @Transactional(readOnly = true)
+    public Integer countAllFaceChat() {
+        return faceChatRepository.countAll();
+    }
+
+    @Transactional(readOnly = true)
+    public Integer countAllAvailableFaceChat(Integer userId){
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        String gender = getGender(user).orElseThrow(InvalidGenderException::new);
+
+        return faceChatRepository.countAllAvailable(gender);
     }
 }

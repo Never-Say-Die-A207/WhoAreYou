@@ -2,18 +2,13 @@ package com.ssafy.whoareyou.facechat.repository;
 
 import com.ssafy.whoareyou.facechat.entity.FaceChat;
 import com.ssafy.whoareyou.facechat.entity.History;
-import com.ssafy.whoareyou.user.entity.Female;
-import com.ssafy.whoareyou.user.entity.Male;
 import com.ssafy.whoareyou.user.entity.User;
-import com.ssafy.whoareyou.user.exception.InvalidGenderException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.NonUniqueResultException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -90,5 +85,15 @@ public class FaceChatRepository {
         } catch (NoResultException e) {
             return Optional.empty();
         }
+    }
+
+    public Integer countAll() {
+        return em.createQuery("select fc from FaceChat fc")
+                .getResultList().size();
+    }
+
+    public Integer countAllAvailable(String myGender) {
+        return em.createQuery("select fc from FaceChat fc")
+                .getResultList().size();
     }
 }

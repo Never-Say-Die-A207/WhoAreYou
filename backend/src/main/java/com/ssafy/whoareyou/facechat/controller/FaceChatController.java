@@ -79,6 +79,24 @@ public class FaceChatController {
         }
     }
 
+    @GetMapping("/list/{userId}")
+    public ResponseEntity<?> getList(@PathVariable("userId") Integer userId){
+        try{
+            Integer totalFaceChatCount = faceChatService.countAllFaceChat();
+            Integer availableFaceChatCount = faceChatService.countAllAvailableFaceChat(userId);
+            return new ResponseEntity<Map<String, Integer>>(Map.of(
+                    "total", totalFaceChatCount,
+                    "available", availableFaceChatCount
+            ),HttpStatus.OK);
+        } catch (UserNotFoundException e){
+            log.info("Wrong user info");
+            return new ResponseEntity<Void> (HttpStatus.BAD_REQUEST);
+        }  catch (Exception e){
+            log.info(e.getMessage());
+            return new ResponseEntity<Void> (HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/result")
     public ResponseEntity<?> finish(@RequestBody FaceChatResultRequest params) {
         try{
