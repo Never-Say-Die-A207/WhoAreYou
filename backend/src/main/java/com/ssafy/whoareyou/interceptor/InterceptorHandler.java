@@ -19,7 +19,7 @@ public class InterceptorHandler implements HandlerInterceptor {
         String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
         response.addHeader(HttpHeaders.AUTHORIZATION, accessToken);
 
-        String userId = provider.getUserId(accessToken);
+        String userId = provider.getUserId(accessToken.substring(7));
 
         log.info("userId 추출 완료: " + userId);
 
