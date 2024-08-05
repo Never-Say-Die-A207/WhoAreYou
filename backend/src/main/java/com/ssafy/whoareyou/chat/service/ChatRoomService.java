@@ -54,7 +54,7 @@ public class ChatRoomService {
         boolean isMale = userRepository.findById(dto.getMaleId()).orElseThrow(() -> new NullPointerException("존재하지 않은 유저")) instanceof Male;
 
         int maleId = isMale ? dto.getMaleId() : dto.getFemaleId();
-        int femaleId = isMale ? dto.getMaleId() : dto.getFemaleId();
+        int femaleId = isMale ? dto.getFemaleId() : dto.getMaleId();
 
         ChatRoom chatRoom = friendJpaRepository.findByGenderId(maleId, femaleId).orElseThrow(
                 () -> new NullPointerException("존재하지 않은 친구관계")
