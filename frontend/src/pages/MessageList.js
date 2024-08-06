@@ -9,16 +9,17 @@ const MessageList = ({ messages, userId }) => {
 
     return (
         <div style={styles.messageList}>
-            {messages.map((message) => (
+            {messages.map((message, index) => (
                 <div
-                    key={message.id}
+                    key={index}
                     style={{
                         ...styles.message,
                         alignSelf: message.senderId === userId ? 'flex-end' : 'flex-start',
                         backgroundColor: message.senderId === userId ? '#dcf8c6' : '#fff',
                     }}
                 >
-                    <div style={styles.text}>{message.text}</div>
+                    {message.senderId !== userId && <div style={styles.sender}>{message.sender}</div>}
+                    <div style={styles.text}>{message.message}</div>
                     <div style={styles.time}>{message.time}</div>
                 </div>
             ))}
@@ -47,6 +48,10 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         transition: 'background-color 0.3s ease',
+    },
+    sender: {
+        fontWeight: 'bold',
+        marginBottom: '5px',
     },
     text: {
         marginBottom: '5px',
