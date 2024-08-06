@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/facechat")
+@RequestMapping("/api/facechat")
 @RequiredArgsConstructor
 public class FaceChatController {
     private static final Logger log = LoggerFactory.getLogger(FaceChatController.class);

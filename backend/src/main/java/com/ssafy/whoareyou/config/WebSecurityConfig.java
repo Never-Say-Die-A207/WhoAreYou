@@ -53,7 +53,7 @@ public class WebSecurityConfig {
                 )
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/chat/**", "/chat-rooms/**").permitAll()
-                        .requestMatchers("/", "/**", "/api/v1/auth/**", "/oauth2/**").permitAll()
+                        .requestMatchers("/", "/**", "/api/**", "/oauth2/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
