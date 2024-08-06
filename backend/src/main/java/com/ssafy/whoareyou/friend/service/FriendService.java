@@ -79,31 +79,31 @@ public class FriendService {
 
     public List<FriendUserDto> getFriends(User user, boolean isMale) {
         log.info("getFriends 시작");
-        List<FriendUserDto> friends = isMale ? friendJpaRepository.findFemaleByMaleId(user.getId()) : friendJpaRepository.findMaleByFemaleId(user.getId());
+        List<Friend> friends = isMale ? friendJpaRepository.findFemaleByMaleId(user.getId()) : friendJpaRepository.findMaleByFemaleId(user.getId());
 
-//        List<FriendUserDto> friendUserDtos = new ArrayList<>();
-//        for (Friend friend : friends) {
-//            FriendUserDto dto;
-//            if (isMale) {
-//                log.info("id: " + friend.getFemale().getId() +", nickname: " + friend.getFemale().getNickname());
-//                dto = FriendUserDto.builder()
-//                        .nickname(friend.getFemale().getNickname())
-//                        .id(friend.getFemale().getId())
-//                        .build();
-//            }
-//            else {
-//                log.info("id: " + friend.getMale().getId() +", nickname: " + friend.getMale().getNickname());
-//                dto = FriendUserDto.builder()
-//                        .nickname(friend.getMale().getNickname())
-//                        .id(friend.getMale().getId())
-//                        .build();
-//            }
-//
-//            friendUserDtos.add(dto);
-//        }
+        List<FriendUserDto> friendUserDtos = new ArrayList<>();
+        for (Friend friend : friends) {
+            FriendUserDto dto;
+            if (isMale) {
+                log.info("id: " + friend.getFemale().getId() +", nickname: " + friend.getFemale().getNickname());
+                dto = FriendUserDto.builder()
+                        .nickname(friend.getFemale().getNickname())
+                        .id(friend.getFemale().getId())
+                        .build();
+            }
+            else {
+                log.info("id: " + friend.getMale().getId() +", nickname: " + friend.getMale().getNickname());
+                dto = FriendUserDto.builder()
+                        .nickname(friend.getMale().getNickname())
+                        .id(friend.getMale().getId())
+                        .build();
+            }
+
+            friendUserDtos.add(dto);
+        }
 
         log.info("getFriends 종료");
-        return friends;
+        return friendUserDtos;
     }
 
     public void delete(SearchTargetDto dto){
