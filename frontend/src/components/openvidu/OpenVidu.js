@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
     LocalVideoTrack,
     RemoteParticipant,
@@ -107,7 +108,6 @@ function OpenVidu() {
     const userId = localStorage.getItem('userId');
 
     //매칭 시작 시간
-
 
     async function joinRoom() {
         const room = new Room();
@@ -389,6 +389,7 @@ function OpenVidu() {
     const CancelMatching = () => {
         window.location.reload();
     };
+
 
     return (
         <>

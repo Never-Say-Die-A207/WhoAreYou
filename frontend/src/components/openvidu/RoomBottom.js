@@ -32,10 +32,7 @@ function RoomBottom({ expressionData, leaveRoom }) {
       </div>
       <div>
         <button className="bottom-button" onClick={leaveRoom}>
-          홈으로 가기
-        </button>
-        <button className="bottom-button">
-          다시 매칭하기
+          나가기
         </button>
       </div>
     </div>
