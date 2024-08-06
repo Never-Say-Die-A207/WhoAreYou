@@ -1,13 +1,15 @@
 package com.ssafy.whoareyou.friend.controller;
 
-import com.ssafy.whoareyou.friend.entity.SearchTargetDto;
+import com.ssafy.whoareyou.friend.dto.SearchTargetDto;
 import com.ssafy.whoareyou.friend.service.FriendService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/friends")
 @RequiredArgsConstructor
@@ -17,6 +19,7 @@ public class FriendController {
     @GetMapping("/")
     ResponseEntity<?> getList(HttpServletRequest request){
         int userId = Integer.parseInt((String) request.getAttribute("userId"));
+        log.info("getList, userId: " + userId);
 
         return new ResponseEntity<>(service.getList(userId), HttpStatus.OK);
     }

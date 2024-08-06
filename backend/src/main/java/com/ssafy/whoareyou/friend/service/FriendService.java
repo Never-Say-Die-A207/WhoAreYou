@@ -1,10 +1,9 @@
 package com.ssafy.whoareyou.friend.service;
 
 import com.ssafy.whoareyou.chat.repository.ChatMongoRepository;
-import com.ssafy.whoareyou.friend.entity.SearchTargetDto;
+import com.ssafy.whoareyou.friend.dto.SearchTargetDto;
 import com.ssafy.whoareyou.chat.entity.ChatRoom;
 import com.ssafy.whoareyou.chat.service.ChatRoomService;
-import com.ssafy.whoareyou.facechat.repository.FaceChatRepository;
 import com.ssafy.whoareyou.friend.dto.FriendUserDto;
 import com.ssafy.whoareyou.friend.entity.Friend;
 import com.ssafy.whoareyou.friend.repository.FriendJpaRepository;
@@ -79,18 +78,21 @@ public class FriendService {
     }
 
     public List<FriendUserDto> getFriends(User user, boolean isMale) {
+        log.info("getFriends 시작");
         List<Friend> friends = isMale ? friendJpaRepository.findFemaleByMaleId(user.getId()) : friendJpaRepository.findMaleByFemaleId(user.getId());
 
         List<FriendUserDto> friendUserDtos = new ArrayList<>();
         for (Friend friend : friends) {
             FriendUserDto dto;
             if (isMale) {
+                log.info("id: " + friend.getFemale().getId() +", nickname: " + friend.getFemale().getNickname());
                 dto = FriendUserDto.builder()
                         .nickname(friend.getFemale().getNickname())
                         .id(friend.getFemale().getId())
                         .build();
             }
             else {
+                log.info("id: " + friend.getMale().getId() +", nickname: " + friend.getMale().getNickname());
                 dto = FriendUserDto.builder()
                         .nickname(friend.getMale().getNickname())
                         .id(friend.getMale().getId())
@@ -100,6 +102,7 @@ public class FriendService {
             friendUserDtos.add(dto);
         }
 
+        log.info("getFriends 종료");
         return friendUserDtos;
     }
 

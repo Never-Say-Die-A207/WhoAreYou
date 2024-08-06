@@ -1,10 +1,9 @@
 package com.ssafy.whoareyou.chat.controller;
 
-import com.ssafy.whoareyou.friend.entity.SearchTargetDto;
+import com.ssafy.whoareyou.friend.dto.SearchTargetDto;
 import com.ssafy.whoareyou.chat.service.ChatRoomService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +26,8 @@ public class ChatRoomController {
      * 통해 나눈 뒤 List 형태로 return.
      * @param dto
      * @return List<String>
-     */    @PostMapping("/historys")
+     */
+    @PostMapping("/historys")
     public ResponseEntity<?> loadHistory(@RequestBody SearchTargetDto dto){
         return new ResponseEntity<>(service.loadHistorys(dto), HttpStatus.OK);
     }

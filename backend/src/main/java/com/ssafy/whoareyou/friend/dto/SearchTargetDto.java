@@ -1,4 +1,4 @@
-package com.ssafy.whoareyou.friend.entity;
+package com.ssafy.whoareyou.friend.dto;
 
 import lombok.*;
 

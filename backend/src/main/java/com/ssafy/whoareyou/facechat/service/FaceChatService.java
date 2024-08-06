@@ -6,7 +6,7 @@ import com.ssafy.whoareyou.facechat.entity.History;
 import com.ssafy.whoareyou.facechat.entity.WantsFriendType;
 import com.ssafy.whoareyou.facechat.exception.FaceChatNotFoundException;
 import com.ssafy.whoareyou.facechat.repository.FaceChatRepository;
-import com.ssafy.whoareyou.friend.entity.SearchTargetDto;
+import com.ssafy.whoareyou.friend.dto.SearchTargetDto;
 import com.ssafy.whoareyou.friend.service.FriendService;
 import com.ssafy.whoareyou.user.entity.Female;
 import com.ssafy.whoareyou.user.entity.Male;

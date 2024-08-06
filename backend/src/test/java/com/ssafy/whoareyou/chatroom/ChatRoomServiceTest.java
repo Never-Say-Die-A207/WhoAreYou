@@ -1,6 +1,6 @@
 //package com.ssafy.whoareyou.chatroom;
 //
-//import com.ssafy.whoareyou.friend.entity.SearchTargetDto;
+//import com.ssafy.whoareyou.friend.dto.SearchTargetDto;
 //import com.ssafy.whoareyou.chat.dto.SendingMessage;
 //import com.ssafy.whoareyou.chat.entity.mongo.Chat;
 //import com.ssafy.whoareyou.chat.entity.ChatRoom;

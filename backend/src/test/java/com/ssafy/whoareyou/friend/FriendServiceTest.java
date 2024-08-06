@@ -1,6 +1,6 @@
 //package com.ssafy.whoareyou.friend;
 //
-//import com.ssafy.whoareyou.friend.entity.SearchTargetDto;
+//import com.ssafy.whoareyou.friend.dto.SearchTargetDto;
 //import com.ssafy.whoareyou.chat.entity.ChatRoom;
 //import com.ssafy.whoareyou.chat.repository.ChatRoomJpaRepository;
 //import com.ssafy.whoareyou.chat.service.ChatRoomService;
