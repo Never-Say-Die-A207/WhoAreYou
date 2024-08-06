@@ -15,7 +15,7 @@ import Naver from './pages/Naver';
 function App() {
   return (
     <div className='App'>
-      <Navbar />
+      {/* <Navbar /> */}
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/signup' element={<Signup />} />

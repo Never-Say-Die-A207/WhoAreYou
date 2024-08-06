@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import FriendList from './FriendList';
 import MessageList from './MessageList';
 import Modal from 'react-modal';
 import MyInfo from './MyInfo';
@@ -305,7 +304,6 @@ const styles = {
         marginTop: 'auto',
         display: 'flex',
         padding: '10px',
-        borderTop: '1px solid #ccc',
     },
     input: {
         flex: 1,
