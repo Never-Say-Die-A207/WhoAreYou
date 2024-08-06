@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 
-const MessageList = ({ messages }) => {
+const MessageList = ({ messages, userId }) => {
     const endOfMessagesRef = useRef(null);
 
     useEffect(() => {
@@ -14,8 +14,8 @@ const MessageList = ({ messages }) => {
                     key={message.id}
                     style={{
                         ...styles.message,
-                        alignSelf: message.sender === '나' ? 'flex-end' : 'flex-start',
-                        backgroundColor: message.sender === '나' ? '#dcf8c6' : '#fff',
+                        alignSelf: message.senderId === userId ? 'flex-end' : 'flex-start',
+                        backgroundColor: message.senderId === userId ? '#dcf8c6' : '#fff',
                     }}
                 >
                     <div style={styles.text}>{message.text}</div>

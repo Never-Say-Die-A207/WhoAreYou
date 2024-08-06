@@ -172,7 +172,7 @@ const Mypage = () => {
                                 대화 내용이 없습니다. 먼저 채팅을 시작하세요!
                             </div>
                         ) : (
-                            <MessageList messages={messages} />
+                            <MessageList messages={messages} userId={userId} />
                         )}
                         <div style={styles.inputContainer}>
                             <input
