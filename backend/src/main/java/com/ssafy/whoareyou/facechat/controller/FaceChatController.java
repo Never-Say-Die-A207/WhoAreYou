@@ -109,8 +109,6 @@ public class FaceChatController {
             if(friend == null)
                 friend = false;
 
-            friend = !friend;
-
             faceChatService.updateWantsFriend(roomId, myId, partnerId, friend);
             try {
                 Thread.sleep(3000);
