@@ -51,7 +51,7 @@ public class ChatRoomService {
 
     public List<SendingMessage> loadHistorys(SearchTargetDto dto){
         log.info("loadHistory 시작");
-        boolean isMale = userRepository.findById(dto.getMaleId()).orElseThrow(() -> new NullPointerException("존재하지 않은 유저")) instanceof Male;
+        boolean isMale = userRepository.findById(dto.getMaleId()).get() instanceof Male;
 
         int maleId = isMale ? dto.getMaleId() : dto.getFemaleId();
         int femaleId = isMale ? dto.getFemaleId() : dto.getMaleId();
