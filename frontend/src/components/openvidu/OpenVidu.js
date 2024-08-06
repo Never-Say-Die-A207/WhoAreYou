@@ -251,11 +251,15 @@ function OpenVidu() {
     }
 
 
+
     //미리보기 코드
     useEffect(() => {
         startPreview();
         return () => stopPreview();
     }, []);
+
+
+
 
     useEffect(() => {
         if (videoPreviewRef.current && previewStream) {
@@ -285,11 +289,11 @@ function OpenVidu() {
                             await faceMesh.send({ image: videoPreviewRef.current });
                         }
                     },
-                    width: 720,
-                    height: 1280,
+                    width: 1280,
+                    height: 720,
                 });
                 camera.start();
-              } else {
+            } else {
                 const camera = new cam.Camera(videoPreviewRef.current, {
                     onFrame: async () => {
                         if (videoPreviewRef.current) {
@@ -300,8 +304,8 @@ function OpenVidu() {
                     height: 720,
                 });
                 camera.start();
-              }
-            
+            }
+
             // videoPreviewRef.current = camera
         }
     }, [previewStream, videoPreviewRef]);  // videoPreviewRef도 의존성 배열에 추가
@@ -428,37 +432,37 @@ function OpenVidu() {
 
     return (
         <>
-             <header>
-            <nav className="navbar navbar-expand-lg navbar-light shadow-sm" style={{ padding: 0 }}>
-                <div className="container-fluid">
-                    <Link to='/' className="navbar-brand" onClick={leaveRoom}>WHO ARE YOU</Link>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                    <div className="collapse navbar-collapse" id="navbarNav">
-                    <div>
-                        <ul className="navbar-nav ml-auto">
-                            <li className="nav-item">
-                                <Link to='/matching' className='nav-link' onClick={leaveRoom}>매칭하기</Link>
-                            </li>
-                            {token &&
-                            <li className="nav-item">
-                                <Link to='/mypage' className='nav-link' onClick={leaveRoom}>채팅하기</Link>
-                            </li>
-                            }
-                            
-                        </ul>
-                        </div>
-                        <div>
-                        {!token && <ul className="navbar-nav ml-auto">
-                            <li className="nav-item">
-                                <Link to='/signup' className='nav-link' id='nav-signup'>회원가입</Link>
-                            </li>
-                        </ul>}
-                        </div>
-                    </div>
+            <header>
+                <nav className="navbar navbar-expand-lg navbar-light shadow-sm" style={{ padding: 0 }}>
+                    <div className="container-fluid">
+                        <Link to='/' className="navbar-brand" onClick={leaveRoom}>WHO ARE YOU</Link>
+                        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                            <span className="navbar-toggler-icon"></span>
+                        </button>
+                        <div className="collapse navbar-collapse" id="navbarNav">
+                            <div>
+                                <ul className="navbar-nav ml-auto">
+                                    <li className="nav-item">
+                                        <Link to='/matching' className='nav-link' onClick={leaveRoom}>매칭하기</Link>
+                                    </li>
+                                    {token &&
+                                        <li className="nav-item">
+                                            <Link to='/mypage' className='nav-link' onClick={leaveRoom}>채팅하기</Link>
+                                        </li>
+                                    }
 
-                    {/* {!token ? (
+                                </ul>
+                            </div>
+                            <div>
+                                {!token && <ul className="navbar-nav ml-auto">
+                                    <li className="nav-item">
+                                        <Link to='/signup' className='nav-link' id='nav-signup'>회원가입</Link>
+                                    </li>
+                                </ul>}
+                            </div>
+                        </div>
+
+                        {/* {!token ? (
                         <Link to='/signup'>
                             <button
                                 style={{
@@ -484,9 +488,9 @@ function OpenVidu() {
                             방인원할까?
                         </p>
                     )} */}
-                </div>
-            </nav>
-        </header>
+                    </div>
+                </nav>
+            </header>
             {!room ? (
                 <div id='join'>
                     {/* <JokerLocal landmarks={landmarks} videoElement3={videoPreviewRef} /> */}
