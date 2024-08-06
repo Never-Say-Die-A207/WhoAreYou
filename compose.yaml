@@ -1,64 +1,8 @@
 services:
-  mysql:
-    image: mysql:8.0.27
-    environment:
-      MYSQL_DATABASE: whoareyou
-      MYSQL_ROOT_HOST: '%'
-      MYSQL_ROOT_PASSWORD: root
-      TZ: 'Asia/Seoul'
-    ports:
-      - "3306:3306"
-    networks:
-      - back-tier
-
-  mongodb:
-    image: mongo:6.0
-    container_name: mongodb
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: 1234
-      MONGO_INITDB_DATABASE: whoareyou
-    ports:
-      - "27017:27017"
-    networks:
-      - back-tier
-    volumes:
-      - mongo_data:/data/db
-
-  zookeeper:
-    image: wurstmeister/zookeeper:latest
-    container_name: zookeeper
-    ports:
-      - "2181:2181"
-    networks:
-      - back-tier
-
-  kafka:
-    image: wurstmeister/kafka:latest
-    container_name: kafka
-    ports:
-      - "9092:9092"
-    environment:
-      KAFKA_ADVERTISED_HOST_NAME: kafka
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-    networks:
-      - back-tier
-
   backend:
     build: ./backend
-    image: backend
-    depends_on:
-      - mysql
-      - mongodb
-      - kafka
-    ports:
-      - "4040:4040"
-    networks:
-      - back-tier
+    image: taegun1011/whoareyou_backend
 
-networks:
-  back-tier: {}
-
-volumes:
-  mongo_data:
-
+  frontend:
+    build: ./frontend
+    image: taegun1011/whoareyou_frontend
