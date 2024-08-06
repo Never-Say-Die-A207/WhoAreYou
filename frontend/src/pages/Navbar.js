@@ -7,7 +7,7 @@ const Navbar = ({ userId, onLogout }) => {
 
     return (
         <header>
-            <nav className="navbar navbar-expand-lg navbar-light shadow-sm" style={{ padding: 0 }}>
+            <nav className="navbar navbar-expand-lg navbar-light shadow-sm" style={{ padding: 0, height: '60px' }}>
                 <div className="container-fluid">
                     <Link to='/' className="navbar-brand">WHO ARE YOU</Link>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -21,6 +21,7 @@ const Navbar = ({ userId, onLogout }) => {
                             <li className="nav-item">
                                 <Link to='/mypage' className='nav-link'>채팅하기</Link>
                             </li>
+                            
                         </ul>
                     </div>
 
