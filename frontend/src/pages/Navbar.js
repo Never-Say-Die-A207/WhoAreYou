@@ -20,7 +20,7 @@ const Navbar = ({ userId, onLogout }) => {
                                 <Link to='/matching' className='nav-link'>매칭하기</Link>
                             </li>
                             <li className="nav-item">
-                                <Link to='/mypage' className='nav-link'>마이페이지</Link>
+                                <Link to='/mypage' className='nav-link'>채팅하기</Link>
                             </li>
                             
                         </ul>
