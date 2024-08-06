@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import FriendList from './FriendList';
 import MessageList from './MessageList';
 import Modal from 'react-modal';
 import MyInfo from './MyInfo';
+import api from '../api/api';
+import SockJS from 'sockjs-client';
+import { Client } from '@stomp/stompjs';
+import Navbar from './Navbar';
+
+
 
 Modal.setAppElement('#root');
 
@@ -10,9 +15,15 @@ const Mypage = () => {
     const [messages, setMessages] = useState([]);
     const [friends, setFriends] = useState([]);
     const [selectedFriendId, setSelectedFriendId] = useState(null);
+    const [selectedFriendNickname, setSelectedFriendNickname] = useState(null);
     const [newMessage, setNewMessage] = useState('');
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [isHovered, setIsHovered] = useState(false); // 호버 상태 추적
+    const [isHovered, setIsHovered] = useState(false);
+    const [roomId, setRoomId] = useState(null);
+    const [stompClient, setStompClient] = useState(null);
+
+    const userId = localStorage.getItem('userId');
+    const nickname = localStorage.getItem('nickname');
 
     const openModal = () => {
         setModalIsOpen(true);
@@ -23,30 +34,89 @@ const Mypage = () => {
     };
 
     useEffect(() => {
-        const fetchData = () => {
-            const dummyFriends = [
-                { id: 1, name: '홍길동' },
-                { id: 2, name: '김철수' },
-                { id: 3, name: '이영희' },
-                { id: 4, name: '박지민' },
-                { id: 5, name: '최민호' },
-            ];
-
-            const dummyMessages = [
-                { id: 1, sender: '홍길동', text: '안녕하세요!', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) },
-                { id: 2, sender: '나', text: '안녕하세요! 잘 지내세요?', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
-            ];
-
-            setFriends(dummyFriends);
-            setMessages(dummyMessages);
+        const fetchData = async () => {
+            try {
+                const response = await api.get('/friends/');
+                setFriends(response.data);
+            } catch (error) {
+                console.log('getFriends error:', error);
+            }
         };
 
         fetchData();
     }, []);
 
+    useEffect(() => {
+        if (selectedFriendId) {
+            const fetchChatRoomAndHistory = async () => {
+                try {
+                    const chatRoomIdResponse = await api.get(`/chat-rooms/${selectedFriendNickname}`);
+                    const chatRoomId = chatRoomIdResponse.data;
+                    console.log('Chat room id:', chatRoomId);
+
+                    const chatHistoryResponse = await api.post('/chat-rooms/historys', {
+                        'maleId': userId,
+                        'femaleId': selectedFriendId
+                    });
+                    const chatHistory = chatHistoryResponse.data;
+                    console.log('chat history:', chatHistory);
+                    setRoomId(chatRoomId);
+                    setMessages(chatHistory);
+                } catch (error) {
+                    console.error('Error room or history:', error);
+                }
+            };
+
+            fetchChatRoomAndHistory();
+        }
+    }, [selectedFriendId, selectedFriendNickname, userId]);
+
+    useEffect(() => {
+        if (roomId && !stompClient) {
+            const socket = new SockJS('http://3.36.120.21:4040/api/chat');
+            const client = new Client({
+                webSocketFactory: () => socket,
+                debug: function (str) {
+                    console.log(str);
+                },
+                onConnect: () => {
+                    console.log('Connected');
+                    setStompClient(client);
+
+                    client.subscribe(`/sub/rooms/${roomId}`, (messageOutput) => {
+                        const message = JSON.parse(messageOutput.body);
+                        setMessages(prevMessages => [...prevMessages, message]);
+                    });
+                },
+                onStompError: (frame) => {
+                    console.error('Broker reported error: ' + frame.headers['message']);
+                    console.error('Additional details: ' + frame.body);
+                }
+            });
+
+            client.activate();
+
+            return () => {
+                if (stompClient) {
+                    stompClient.deactivate();
+                }
+            };
+        }
+    }, [roomId, stompClient]);
+
     const handleSendMessage = () => {
-        if (newMessage.trim()) {
-            setMessages([...messages, { id: messages.length + 1, sender: '나', text: newMessage, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
+        if (newMessage.trim() && stompClient) {
+            const message = {
+                roomId: roomId,
+                nickname: nickname,
+                message: newMessage,
+            };
+
+            stompClient.publish({
+                destination: '/pub/messages',
+                body: JSON.stringify(message),
+            });
+
             setNewMessage('');
         }
     };
@@ -58,82 +128,87 @@ const Mypage = () => {
         }
     };
 
-    const handleFriendClick = (friendId) => {
+    const handleFriendClick = (friendId, friendNickname) => {
         setSelectedFriendId(friendId);
+        setSelectedFriendNickname(friendNickname);
     };
 
     const isFriendSelected = (friendId) => selectedFriendId === friendId;
 
     return (
-        <div style={styles.container}>
-            <div style={styles.friendSection}>
-                <button
-                    onClick={openModal}
-                    style={isHovered ? styles.infoButtonHovered : styles.infoButton}
-                    onMouseEnter={() => setIsHovered(true)}
-                    onMouseLeave={() => setIsHovered(false)}
-                >
-                    내정보
-                </button>
-                <div style={styles.friendList}>
-                    {friends.length === 0 ? (
-                        <div style={styles.noFriendsMessage}>
-                            친구가 없습니다. 친구를 추가하세요!
-                        </div>
-                    ) : (
-                        <ul style={styles.friendListItems}>
-                            {friends.map(friend => (
-                                <li
-                                    key={friend.id}
-                                    style={isFriendSelected(friend.id) ? styles.selectedFriendListItem : styles.friendListItem}
-                                    onClick={() => handleFriendClick(friend.id)}
-                                >
-                                    {friend.name}
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </div>
-            </div>
-            <div style={styles.chatArea}>
-                {selectedFriendId ? (
-                    <>
-                        {messages.length === 0 ? (
-                            <div style={styles.noMessagesMessage}>
-                                대화 내용이 없습니다. 먼저 채팅을 시작하세요!
+        <div style={{ height: '100vh' }}>
+            <Navbar />
+            <div style={styles.container}>
+                <div style={styles.friendSection}>
+                    <button
+                        onClick={openModal}
+                        style={isHovered ? styles.infoButtonHovered : styles.infoButton}
+                        onMouseEnter={() => setIsHovered(true)}
+                        onMouseLeave={() => setIsHovered(false)}
+                    >
+                        내정보
+                    </button>
+                    <div style={styles.friendList}>
+                        {friends.length === 0 ? (
+                            <div style={styles.noFriendsMessage}>
+                                친구가 없습니다. 친구를 추가하세요!
                             </div>
                         ) : (
-                            <MessageList messages={messages} />
+                            <ul style={styles.friendListItems}>
+                                {friends.map(friend => (
+                                    <li
+                                        key={friend.id}
+                                        style={isFriendSelected(friend.id) ? styles.selectedFriendListItem : styles.friendListItem}
+                                        onClick={() => handleFriendClick(friend.id, friend.nickname)}
+                                    >
+                                        {friend.nickname}
+                                    </li>
+                                ))}
+                            </ul>
                         )}
-                        <div style={styles.inputContainer}>
-                            <input
-                                type="text"
-                                value={newMessage}
-                                onChange={(e) => setNewMessage(e.target.value)}
-                                placeholder="메시지를 입력하세요..."
-                                style={styles.input}
-                                onKeyDown={handleKeyDown}
-                            />
-                            <button onClick={handleSendMessage} style={styles.sendButton}>
-                                보내기
-                            </button>
-                        </div>
-                    </>
-                ) : (
-                    <div style={styles.selectFriendMessage}>
-                        친구를 선택하세요.
                     </div>
-                )}
+                </div>
+                <div style={styles.chatArea}>
+                    {selectedFriendId ? (
+                        <>
+                            {messages.length === 0 ? (
+                                <div style={styles.noMessagesMessage}>
+                                    대화 내용이 없습니다. 먼저 채팅을 시작하세요!
+                                </div>
+                            ) : (
+                                <MessageList messages={messages} userId={userId} />
+                            )}
+                            <div style={styles.inputContainer}>
+                                <input
+                                    type="text"
+                                    value={newMessage}
+                                    onChange={(e) => setNewMessage(e.target.value)}
+                                    placeholder="메시지를 입력하세요..."
+                                    style={styles.input}
+                                    onKeyDown={handleKeyDown}
+                                />
+                                <button onClick={handleSendMessage} style={styles.sendButton}>
+                                    보내기
+                                </button>
+                            </div>
+                        </>
+                    ) : (
+                        <div style={styles.selectFriendMessage}>
+                            친구를 선택하세요.
+                        </div>
+                    )}
+                </div>
+                <Modal
+                    isOpen={modalIsOpen}
+                    onRequestClose={closeModal}
+                    contentLabel="My Info Modal"
+                    className="my-modal"
+                    overlayClassName="my-overlay"
+                >
+                    <MyInfo onClose={closeModal} />
+                </Modal>
             </div>
-            <Modal
-                isOpen={modalIsOpen}
-                onRequestClose={closeModal}
-                contentLabel="My Info Modal"
-                className="my-modal"
-                overlayClassName="my-overlay"
-            >
-                <MyInfo onClose={closeModal} />
-            </Modal>
+
         </div>
     );
 };
@@ -236,7 +311,6 @@ const styles = {
         marginTop: 'auto',
         display: 'flex',
         padding: '10px',
-        borderTop: '1px solid #ccc',
     },
     input: {
         flex: 1,

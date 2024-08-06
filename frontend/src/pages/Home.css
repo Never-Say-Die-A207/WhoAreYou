@@ -124,7 +124,7 @@ form {
     color: #131619;
     display: inline-block;
     outline: none;
-    padding: 0 12px;
+    /* padding: 0 12px; */
     transition: cubic-bezier(0.645, 0.045, 0.355, 1);
     width: 100%;
     vertical-align: middle;
@@ -265,7 +265,7 @@ button {
 
 .agree-terms {
     color: #747487;
-    font-size: 14px;
+    font-size: 12px;
     line-height: 20px;
 }
 
@@ -389,8 +389,10 @@ input[type='checkbox'] {
 .zm-login-methods__title {
     position: relative;
     text-align: center;
-    margin-top: 12px;
+    margin-top: 5px;
     margin-bottom: 24px;
+    font-size: 1rem;
+    font-weight: 500;
 }
 
 .zm-login-methods__list .justify-between {

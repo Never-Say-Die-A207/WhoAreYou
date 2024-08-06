@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import api from '../api/api';
 import { useNavigate } from 'react-router-dom';
 import Naver from './Naver';
-// named import
 import { jwtDecode } from 'jwt-decode';
 
 const Login = ({ onLoginSuccess }) => {
@@ -24,10 +23,6 @@ const Login = ({ onLoginSuccess }) => {
         });
     };
 
-    const onLogin = () => {
-        navigate('/signup');
-    };
-
     const onSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -46,12 +41,15 @@ const Login = ({ onLoginSuccess }) => {
             const userId = decodedToken.sub;
 
             localStorage.setItem('userId', userId);
-            // 로그인 성공 콜백 호출
-            onLoginSuccess(userId);
-
-            navigate('/');
+            localStorage.setItem('token', token);
+            
+            navigate('/matching');
         } catch (error) {
             console.error('Login error:', error);
+        } finally {
+            const response = await api.get(`/user/${localStorage.getItem('userId')}`);
+            localStorage.setItem('nickname', response.data['nickname']);
+            navigate('/matching');
         }
     };
 
@@ -73,7 +71,7 @@ const Login = ({ onLoginSuccess }) => {
                                             type='email'
                                             autoComplete='email'
                                             name='email'
-                                            placeholder
+                                            placeholder="이메일 주소"
                                             aria-required='true'
                                             aria-label='이메일 주소'
                                             id='email'
@@ -83,7 +81,7 @@ const Login = ({ onLoginSuccess }) => {
                                             onChange={onChange}
                                             style={inputStyle}
                                         />
-                                        {!email && <label htmlFor='email' className='zm-input__label'>이메일 주소</label>}
+                                     
                                         <span className='zm-input__suffix'>
                                             <span className='zm-input__suffix-inner'></span>
                                         </span>
@@ -97,7 +95,7 @@ const Login = ({ onLoginSuccess }) => {
                                             type='password'
                                             autoComplete='password'
                                             name='password'
-                                            placeholder
+                                            placeholder="비밀번호"
                                             aria-required='true'
                                             aria-label='비밀번호'
                                             id='password'
@@ -107,7 +105,7 @@ const Login = ({ onLoginSuccess }) => {
                                             onChange={onChange}
                                             style={inputStyle}
                                         />
-                                        {!password && <label htmlFor='password' className='zm-input__label'>비밀번호</label>}
+                                      
                                         <span className='zm-input__suffix'>
                                             <span className='zm-input__suffix-inner'>
                                                 <button type='button' aria-label='show password' className='zm-input__password-btn zm-input__icon zm-icon-eyes zm-input__clear'></button>
@@ -140,11 +138,12 @@ const Login = ({ onLoginSuccess }) => {
                                     </button>
                                 </div>
                                 <p id='agree-terms' className='agree-terms mgt-md'>
-                                    "나는 로그인함으로써 who are you? 개인정보 처리방침 및 이용 약관에 동의합니다."
+                                    "나는 로그인함으로써 <br></br>who are you? 개인정보 처리방침 및 이용 약관에 동의합니다."
                                 </p>
                             </div>
                         </form>
                     </div>
+                    <hr></hr>
                     <div className='form-width-sm'>
                         <div className='zm-login-methods form-width'>
                             <p id='js_ride_methods_title' className='zm-login-methods__title'>

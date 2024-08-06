@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import {
     LocalVideoTrack,
     RemoteParticipant,
@@ -8,6 +9,7 @@ import {
     RoomEvent
 } from 'livekit-client';
 import './OpenVidu.css';
+import '../../pages/Navbar.css';
 import VideoComponent from './VideoComponent';
 import VideoComponentLocal from './VideoComponentLocal';
 import AudioComponent from './AudioComponent';
@@ -35,7 +37,7 @@ import { useMediaQuery, MediaQuery } from 'react-responsive';
 
 
 
-var APPLICATION_SERVER_URL = "http://3.36.120.21:4040/";
+var APPLICATION_SERVER_URL = 'http://3.36.120.21:4040/api';
 var LIVEKIT_URL = "wss://myapp-yqvsqxqi.livekit.cloud/";
 
 // let APPLICATION_SERVER_URL = "";
@@ -103,13 +105,21 @@ function OpenVidu() {
 
     // 친구 추가 토글 상태
     const [isFriend, setIsFriend] = useState(false);
+    const isFriendRef = useRef(isFriend);
+
+
 
     const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token');
+    const navigate = useNavigate();
 
     //매칭 시작 시간
 
-
     async function joinRoom() {
+        if (!token) {
+            alert('로그인을 해주세요.');
+            navigate('/');
+        }
         const room = new Room();
         setRoom(room);
 
@@ -336,11 +346,12 @@ function OpenVidu() {
 
     // 타이머 끝나는 경우 코드 실행
     const handleTimerEnd = (roomId, partnerId) => {
+        console.log("Final isFriend value:", isFriendRef.current); // C
         const finalResult = {
             'myId': userId,
             'partnerId': partnerId,
             'roomId': roomId,
-            'friend': !isFriend
+            'friend': isFriendRef.current,
         };
         console.log(finalResult);
 
@@ -381,10 +392,17 @@ function OpenVidu() {
     };
 
 
-    // 친구 토글
-    const handleFriendToggle = () => {
-        setIsFriend(!isFriend);
-        console.log(isFriend);
+    useEffect(() => {
+        isFriendRef.current = isFriend;
+    }, [isFriend]);
+
+    // Function to toggle isFriend state and ref
+    const toggleIsFriend = () => {
+        setIsFriend(prev => {
+            const newState = !prev;
+            isFriendRef.current = newState; // Update the ref
+            return newState;
+        });
     };
 
     //매칭 취소
@@ -392,8 +410,56 @@ function OpenVidu() {
         window.location.reload();
     };
 
+
     return (
         <>
+            <header>
+                <nav className="navbar navbar-expand-lg navbar-light shadow-sm" style={{ padding: 0, height: '60px' }}>
+                    <div className="container-fluid">
+                        <Link to='/' className="navbar-brand" onClick={leaveRoom}>WHO ARE YOU</Link>
+                        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                            <span className="navbar-toggler-icon"></span>
+                        </button>
+                        <div className="collapse navbar-collapse" id="navbarNav">
+                            <ul className="navbar-nav ml-auto">
+                                <li className="nav-item">
+                                    <Link to='/matching' className='nav-link' onClick={leaveRoom}>매칭하기</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link to='/mypage' className='nav-link' onClick={leaveRoom}>채팅하기</Link>
+                                </li>
+                            </ul>
+                        </div>
+
+                        {!token ? (
+                        <Link to='/signup'>
+                            <button
+                                style={{
+                                    cursor: 'pointer',
+                                    color: 'white',
+                                    backgroundColor: '#aa4dcb',
+                                    fontSize: '1.2rem',
+                                    width: '200px',
+                                    height: '50px',
+                                    border: 'none',
+                                    borderRadius: '5px',
+                                    textAlign: 'center',
+                                    fontWeight: '600'
+                                }}
+                                onMouseOver={(e) => e.target.style.backgroundColor = 'rgb(150, 60, 180)'}
+                                onMouseOut={(e) => e.target.style.backgroundColor = '#aa4dcb'}
+                            >
+                                회원가입
+                            </button>
+                        </Link>
+                    ) : (
+                        <p>
+                            방인원할까?
+                        </p>
+                    )}
+                    </div>
+                </nav>
+            </header>
             {!room ? (
                 <div id='join'>
                     {/* <JokerLocal landmarks={landmarks} videoElement3={videoPreviewRef} /> */}
@@ -554,7 +620,7 @@ function OpenVidu() {
                         </div>
                         <div className='friend-toggle'>
                             <label>
-                                <input type='checkbox' checked={isFriend} onChange={handleFriendToggle} />
+                                <input type='checkbox' onClick={toggleIsFriend} />
                                 친구 추가
                             </label>
                         </div>
