@@ -105,7 +105,7 @@ const Login = ({ onLoginSuccess }) => {
                                             onChange={onChange}
                                             style={inputStyle}
                                         />
-                                        {/* {!password && <label htmlFor='password' className='zm-input__label'>비밀번호</label>} */}
+                                      
                                         <span className='zm-input__suffix'>
                                             <span className='zm-input__suffix-inner'>
                                                 <button type='button' aria-label='show password' className='zm-input__password-btn zm-input__icon zm-icon-eyes zm-input__clear'></button>
