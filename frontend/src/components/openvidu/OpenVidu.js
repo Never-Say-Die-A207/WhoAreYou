@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import {
     LocalVideoTrack,
     RemoteParticipant,
@@ -9,6 +9,7 @@ import {
     RoomEvent
 } from 'livekit-client';
 import './OpenVidu.css';
+import '../../pages/Navbar.css';
 import VideoComponent from './VideoComponent';
 import VideoComponentLocal from './VideoComponentLocal';
 import AudioComponent from './AudioComponent';
@@ -412,6 +413,48 @@ function OpenVidu() {
 
     return (
         <>
+            <header>
+                <nav className="navbar navbar-expand-lg navbar-light shadow-sm">
+                    <div className="container-fluid">
+                        <Link to='/' className="navbar-brand" onClick={leaveRoom}>WHO ARE YOU</Link>
+                        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                            <span className="navbar-toggler-icon"></span>
+                        </button>
+                        <div className="collapse navbar-collapse" id="navbarNav">
+                            <ul className="navbar-nav ml-auto">
+                                <li className="nav-item">
+                                    <Link to='/matching' className='nav-link' onClick={leaveRoom}>매칭하기</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link to='/mypage' className='nav-link' onClick={leaveRoom}>채팅하기</Link>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <Link to='/signup'>
+                            <button
+                                style={{
+                                    cursor: 'pointer',
+                                    color: 'white',
+                                    backgroundColor: '#aa4dcb',
+                                    fontSize: '1.2rem',
+                                    width: '200px',
+                                    height: '50px',
+                                    border: 'none',
+                                    borderRadius: '5px',
+                                    textAlign: 'center',
+                                    fontWeight: '600'
+                                }}
+                                onMouseOver={(e) => e.target.style.backgroundColor = 'rgb(150, 60, 180)'}
+                                onMouseOut={(e) => e.target.style.backgroundColor = '#aa4dcb'}
+                            >
+                                회원가입
+                            </button>
+                        </Link>
+
+                    </div>
+                </nav>
+            </header>
             {!room ? (
                 <div id='join'>
                     {/* <JokerLocal landmarks={landmarks} videoElement3={videoPreviewRef} /> */}
@@ -572,7 +615,7 @@ function OpenVidu() {
                         </div>
                         <div className='friend-toggle'>
                             <label>
-                            <input type='checkbox' onClick={toggleIsFriend} />
+                                <input type='checkbox' onClick={toggleIsFriend} />
                                 친구 추가
                             </label>
                         </div>
