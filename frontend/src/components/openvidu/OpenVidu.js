@@ -37,7 +37,7 @@ import { useMediaQuery, MediaQuery } from 'react-responsive';
 
 
 
-var APPLICATION_SERVER_URL = 'http://3.36.120.21:4040/api';
+var APPLICATION_SERVER_URL = 'https://3.36.120.21/api';
 var LIVEKIT_URL = "wss://myapp-yqvsqxqi.livekit.cloud/";
 
 // let APPLICATION_SERVER_URL = "";

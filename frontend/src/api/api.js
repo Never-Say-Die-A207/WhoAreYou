@@ -6,8 +6,8 @@ const api = axios.create({
     // baseURL: 'http://localhost:5000',
 
     // 서버
-    baseURL: 'http://3.36.120.21:4040/api',
-    // baseURL: 'https://3.36.120.21/api',
+    // baseURL: 'http://3.36.120.21:4040/api',
+    baseURL: 'https://3.36.120.21/api',
     headers: {
         'Content-Type': 'application/json',
     },
