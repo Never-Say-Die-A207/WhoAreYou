@@ -26,21 +26,43 @@
     gap: 5px; /* 동일한 간격을 위해 추가 */
 }
 
+.zm-input {
+    position: relative; /* 부모 요소에 relative 포지션 */
+}
+
 .zm-input__inner {
     width: 100%;
     height: 50px;
     font-size: 1rem;
-    padding: 10px;
+ 
     border-radius: 5px;
+    box-sizing: border-box; /* border와 padding을 포함한 크기 계산 */
 }
 
 .zm-input__label {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: absolute; /* 절대적으로 위치시키기 */
+    top: 50%; /* 세로 중앙 정렬 */
+    left: 10px; /* 왼쪽 경계에서 10px 위치 */
+    transform: translateY(-50%); /* 수직 중앙 정렬 */
     color: #999;
+    pointer-events: none; /* 클릭 불가능 */
+    transition: all 0.2s ease; /* 부드러운 애니메이션 효과 */
 }
+
+/* 입력 필드가 포커스되었거나 텍스트가 있으면 라벨 위치 변경 */
+.zm-input__inner:focus + .zm-input__label,
+.zm-input__inner:not(:placeholder-shown) + .zm-input__label {
+    top: 10px; /* 라벨을 입력 필드 안쪽 위로 이동 */
+    font-size: 12px; /* 라벨의 폰트 크기 축소 */
+    color: #666; /* 라벨 색상 변경 */
+}
+
+
+input::placeholder {
+    padding-left: 5px;
+   
+}
+
 
 .layout-main-slot {
     justify-content: center;
@@ -87,6 +109,7 @@
     outline: none;
 }
 
+
 .email_input {
     position: relative;
     flex: 1;
@@ -94,9 +117,9 @@
 
 .zm-input__inner .email_input_input {
     width: 100%;
-    height: 50px;
+    /* height: 50px; */
     box-sizing: border-box;
-    padding-right: 10px;
+    
     font-size: 1rem;
 }
 
@@ -126,7 +149,7 @@
     width: 100%;
     height: 50px;
     box-sizing: border-box;
-    padding: 0 10px;
+    /* padding: 0 10px; */
     font-size: 1rem;
 }
 

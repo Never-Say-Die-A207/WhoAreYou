@@ -71,7 +71,7 @@ const Login = ({ onLoginSuccess }) => {
                                             type='email'
                                             autoComplete='email'
                                             name='email'
-                                            placeholder
+                                            placeholder="이메일 주소"
                                             aria-required='true'
                                             aria-label='이메일 주소'
                                             id='email'
@@ -81,7 +81,7 @@ const Login = ({ onLoginSuccess }) => {
                                             onChange={onChange}
                                             style={inputStyle}
                                         />
-                                        {!email && <label htmlFor='email' className='zm-input__label'>이메일 주소</label>}
+                                     
                                         <span className='zm-input__suffix'>
                                             <span className='zm-input__suffix-inner'></span>
                                         </span>
@@ -95,7 +95,7 @@ const Login = ({ onLoginSuccess }) => {
                                             type='password'
                                             autoComplete='password'
                                             name='password'
-                                            placeholder
+                                            placeholder="비밀번호"
                                             aria-required='true'
                                             aria-label='비밀번호'
                                             id='password'
@@ -105,7 +105,7 @@ const Login = ({ onLoginSuccess }) => {
                                             onChange={onChange}
                                             style={inputStyle}
                                         />
-                                        {!password && <label htmlFor='password' className='zm-input__label'>비밀번호</label>}
+                                      
                                         <span className='zm-input__suffix'>
                                             <span className='zm-input__suffix-inner'>
                                                 <button type='button' aria-label='show password' className='zm-input__password-btn zm-input__icon zm-icon-eyes zm-input__clear'></button>
