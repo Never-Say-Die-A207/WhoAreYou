@@ -103,6 +103,9 @@ function OpenVidu() {
 
     // 친구 추가 토글 상태
     const [isFriend, setIsFriend] = useState(false);
+    const isFriendRef = useRef(isFriend);
+
+
 
     const userId = localStorage.getItem('userId');
 
@@ -336,11 +339,12 @@ function OpenVidu() {
 
     // 타이머 끝나는 경우 코드 실행
     const handleTimerEnd = (roomId, partnerId) => {
+        console.log("Final isFriend value:", isFriendRef.current); // C
         const finalResult = {
             'myId': userId,
             'partnerId': partnerId,
             'roomId': roomId,
-            'friend': isFriend
+            'friend': isFriendRef.current,
         };
         console.log(finalResult);
 
@@ -380,9 +384,18 @@ function OpenVidu() {
         return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     };
 
-    // 친구 토글
-    const handleFriendToggle = () => {
-        setIsFriend(!isFriend);
+
+    useEffect(() => {
+        isFriendRef.current = isFriend;
+    }, [isFriend]);
+
+    // Function to toggle isFriend state and ref
+    const toggleIsFriend = () => {
+        setIsFriend(prev => {
+            const newState = !prev;
+            isFriendRef.current = newState; // Update the ref
+            return newState;
+        });
     };
 
     //매칭 취소
@@ -552,7 +565,7 @@ function OpenVidu() {
                         </div>
                         <div className='friend-toggle'>
                             <label>
-                                <input type='checkbox' checked={isFriend} onClick={handleFriendToggle} />
+                            <input type='checkbox' onClick={toggleIsFriend} />
                                 친구 추가
                             </label>
                         </div>
