@@ -41,12 +41,14 @@ const Login = ({ onLoginSuccess }) => {
             const userId = decodedToken.sub;
 
             localStorage.setItem('userId', userId);
-            // 로그인 성공 콜백 호출
+            
             onLoginSuccess(userId);
-
-            navigate('/');
         } catch (error) {
             console.error('Login error:', error);
+        } finally {
+            const response = await api.get(`/user/${localStorage.getItem('userId')}`);
+            localStorage.setItem('nickname', response.data['nickname']);
+            navigate('/');
         }
     };
 

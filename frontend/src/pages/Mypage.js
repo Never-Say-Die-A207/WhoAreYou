@@ -5,6 +5,7 @@ import Modal from 'react-modal';
 import MyInfo from './MyInfo';
 import api from '../api/api';
 import SockJS from 'sockjs-client';
+import { Client } from '@stomp/stompjs';
 
 Modal.setAppElement('#root');
 
@@ -16,9 +17,11 @@ const Mypage = () => {
     const [newMessage, setNewMessage] = useState('');
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
-    const [roomId, setRoomId] = useState(null)
+    const [roomId, setRoomId] = useState(null);
+    const [stompClient, setStompClient] = useState(null);
 
     const userId = localStorage.getItem('userId');
+    const nickname = localStorage.getItem('nickname');
 
     const openModal = () => {
         setModalIsOpen(true);
@@ -32,8 +35,7 @@ const Mypage = () => {
         const fetchData = async () => {
             try {
                 const response = await api.get('/friends/');
-                const friendsData = response.data;
-                setFriends(friendsData);
+                setFriends(response.data);
             } catch (error) {
                 console.log('getFriends error:', error);
             }
@@ -51,12 +53,13 @@ const Mypage = () => {
                     console.log('Chat room id:', chatRoomId);
 
                     const chatHistoryResponse = await api.post('/chat-rooms/historys', {
-                        userId,
-                        friendId: selectedFriendId
+                        'maleId': userId,
+                        'femaleId': selectedFriendId
                     });
                     const chatHistory = chatHistoryResponse.data;
                     console.log('chat history:', chatHistory);
-                    setRoomId(chatHistory);
+                    setRoomId(chatRoomId);
+                    setMessages(chatHistory);
                 } catch (error) {
                     console.error('Error room or history:', error);
                 }
@@ -64,18 +67,55 @@ const Mypage = () => {
 
             fetchChatRoomAndHistory();
         }
-    }, [selectedFriendId]);
+    }, [selectedFriendId, selectedFriendNickname, userId]);
+
+    useEffect(() => {
+        if (roomId && !stompClient) {
+            const socket = new SockJS('http://3.36.120.21:4040/chat');
+            const client = new Client({
+                webSocketFactory: () => socket,
+                debug: function (str) {
+                    console.log(str);
+                },
+                onConnect: () => {
+                    console.log('Connected');
+                    setStompClient(client);
+
+                    client.subscribe(`/sub/rooms/${roomId}`, (messageOutput) => {
+                        const message = JSON.parse(messageOutput.body);
+                        setMessages(prevMessages => [...prevMessages, message]);
+                    });
+                },
+                onStompError: (frame) => {
+                    console.error('Broker reported error: ' + frame.headers['message']);
+                    console.error('Additional details: ' + frame.body);
+                }
+            });
+
+            client.activate();
+
+            return () => {
+                if (stompClient) {
+                    stompClient.deactivate();
+                }
+            };
+        }
+    }, [roomId, stompClient]);
 
     const handleSendMessage = () => {
-        if (newMessage.trim()) {
+        if (newMessage.trim() && stompClient) {
             const message = {
-                userId,
-                friendId: selectedFriendId,
-                message: newMessage
+                roomId: roomId,
+                nickname: nickname,
+                message: newMessage,
             };
 
+            stompClient.publish({
+                destination: '/pub/messages',
+                body: JSON.stringify(message),
+            });
+
             setNewMessage('');
-            setMessages(prevMessages => [...prevMessages, { ...message, sender: '나' }]);
         }
     };
 
