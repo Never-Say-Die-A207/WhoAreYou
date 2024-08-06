@@ -1,16 +1,24 @@
 /* 공통 네비게이션 스타일 */
 .navbar {
-    padding: 0.8rem 1.5rem;
+    /* padding: 0.8rem 1.5rem; */
     background-color: rgb(170, 77, 203);
     transition: background-color 0.3s;
+    /* height: 60px; */
+    padding: 10px !important;
   }
   
   .navbar:hover {
     background-color: rgb(150, 60, 180);
   }
   
+#navbarNav {
+  justify-content: space-between;
+}
+
+
+
   .navbar-brand {
-    margin-right: 2rem;
+    margin-right: 4rem !important;
     color: white !important;
     font-family: 'Arial', sans-serif;
     font-weight: bold;
@@ -25,17 +33,21 @@
   .navbar-nav .nav-link {
     margin-right: 1rem;
     font-size: 1.2rem;
+    font-weight: 550;
     color: white !important;
     transition: color 0.3s, transform 0.3s;
+    padding-right: 8px !important;
+    padding-top: 7px !important;
   }
   
   .navbar-nav .nav-link:hover {
     color: #ddd !important;
-    transform: scale(1.1);
+    transform: scale(1) !important;
   }
   
   .navbar-toggler {
     border-color: rgba(255, 255, 255, 0.5);
+    border: white solid 1px !important; 
   }
   
   .navbar-toggler-icon {
@@ -45,4 +57,15 @@
   .shadow-sm {
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   }
+
+
+  #nav-signup {
+    margin-right: 0px !important;
+  }
   
+
+  @media (max-width: 992px) {
+    #nav-signup {
+      margin-right: 16px !important;
+    }
+  }
