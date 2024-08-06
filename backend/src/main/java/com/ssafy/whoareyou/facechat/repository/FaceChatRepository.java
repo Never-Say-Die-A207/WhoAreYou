@@ -97,11 +97,11 @@ public class FaceChatRepository {
                 "where fc." + myGender + " is null " +
                 "and fc." + yourGender + " not in " +
                 "(select h." + yourGender + " from History h " +
-                "where h." + myGender + " =:user)" +
+                "where h." + myGender + " =:user) " +
                 "order by fc.createdAt";
 
             return Optional.of(em.createQuery(queryString, FaceChat.class)
-                    .setParameter("timeLimit", timeLimit)
+//                    .setParameter("timeLimit", timeLimit)
                     .setParameter("user", user)
                     .getResultList());
     }
