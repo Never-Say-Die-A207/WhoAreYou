@@ -5,12 +5,14 @@ const Logout = ({ onLogout }) => {
     const navigate = useNavigate();
     
     const onClick = async () => {
+        // 로컬 스토리지 정보 삭제
         localStorage.clear();
         
-        // onLogout 콜백 호출
+        // 상위 컴포넌트에 onLogout 콜백 호출
         onLogout();
         
-        window.location.reload();
+        // 홈 페이지 리디렉션
+        navigate('/');
     };
 
     return (

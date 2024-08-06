@@ -4,6 +4,7 @@ import Logout from './Logout';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
 import mainimg from '../assets/mainimg.jpg';
+import Navbar from './Navbar'; // Navbar 컴포넌트 import
 
 const Home = () => {
     const [loginModal, setLoginModal] = useState(false);
@@ -42,13 +43,13 @@ const Home = () => {
         navigate('/mypage');
     };
 
-    // 회원가입 페이지로 이동하는 함수 추가
     const goToSignup = () => {
         navigate('/signup');
     };
 
     return (
         <div className='login-page'>
+            <Navbar userId={userId} onLogout={onLogout} />
             <div style={{ display: 'flex', height: '100vh', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                 <div className='layout-aside'>
                     <div className='layout-body login-page-view' data-lang='ko-KO'>
@@ -70,8 +71,6 @@ const Home = () => {
                         <div>
                             <h2 style={{ fontSize: '2rem', marginBottom:'2rem', marginTop:'1rem', fontWeight:'500' }}>로그인</h2>
                             <Login onLoginSuccess={onLoginSuccess} />
-
-                            {/* 회원가입 버튼 추가 */}
                             <div className='mgt-sm'>
                                 <div style={{ paddingTop: '30px' }}>
                                     <button
@@ -81,7 +80,6 @@ const Home = () => {
                                             backgroundColor: '#aa4dcb',
                                             fontSize: '1.2rem',
                                             width: '50%',
-                                            // height: '50px',
                                             border: 'none',
                                             borderRadius: '5px',
                                             textAlign: 'center',
@@ -90,12 +88,11 @@ const Home = () => {
                                         }}
                                         onMouseOver={(e) => e.target.style.backgroundColor = 'rgb(150, 60, 180)'}
                                         onMouseOut={(e) => e.target.style.backgroundColor = '#aa4dcb'}
-                                        onClick={goToSignup} // 회원가입 함수 호출
+                                        onClick={goToSignup}
                                     >
                                         회원가입
                                     </button>
                                 </div>
-                         
                             </div>
                         </div>
                     )}
