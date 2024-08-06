@@ -61,7 +61,7 @@ const Home = () => {
     return (
         <div className='login-page'>
             <Navbar />
-            <div style={{ display: 'flex', height: '100vh', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                 <div className='layout-aside'>
                     <img src={mainimg} alt="Main" className='mainpage-pic'/>
                 </div>

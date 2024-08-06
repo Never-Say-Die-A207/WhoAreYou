@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
-import Logout from './Logout';
 
 const Navbar = ({ userId, onLogout }) => {
+    const token = localStorage.getItem('token');
+
     return (
         <header>
-            <nav className="navbar navbar-expand-lg navbar-light shadow-sm">
+            <nav className="navbar navbar-expand-lg navbar-light shadow-sm" style={{ padding: 0 }}>
                 <div className="container-fluid">
                     <Link to='/' className="navbar-brand">WHO ARE YOU</Link>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,7 +23,8 @@ const Navbar = ({ userId, onLogout }) => {
                             </li>
                         </ul>
                     </div>
-                    
+
+                    {!token ? (
                         <Link to='/signup'>
                             <button
                                 style={{
@@ -43,7 +45,11 @@ const Navbar = ({ userId, onLogout }) => {
                                 회원가입
                             </button>
                         </Link>
-       
+                    ) : (
+                        <p>
+                            방인원할까?
+                        </p>
+                    )}
                 </div>
             </nav>
         </header>

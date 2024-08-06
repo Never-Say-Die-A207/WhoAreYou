@@ -5,6 +5,9 @@ import MyInfo from './MyInfo';
 import api from '../api/api';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
+import Navbar from './Navbar';
+
+
 
 Modal.setAppElement('#root');
 
@@ -133,75 +136,79 @@ const Mypage = () => {
     const isFriendSelected = (friendId) => selectedFriendId === friendId;
 
     return (
-        <div style={styles.container}>
-            <div style={styles.friendSection}>
-                <button
-                    onClick={openModal}
-                    style={isHovered ? styles.infoButtonHovered : styles.infoButton}
-                    onMouseEnter={() => setIsHovered(true)}
-                    onMouseLeave={() => setIsHovered(false)}
-                >
-                    내정보
-                </button>
-                <div style={styles.friendList}>
-                    {friends.length === 0 ? (
-                        <div style={styles.noFriendsMessage}>
-                            친구가 없습니다. 친구를 추가하세요!
-                        </div>
-                    ) : (
-                        <ul style={styles.friendListItems}>
-                            {friends.map(friend => (
-                                <li
-                                    key={friend.id}
-                                    style={isFriendSelected(friend.id) ? styles.selectedFriendListItem : styles.friendListItem}
-                                    onClick={() => handleFriendClick(friend.id, friend.nickname)}
-                                >
-                                    {friend.nickname}
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </div>
-            </div>
-            <div style={styles.chatArea}>
-                {selectedFriendId ? (
-                    <>
-                        {messages.length === 0 ? (
-                            <div style={styles.noMessagesMessage}>
-                                대화 내용이 없습니다. 먼저 채팅을 시작하세요!
+        <div style={{ height: '100vh' }}>
+            <Navbar />
+            <div style={styles.container}>
+                <div style={styles.friendSection}>
+                    <button
+                        onClick={openModal}
+                        style={isHovered ? styles.infoButtonHovered : styles.infoButton}
+                        onMouseEnter={() => setIsHovered(true)}
+                        onMouseLeave={() => setIsHovered(false)}
+                    >
+                        내정보
+                    </button>
+                    <div style={styles.friendList}>
+                        {friends.length === 0 ? (
+                            <div style={styles.noFriendsMessage}>
+                                친구가 없습니다. 친구를 추가하세요!
                             </div>
                         ) : (
-                            <MessageList messages={messages} userId={userId} />
+                            <ul style={styles.friendListItems}>
+                                {friends.map(friend => (
+                                    <li
+                                        key={friend.id}
+                                        style={isFriendSelected(friend.id) ? styles.selectedFriendListItem : styles.friendListItem}
+                                        onClick={() => handleFriendClick(friend.id, friend.nickname)}
+                                    >
+                                        {friend.nickname}
+                                    </li>
+                                ))}
+                            </ul>
                         )}
-                        <div style={styles.inputContainer}>
-                            <input
-                                type="text"
-                                value={newMessage}
-                                onChange={(e) => setNewMessage(e.target.value)}
-                                placeholder="메시지를 입력하세요..."
-                                style={styles.input}
-                                onKeyDown={handleKeyDown}
-                            />
-                            <button onClick={handleSendMessage} style={styles.sendButton}>
-                                보내기
-                            </button>
-                        </div>
-                    </>
-                ) : (
-                    <div style={styles.selectFriendMessage}>
-                        친구를 선택하세요.
                     </div>
-                )}
+                </div>
+                <div style={styles.chatArea}>
+                    {selectedFriendId ? (
+                        <>
+                            {messages.length === 0 ? (
+                                <div style={styles.noMessagesMessage}>
+                                    대화 내용이 없습니다. 먼저 채팅을 시작하세요!
+                                </div>
+                            ) : (
+                                <MessageList messages={messages} userId={userId} />
+                            )}
+                            <div style={styles.inputContainer}>
+                                <input
+                                    type="text"
+                                    value={newMessage}
+                                    onChange={(e) => setNewMessage(e.target.value)}
+                                    placeholder="메시지를 입력하세요..."
+                                    style={styles.input}
+                                    onKeyDown={handleKeyDown}
+                                />
+                                <button onClick={handleSendMessage} style={styles.sendButton}>
+                                    보내기
+                                </button>
+                            </div>
+                        </>
+                    ) : (
+                        <div style={styles.selectFriendMessage}>
+                            친구를 선택하세요.
+                        </div>
+                    )}
+                </div>
+                <Modal
+                    isOpen={modalIsOpen}
+                    onRequestClose={closeModal}
+                    contentLabel="My Info Modal"
+                    className="my-modal"
+                    overlayClassName="my-overlay"
+                >
+                    <MyInfo onClose={closeModal} />
+                </Modal>
             </div>
-            <Modal
-                isOpen={modalIsOpen}
-                onRequestClose={closeModal}
-                contentLabel="My Info Modal"
-                className="my-modal"
-                overlayClassName="my-overlay"
-            >
-                <MyInfo onClose={closeModal} />
-            </Modal>
+
         </div>
     );
 };
