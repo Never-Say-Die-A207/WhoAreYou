@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 
 const MessageList = ({ messages, userId }) => {
     const endOfMessagesRef = useRef(null);
+    const nickname = localStorage.getItem('nickname');
 
     useEffect(() => {
         endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -14,11 +15,10 @@ const MessageList = ({ messages, userId }) => {
                     key={index}
                     style={{
                         ...styles.message,
-                        alignSelf: message.senderId === userId ? 'flex-end' : 'flex-start',
-                        backgroundColor: message.senderId === userId ? '#dcf8c6' : '#fff',
+                        alignSelf: message.sender === nickname ? 'flex-end' : 'flex-start',
+                        backgroundColor: message.sender === nickname ? '#dcf8c6' : '#fff',
                     }}
                 >
-                    {message.senderId !== userId && <div style={styles.sender}>{message.sender}</div>}
                     <div style={styles.text}>{message.message}</div>
                     <div style={styles.time}>{message.time}</div>
                 </div>
