@@ -22,6 +22,7 @@ const Navbar = ({ userId, onLogout }) => {
                             <li className="nav-item">
                                 <Link to='/mypage' className='nav-link'>마이페이지</Link>
                             </li>
+                            
                         </ul>
                         </div>
                         <div>
