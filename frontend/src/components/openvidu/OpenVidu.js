@@ -276,17 +276,32 @@ function OpenVidu() {
                     setLandmarks(landmarks);
                 }
             });
-
-            const camera = new cam.Camera(videoPreviewRef.current, {
-                onFrame: async () => {
-                    if (videoPreviewRef.current) {
-                        await faceMesh.send({ image: videoPreviewRef.current });
-                    }
-                },
-                width: 1280,
-                height: 720,
-            });
-            camera.start();
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if (isMobile) {
+                // mobile
+                const camera = new cam.Camera(videoPreviewRef.current, {
+                    onFrame: async () => {
+                        if (videoPreviewRef.current) {
+                            await faceMesh.send({ image: videoPreviewRef.current });
+                        }
+                    },
+                    width: 720,
+                    height: 1280,
+                });
+                camera.start();
+              } else {
+                const camera = new cam.Camera(videoPreviewRef.current, {
+                    onFrame: async () => {
+                        if (videoPreviewRef.current) {
+                            await faceMesh.send({ image: videoPreviewRef.current });
+                        }
+                    },
+                    width: 1280,
+                    height: 720,
+                });
+                camera.start();
+              }
+            
             // videoPreviewRef.current = camera
         }
     }, [previewStream, videoPreviewRef]);  // videoPreviewRef도 의존성 배열에 추가
