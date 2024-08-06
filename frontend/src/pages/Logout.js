@@ -10,7 +10,7 @@ const Logout = ({ onLogout }) => {
         // onLogout 콜백 호출
         onLogout();
         
-        navigate('/');
+        window.location.reload();
     };
 
     return (

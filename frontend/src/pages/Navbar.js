@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
+import Logout from './Logout';
+
 
 
 const Navbar = () => {
+    const [userId, setUserId] = useState(null);
+    const onLogout = () => {
+        
+    };
 
   return (
     <header>
@@ -29,6 +35,9 @@ const Navbar = () => {
               </li>
             </ul>
           </div>
+          <button type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <Logout onLogout={onLogout}/>
+          </button>
         </div>
       </nav>
     </header>
