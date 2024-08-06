@@ -41,14 +41,15 @@ const Login = ({ onLoginSuccess }) => {
             const userId = decodedToken.sub;
 
             localStorage.setItem('userId', userId);
+            localStorage.setItem('token', token);
             
-            onLoginSuccess(userId);
+            navigate('/matching');
         } catch (error) {
             console.error('Login error:', error);
         } finally {
             const response = await api.get(`/user/${localStorage.getItem('userId')}`);
             localStorage.setItem('nickname', response.data['nickname']);
-            navigate('/');
+            navigate('/matching');
         }
     };
 

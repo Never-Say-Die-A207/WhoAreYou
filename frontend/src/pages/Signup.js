@@ -4,6 +4,7 @@ import api from '../api/api';
 import './Signup.css';
 import './Modal.css'; // 추가된 스타일 파일 가져오기
 import Agree from './Agree';
+import Navbar from './Navbar';
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -133,6 +134,7 @@ const Signup = () => {
 
     return (
         <div className="login-page">
+            <Navbar />
             <div className="layout-body login-page-view" data-lang="ko-KO">
                 <div className="signup-container">
                     <h1 className="signup-title">회원가입</h1>
@@ -144,7 +146,7 @@ const Signup = () => {
                                         <div className="zm-form-item__content">
                                             <div className={`zm-input zm-input--xLarge ${email ? '' : 'is-empty'} zm-input--suffix zm-input--show-label`} style={{ display: 'flex', alignItems: 'center' }}>
                                                 <div className='email_input'>
-                                                    <input type="email" autoComplete="email" name="email" placeholder="이메일 주소" aria-required="true" aria-label="이메일 주소" id="email" maxLength="99" className="zm-input__inner email_input_input" value={email} onChange={onChange} />
+                                                    <input type="email" autoComplete="email" name="email" aria-required="true" aria-label="이메일 주소" id="email" maxLength="99" className="zm-input__inner email_input_input" value={email} onChange={onChange} />
                                                     {!email && (
                                                         <label htmlFor="email" className="zm-input__label email_label" style={{ transform: 'translate(-50%, -50%)' }}>
                                                             이메일 주소
@@ -161,7 +163,7 @@ const Signup = () => {
                                         <div className="zm-form-item__content">
                                             <div className={`zm-input zm-input--xLarge ${password ? '' : 'is-empty'} zm-input--suffix zm-input--show-label`} style={{ display: 'flex', alignItems: 'center' }}>
                                                 <div className='password_div'>
-                                                    <input type="password" autoComplete="password" name="password" placeholder="비밀번호" aria-required="true" aria-label="비밀번호" id="password" maxLength="99" className="zm-input__inner password_input" value={password} onChange={onChange} />
+                                                    <input type="password" autoComplete="password" name="password" aria-required="true" aria-label="비밀번호" id="password" maxLength="99" className="zm-input__inner password_input" value={password} onChange={onChange} />
                                                     {!password && (
                                                         <label htmlFor="password" className="zm-input__label password_label" style={{ transform: 'translate(-50%, -50%)' }}>
                                                             비밀번호
@@ -175,7 +177,7 @@ const Signup = () => {
                                         <div className="zm-form-item__content">
                                             <div className={`zm-input zm-input--xLarge ${password ? '' : 'is-empty'} zm-input--suffix zm-input--show-label`} style={{ display: 'flex', alignItems: 'center' }}>
                                                 <div className='password_div'>
-                                                    <input type="password" autoComplete="password" name="password" placeholder="비밀번호확인" aria-required="true" aria-label="비밀번호확인" id="checkpassword" maxLength="99" className="zm-input__inner password_input" value={checkpassword} onChange={onCheck} />
+                                                    <input type="password" autoComplete="password" name="password" aria-required="true" aria-label="비밀번호확인" id="checkpassword" maxLength="99" className="zm-input__inner password_input" value={checkpassword} onChange={onCheck} />
                                                     {!checkpassword && (
                                                         <label htmlFor="checkpassword" className="zm-input__label password_label" style={{ transform: 'translate(-50%, -50%)' }}>
                                                             비밀번호확인
@@ -189,7 +191,7 @@ const Signup = () => {
                                         <div className="zm-form-item__content">
                                             <div className={`zm-input zm-input--xLarge ${nickname ? '' : 'is-empty'} zm-input--suffix zm-input--show-label`} style={{ display: 'flex', alignItems: 'center' }}>
                                                 <div className='email_input'>
-                                                    <input type="text" autoComplete="text" name="nickname" placeholder="닉네임" aria-required="true" aria-label="닉네임" id="nickname" maxLength="99" className="zm-input__inner email_input_input" value={nickname} onChange={onChange} />
+                                                    <input type="text" autoComplete="text" name="nickname" aria-required="true" aria-label="닉네임" id="nickname" maxLength="99" className="zm-input__inner email_input_input" value={nickname} onChange={onChange} />
                                                     {!nickname && (
                                                         <label htmlFor="nickname" className="zm-input__label email_label" style={{ transform: 'translate(-50%, -50%)' }}>
                                                             닉네임
@@ -206,7 +208,7 @@ const Signup = () => {
                                         <div className="zm-form-item__content">
                                             <div className={`zm-input zm-input--xLarge ${nickname ? '' : 'is-empty'} zm-input--suffix zm-input--show-label`} style={{ display: 'flex', alignItems: 'center' }}>
                                                 <div className='email_input'>
-                                                    <input type="text" autoComplete="text" name="name" placeholder="이름" aria-required="true" aria-label="이름" id="name" maxLength="99" className="zm-input__inner email_input_input" value={name} onChange={onChange} />
+                                                    <input type="text" autoComplete="text" name="name" aria-required="true" aria-label="이름" id="name" maxLength="99" className="zm-input__inner email_input_input" value={name} onChange={onChange} />
                                                     {!name && (
                                                         <label htmlFor="name" className="zm-input__label email_label" style={{ transform: 'translate(-50%, -50%)' }}>
                                                             이름

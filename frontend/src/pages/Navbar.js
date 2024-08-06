@@ -22,8 +22,8 @@ const Navbar = ({ userId, onLogout }) => {
                             </li>
                         </ul>
                     </div>
-                    {!userId ? (
-                        <Link to='/'>
+                    
+                        <Link to='/signup'>
                             <button
                                 style={{
                                     cursor: 'pointer',
@@ -40,12 +40,10 @@ const Navbar = ({ userId, onLogout }) => {
                                 onMouseOver={(e) => e.target.style.backgroundColor = 'rgb(150, 60, 180)'}
                                 onMouseOut={(e) => e.target.style.backgroundColor = '#aa4dcb'}
                             >
-                                로그인
+                                회원가입
                             </button>
                         </Link>
-                    ) : (
-                        <Logout onLogout={onLogout} />
-                    )}
+       
                 </div>
             </nav>
         </header>
