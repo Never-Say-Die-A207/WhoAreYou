@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
     LocalVideoTrack,
     RemoteParticipant,
@@ -109,10 +109,16 @@ function OpenVidu() {
 
 
     const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token');
+    const navigate = useNavigate();
 
     //매칭 시작 시간
 
     async function joinRoom() {
+        if (!token) {
+            alert('로그인을 해주세요.');
+            navigate('/');
+        }
         const room = new Room();
         setRoom(room);
 

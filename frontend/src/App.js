@@ -1,7 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import './App.css';
-import Navbar from './pages/Navbar';
 import Home from './pages/Home';
 import Signup from './pages/Signup';
 import Mypage from './pages/Mypage';
@@ -14,18 +13,9 @@ import PrivateRoute from './pages/PrivateRoute';
 function App() {
   return (
     <div className='App'>
-      {/* <Navbar /> */}
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/signup' element={<Signup />} />
-        <Route
-          path='/matching'
-          element={
-            <PrivateRoute>
-              <OpenVidu />
-            </PrivateRoute>
-          }
-        />
         <Route
           path='/mypage'
           element={
@@ -34,6 +24,7 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route path='/matching' element={<OpenVidu />}/>
         <Route path="/" element={<Naver />} />
         <Route path="/auth/oauth-response/:token/:expiry" element={<Naver />} />
       </Routes>
