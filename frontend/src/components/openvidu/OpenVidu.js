@@ -98,7 +98,7 @@ function OpenVidu() {
 
 
     // 타이머
-    const [timeLeft, setTimeLeft] = useState(10); // 3분 = 180초로 변경
+    const [timeLeft, setTimeLeft] = useState(180); // 3분 = 180초로 변경
     const timerRef = useRef(null);
     const startTimeRef = useRef(null);
 
@@ -332,13 +332,13 @@ function OpenVidu() {
 
     const startTimer = (ri, pi) => {
         startTimeRef.current = Date.now();
-        setTimeLeft(10); // 타이머 초기화 - 3분(180초)로 변경
+        setTimeLeft(180); // 타이머 초기화 - 3분(180초)로 변경
 
         const updateTimer = () => {
             const elapsedTime = Math.floor((Date.now() - startTimeRef.current) / 1000);
-            setTimeLeft(10 - elapsedTime); // 3분(180초)으로 변경
+            setTimeLeft(180 - elapsedTime); // 3분(180초)으로 변경
 
-            if (elapsedTime < 10) { // 3분(180초)으로 변경
+            if (elapsedTime < 180) { // 3분(180초)으로 변경
                 timerRef.current = requestAnimationFrame(updateTimer);
             } else {
                 handleTimerEnd(ri, pi); // 타이머가 끝났을 때 실행할 함수 호출
@@ -378,6 +378,7 @@ function OpenVidu() {
             .catch(error => {
                 console.log('handleTimerEnd error:', error);
             });
+            leaveRoom();
     };
 
 

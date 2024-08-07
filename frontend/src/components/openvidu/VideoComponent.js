@@ -60,9 +60,9 @@ function VideoComponent({ track, participantIdentity, setExpressionData, local =
 
   return (
     <div id={"camera-" + participantIdentity} className="video-container">
-      <div className="participant-data">
+      {/* <div className="participant-data">
         <p>{participantIdentity + (local ? " (You)" : "")}</p>
-      </div>
+      </div> */}
       <video ref={videoElement2} id={track.sid} style={{ display: 'none' }} />
       {/* <RedFoxRemote landmarks={landmarks} videoElement={videoElement2} /> */}
       {maskRemote === 'RedFox' && <RedFoxRemote landmarks={landmarks} videoElement={videoElement2} />}

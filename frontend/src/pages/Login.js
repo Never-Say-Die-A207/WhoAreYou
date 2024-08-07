@@ -3,6 +3,8 @@ import api from '../api/api';
 import { useNavigate } from 'react-router-dom';
 import Naver from './Naver';
 import { jwtDecode } from 'jwt-decode';
+import './Modal.css';
+
 
 const Login = ({ onLoginSuccess }) => {
     const navigate = useNavigate();
@@ -11,6 +13,8 @@ const Login = ({ onLoginSuccess }) => {
         password: '',
     });
 
+    const [modalMessage, setModalMessage] = useState('');
+    const [showModal, setShowModal] = useState(false);
     const { email, password } = form;
 
     const onChange = (e) => {
@@ -35,26 +39,33 @@ const Login = ({ onLoginSuccess }) => {
             const token = response.data.token;
 
             // 토큰 디코딩
-            const decodedToken = jwtDecode(token); // 이 부분이 named import로 되어 있습니다.
+            const decodedToken = jwtDecode(token);
 
             // userId 추출
             const userId = decodedToken.sub;
 
             localStorage.setItem('userId', userId);
             localStorage.setItem('token', token);
-            
+
+            // 사용자 정보를 가져오기
+            const userResponse = await api.get(`/user/${userId}`);
+            localStorage.setItem('nickname', userResponse.data['nickname']);
+
             navigate('/matching');
         } catch (error) {
             console.error('Login error:', error);
-        } finally {
-            const response = await api.get(`/user/${localStorage.getItem('userId')}`);
-            localStorage.setItem('nickname', response.data['nickname']);
-            navigate('/matching');
+            setModalMessage('아이디와 비밀번호를 확인해 주세요.');
+            setShowModal(true); // 로그인 실패 시 모달을 표시
         }
     };
 
+
     const inputStyle = {
         paddingLeft: '10px',
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
     };
 
     return (
@@ -81,7 +92,7 @@ const Login = ({ onLoginSuccess }) => {
                                             onChange={onChange}
                                             style={inputStyle}
                                         />
-                                     
+
                                         <span className='zm-input__suffix'>
                                             <span className='zm-input__suffix-inner'></span>
                                         </span>
@@ -105,7 +116,7 @@ const Login = ({ onLoginSuccess }) => {
                                             onChange={onChange}
                                             style={inputStyle}
                                         />
-                                      
+
                                         <span className='zm-input__suffix'>
                                             <span className='zm-input__suffix-inner'>
                                                 <button type='button' aria-label='show password' className='zm-input__password-btn zm-input__icon zm-icon-eyes zm-input__clear'></button>
@@ -158,6 +169,20 @@ const Login = ({ onLoginSuccess }) => {
 
                 </div>
             </div>
+            {showModal && (
+                <div className="my-overlay">
+                    <div className="my-modal">
+                        <h2 style={{ color: 'white', marginBottom: '20px' }}><strong>로그인 오류</strong></h2>
+                        <div className="my-info-content">
+                            <div className="info-box" style={{ justifyContent: 'center' }}>
+                                <p>{modalMessage}</p>
+                            </div>
+                        </div>
+                        <button className="close" onClick={closeModal}>확인</button>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 };
