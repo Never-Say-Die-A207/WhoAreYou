@@ -71,7 +71,7 @@
 }
 
 /* 닫기 버튼 스타일 */
-.my-info-modal .close, .modal-content .close {
+.my-info-modal .close, .modal-content .close, .my-modal .close {
   margin-top: 20px;
   padding: 10px 20px;
   border-radius: 5px;
@@ -84,7 +84,7 @@
   align-self: center; /* 가운데 정렬 */
 }
 
-.my-info-modal .close:hover, .modal-content .close:hover {
+.my-info-modal .close:hover, .modal-content .close:hover, .my-modal .close:hover {
   background-color: rgb(130, 50, 160); /* 호버 시 색상 */
   color: #fff; /* 흰색 글씨 유지 */
 }

@@ -1,7 +1,8 @@
 import React, { useRef, useEffect } from 'react';
 
-const MessageList = ({ messages }) => {
+const MessageList = ({ messages, userId }) => {
     const endOfMessagesRef = useRef(null);
+    const nickname = localStorage.getItem('nickname');
 
     useEffect(() => {
         endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -9,17 +10,32 @@ const MessageList = ({ messages }) => {
 
     return (
         <div style={styles.messageList}>
-            {messages.map((message) => (
+            {messages.map((message, index) => (
                 <div
-                    key={message.id}
+                    key={index}
                     style={{
-                        ...styles.message,
-                        alignSelf: message.sender === '나' ? 'flex-end' : 'flex-start',
-                        backgroundColor: message.sender === '나' ? '#dcf8c6' : '#fff',
+                        ...styles.messageWrapper,
+                        alignSelf: message.sender === nickname ? 'flex-end' : 'flex-start',
                     }}
                 >
-                    <div style={styles.text}>{message.text}</div>
-                    <div style={styles.time}>{message.time}</div>
+                    {message.sender !== nickname && <div style={styles.sender}>{message.sender}</div>}
+                    <div
+                        style={{
+                            ...styles.message,
+                            backgroundColor: message.sender === nickname ? '#dcf8c6' : '#fff',
+                            alignSelf: message.sender === nickname ? 'flex-end' : 'flex-start',
+                        }}
+                    >
+                        <div style={styles.text}>{message.message}</div>
+                        <div
+                            style={{
+                                ...styles.time,
+                                textAlign: message.sender === nickname ? 'right' : 'left',
+                            }}
+                        >
+                            {message.time}
+                        </div>
+                    </div>
                 </div>
             ))}
             <div ref={endOfMessagesRef} />
@@ -38,15 +54,26 @@ const styles = {
         flexDirection: 'column',
         overflowY: 'auto',
     },
-    message: {
+    messageWrapper: {
         margin: '10px 0',
+        display: 'flex',
+        flexDirection: 'column',
+        maxWidth: '60%',
+    },
+    message: {
         padding: '10px',
         borderRadius: '10px',
-        maxWidth: '60%',
         boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
         display: 'flex',
         flexDirection: 'column',
         transition: 'background-color 0.3s ease',
+    },
+    sender: {
+        fontSize: '14px',
+        fontWeight: 'bold',
+        marginBottom: '5px',
+        textAlign: 'left',
+        color: '#b0b0b0',
     },
     text: {
         marginBottom: '5px',
@@ -54,7 +81,6 @@ const styles = {
     time: {
         fontSize: '12px',
         color: '#aaa',
-        textAlign: 'right',
     },
 };
 

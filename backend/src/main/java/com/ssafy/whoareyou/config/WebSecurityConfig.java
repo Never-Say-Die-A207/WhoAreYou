@@ -53,7 +53,7 @@ public class WebSecurityConfig {
                 )
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/chat/**", "/chat-rooms/**").permitAll()
-                        .requestMatchers("/", "/**", "/api/v1/auth/**", "/oauth2/**").permitAll()
+                        .requestMatchers("/", "/**", "/api/**", "/oauth2/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
@@ -77,6 +77,8 @@ public class WebSecurityConfig {
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.addAllowedOrigin("http://localhost:3000");
         corsConfiguration.addAllowedOrigin("http://3.36.120.21:3000");
+        corsConfiguration.addAllowedOrigin("https://i11a207.p.ssafy.io");
+        corsConfiguration.addAllowedOrigin("http://i11a207.p.ssafy.io");
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
 

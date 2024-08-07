@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -57,7 +58,6 @@ public class AuthController {
     @GetMapping("/user/{id}")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable int id){
 
-        System.out.println("아무말");
         try {
 
             UserResponseDto userResponseDto = authService.getUserById(id);
