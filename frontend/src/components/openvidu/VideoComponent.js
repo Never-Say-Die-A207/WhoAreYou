@@ -5,6 +5,9 @@ import RedFoxRemote from "./RedFoxRemote";
 import FaceRecognition from './FaceRecognition';
 import './VideoComponent.css';
 import SpiderManRemote from './SpiderManRemote';
+import SpiderManBlackRemote from './SpiderManBlackRemote';
+import SquidRemote from './SquidRemote';
+import JokerRemote from './JokerRemote';
 
 function VideoComponent({ track, participantIdentity, setExpressionData, local = false, maskRemote }) {
   const videoElement2 = useRef(null);
@@ -67,9 +70,9 @@ function VideoComponent({ track, participantIdentity, setExpressionData, local =
       {/* <RedFoxRemote landmarks={landmarks} videoElement={videoElement2} /> */}
       {maskRemote === 'RedFox' && <RedFoxRemote landmarks={landmarks} videoElement={videoElement2} />}
       {maskRemote === 'SpiderMan' && <SpiderManRemote landmarks={landmarks} videoElement={videoElement2} />}
-      {maskRemote === 'SpiderManBlack' && <SpiderManRemote landmarks={landmarks} videoElement={videoElement2} />}
-      {maskRemote === 'Squid' && <SpiderManRemote landmarks={landmarks} videoElement={videoElement2} />}
-      {maskRemote === 'Joker' && <SpiderManRemote landmarks={landmarks} videoElement={videoElement2} />}
+      {maskRemote === 'SpiderManBlack' && <SpiderManBlackRemote landmarks={landmarks} videoElement={videoElement2} />}
+      {maskRemote === 'Squid' && <SquidRemote landmarks={landmarks} videoElement={videoElement2} />}
+      {maskRemote === 'Joker' && <JokerRemote landmarks={landmarks} videoElement={videoElement2} />}
       <FaceRecognition videoElement={videoElement2} setExpressionData={setExpressionData} />
     </div>
   );
