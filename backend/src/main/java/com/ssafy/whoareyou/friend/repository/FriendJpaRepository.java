@@ -12,11 +12,11 @@ import java.util.Optional;
 
 @Repository
 public interface FriendJpaRepository extends JpaRepository<Friend, Integer> {
-    @Query("select new FriendUserDto(f.female.id, f.female.nickname) from Friend f " +
+    @Query("select new com.ssafy.whoareyou.friend.dto.FriendUserDto(f.female.id, f.female.nickname) from Friend f " +
             "where f.male.id = :maleId")
     List<FriendUserDto> findFemaleByMaleId(@Param("maleId") int maleId);
 
-    @Query("select new FriendUserDto(f.male.id, f.male.nickname) from Friend f " +
+    @Query("select new com.ssafy.whoareyou.friend.dto.FriendUserDto(f.male.id, f.male.nickname) from Friend f " +
             "where f.female.id = :femaleId")
     List<FriendUserDto> findMaleByFemaleId(@Param("femaleId") int femaleId);
 
