@@ -7,7 +7,6 @@ const api = axios.create({
 
     // 서버
     // baseURL: 'http://3.36.120.21:4040/api',
-    // baseURL: 'https://3.36.120.21/api',
     baseURL: 'https://i11a207.p.ssafy.io/api',
     headers: {
         'Content-Type': 'application/json',
