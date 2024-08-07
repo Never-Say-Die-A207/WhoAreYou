@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/api';
 import './Signup.css';
-import './Modal.css'; // 추가된 스타일 파일 가져오기
+import './Modal.css';
 import Agree from './Agree';
 import Navbar from './Navbar';
 
@@ -147,7 +147,7 @@ const Signup = () => {
                                             <div className={`zm-input zm-input--xLarge ${email ? '' : 'is-empty'} zm-input--suffix zm-input--show-label`} style={{ display: 'flex', alignItems: 'center' }}>
                                                 <div className='email_input'>
                                                     <input type="email" placeholder="이메일 주소" autoComplete="email" name="email" aria-required="true" aria-label="이메일 주소" id="email" maxLength="99" className="zm-input__inner email_input_input" value={email} onChange={onChange} />
-                                                  
+
                                                 </div>
                                                 <button className='email_button' onClick={checkEmail}>
                                                     {emailCheck}
@@ -160,7 +160,7 @@ const Signup = () => {
                                             <div className={`zm-input zm-input--xLarge ${password ? '' : 'is-empty'} zm-input--suffix zm-input--show-label`} style={{ display: 'flex', alignItems: 'center' }}>
                                                 <div className='password_div'>
                                                     <input type="password" placeholder="비밀번호" autoComplete="password" name="password" aria-required="true" aria-label="비밀번호" id="password" maxLength="99" className="zm-input__inner password_input" value={password} onChange={onChange} />
-                                               
+
                                                 </div>
                                             </div>
                                         </div>
@@ -170,7 +170,7 @@ const Signup = () => {
                                             <div className={`zm-input zm-input--xLarge ${password ? '' : 'is-empty'} zm-input--suffix zm-input--show-label`} style={{ display: 'flex', alignItems: 'center' }}>
                                                 <div className='password_div'>
                                                     <input type="password" placeholder="비밀번호 확인" autoComplete="password" name="password" aria-required="true" aria-label="비밀번호확인" id="checkpassword" maxLength="99" className="zm-input__inner password_input" value={checkpassword} onChange={onCheck} />
-                                              
+
                                                 </div>
                                             </div>
                                         </div>
@@ -180,7 +180,7 @@ const Signup = () => {
                                             <div className={`zm-input zm-input--xLarge ${nickname ? '' : 'is-empty'} zm-input--suffix zm-input--show-label`} style={{ display: 'flex', alignItems: 'center' }}>
                                                 <div className='email_input'>
                                                     <input type="text" placeholder="닉네임" autoComplete="text" name="nickname" aria-required="true" aria-label="닉네임" id="nickname" maxLength="99" className="zm-input__inner email_input_input" value={nickname} onChange={onChange} />
-                                                  
+
                                                 </div>
                                                 <button className='email_button' onClick={checkNickname}>
                                                     {nicknameCheck}
@@ -193,12 +193,12 @@ const Signup = () => {
                                             <div className={`zm-input zm-input--xLarge ${nickname ? '' : 'is-empty'} zm-input--suffix zm-input--show-label`} style={{ display: 'flex', alignItems: 'center' }}>
                                                 <div className='email_input'>
                                                     <input type="text" placeholder="이름" autoComplete="text" name="name" aria-required="true" aria-label="이름" id="name" maxLength="99" className="zm-input__inner email_input_input" value={name} onChange={onChange} />
-                                                  
+
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '50px', marginTop: '20px', fontSize:'1.3rem', fontWeight:'600', marginBottom:'1.5rem' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '50px', marginTop: '20px', fontSize: '1.3rem', fontWeight: '600', marginBottom: '1.5rem' }}>
                                         <div className="form-check">
                                             <input className="form-check-input" type="radio" name="gender" id="male" value="male" checked={gender === 'male'} onChange={onRadioChange} />
                                             <label className="form-check-label" htmlFor="male">
@@ -226,10 +226,14 @@ const Signup = () => {
                 </div>
             </div>
             {showModal && (
-                <div className="my-overlay"> {/* 오버레이 스타일 적용 */}
-                    <div className="my-modal"> {/* 모달 스타일 적용 */}
-                        <h2>회원가입 오류</h2>
-                        <p>{modalMessage}</p>
+                <div className="my-overlay">
+                    <div className="my-modal">
+                        <h2 style={{ color: 'white', marginBottom: '20px' }}><strong>회원가입 오류</strong></h2>
+                        <div className="my-info-content">
+                            <div className="info-box" style={{ justifyContent: 'center' }}>
+                                <p>{modalMessage}</p>
+                            </div>
+                        </div>
                         <button className="close" onClick={closeModal}>확인</button>
                     </div>
                 </div>
