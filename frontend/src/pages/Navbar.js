@@ -35,33 +35,6 @@ const Navbar = ({ userId, onLogout }) => {
                         </ul>}
                         </div>
                     </div>
-
-                    {/* {!token ? (
-                        <Link to='/signup'>
-                            <button
-                                style={{
-                                    cursor: 'pointer',
-                                    color: 'white',
-                                    backgroundColor: '#aa4dcb',
-                                    fontSize: '1.2rem',
-                                    width: '200px',
-                                    height: '50px',
-                                    border: 'none',
-                                    borderRadius: '5px',
-                                    textAlign: 'center',
-                                    fontWeight: '600'
-                                }}
-                                onMouseOver={(e) => e.target.style.backgroundColor = 'rgb(150, 60, 180)'}
-                                onMouseOut={(e) => e.target.style.backgroundColor = '#aa4dcb'}
-                            >
-                                회원가입
-                            </button>
-                        </Link>
-                    ) : (
-                        <p>
-                            방인원할까?
-                        </p>
-                    )} */}
                 </div>
             </nav>
         </header>
