@@ -205,7 +205,7 @@ function OpenVidu() {
                 console.log(body.info.startedAt);
                 console.log('partnerId:', body.info.partnerId)
                 console.log('roomId:', body.info.roomId)
-
+                startTimeRef.current = new Date(body.info.startedAt).getTime();
                 setLoading(false);
 
                 // 타이머 시작
@@ -331,7 +331,7 @@ function OpenVidu() {
 
 
     const startTimer = (ri, pi) => {
-        startTimeRef.current = Date.now();
+        // startTimeRef.current = Date.now();
         setTimeLeft(180); // 타이머 초기화 - 3분(180초)로 변경
 
         const updateTimer = () => {
