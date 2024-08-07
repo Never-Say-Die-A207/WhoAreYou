@@ -73,7 +73,7 @@ const Mypage = () => {
 
     useEffect(() => {
         if (roomId && !stompClient) {
-            const socket = new SockJS('http://3.36.120.21:4040/api/chat');
+            const socket = new SockJS('https://i11a207.p.ssafy.io/api/chat');
             const client = new Client({
                 webSocketFactory: () => socket,
                 debug: function (str) {
