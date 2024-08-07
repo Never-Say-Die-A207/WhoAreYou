@@ -44,24 +44,11 @@ public abstract class User {
     @Column(columnDefinition = "integer default 0")
     private Integer successCount;
 
-//    @OneToOne(mappedBy = "male", fetch = FetchType.LAZY)
-//    private FaceChat faceChatAsMale;
-//
-//    @OneToOne(mappedBy = "female", fetch = FetchType.LAZY)
-//    private FaceChat faceChatAsFemale;
-//
-//    @OneToMany(mappedBy = "id")
-//    private List<History> recentFaceChats = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "user")
-//    private List<Friend> friends;
-
     public User(SignUpRequestDto dto){
         this.email = dto.getEmail();
         this.password = dto.getPassword();
         this.name = dto.getName();
         this.nickname = dto.getNickname();
-//        this.gender = dto.getGender();
         this.matchingCount = 0;
         this.successCount = 0;
         this.type = "general";
@@ -71,7 +58,6 @@ public abstract class User {
         this.email = email;
         this.name = name;
         this.nickname = nickname;
-//        this.gender = gender;
         this.matchingCount = 0;
         this.successCount = 0;
         this.type = type;

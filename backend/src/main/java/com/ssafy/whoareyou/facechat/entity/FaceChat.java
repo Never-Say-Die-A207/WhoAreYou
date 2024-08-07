@@ -56,7 +56,8 @@ public class FaceChat {
         if(isEmptyRoom)
             this.createdAt = LocalDateTime.now();
         else{
-            this.startedAt = LocalDateTime.now();
+            if(this.startedAt == null)
+                this.startedAt = LocalDateTime.now();
             updateMatchingCount();
         }
     }

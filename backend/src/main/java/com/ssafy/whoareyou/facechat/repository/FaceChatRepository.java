@@ -52,33 +52,6 @@ public class FaceChatRepository {
                 .getResultList().size();
     }
 
-
-//    public Optional<FaceChat> findAvailable(User user, String myGender) throws RuntimeException {
-//        String yourGender = myGender.equals("male") ? "female" : "male";
-//
-//        String queryString = "select fc from FaceChat fc " +
-//                "where fc." + myGender + " is null " +
-//                "and fc." + yourGender + " not in " +
-//                "(select h." + yourGender + " from History h " +
-//                "where h." + myGender + " =:user " +
-//                "and function('timestampdiff', MINUTE, h.enteredAt, function('now')) <= :timeLimit " +
-//                "union " +
-//                "select f." + yourGender + " from Friend f " +
-//                "where f." + myGender + " =:user) " +
-//                "order by fc.createdAt";
-//
-//        try{
-//            return Optional.of(em.createQuery(queryString, FaceChat.class)
-//                    .setParameter("timeLimit", timeLimit)
-//                    .setParameter("user", user)
-//                    .setFirstResult(0)
-//                    .setMaxResults(1)
-//                    .getSingleResult());
-//        } catch (NoResultException e) {
-//            return Optional.empty();
-//        }
-//    }
-
     public Optional<List<FaceChat>> findAvailable(User user, String myGender) throws RuntimeException {
         String yourGender = myGender.equals("male") ? "female" : "male";
 

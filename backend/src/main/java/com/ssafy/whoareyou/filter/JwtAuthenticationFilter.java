@@ -51,7 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 return;
             }
 
-            Optional<User> userEntity = userRepository.findById(Integer.parseInt(userId));
+            //Optional<User> userEntity = userRepository.findById(Integer.parseInt(userId));
             String role = "ROLE_USER";
 
             List<GrantedAuthority> authorities = new ArrayList<>();
