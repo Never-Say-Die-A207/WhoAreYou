@@ -205,21 +205,10 @@ function OpenVidu() {
                 console.log(body.info.startedAt);
                 console.log('partnerId:', body.info.partnerId);
                 console.log('roomId:', body.info.roomId);
-    
-                // Get the Korea Standard Time (KST)
-                const kstOffset = 9 * 60 * 60 * 1000; // 9 hours in milliseconds
-                const currentTimeKST = Date.now() + new Date().getTimezoneOffset() * 60 * 1000 + kstOffset;
-    
-                const startTimeKST = new Date(body.info.startedAt).getTime() + kstOffset;
-    
-                // Calculate elapsed time based on KST
-                const elapsedTime = Math.floor((currentTimeKST - startTimeKST) / 1000);
-                const timeLeft = 180 - elapsedTime; // 180 seconds countdown
-                setTimeLeft(timeLeft > 0 ? timeLeft : 0); // 초기 남은 시간 설정
-    
+                startTimeRef.current = new Date(body.info.startedAt).getTime(); // 시작 시간 설정
                 setLoading(false);
     
-                // Start timer based on KST
+                // 타이머 시작
                 startTimer(body.info.roomId, body.info.partnerId);
     
                 return body;
@@ -340,14 +329,21 @@ function OpenVidu() {
     }
 
 
-    // 타이머
+    // 타이머 시작 함수 수정
     const startTimer = (ri, pi) => {
-        const updateTimer = () => {
-            const currentTimeKST = Date.now() + new Date().getTimezoneOffset() * 60 * 1000 + 9 * 60 * 60 * 1000;
-            const newElapsedTime = Math.floor((currentTimeKST - startTimeRef.current) / 1000); // KST 기준 경과 시간
-            const newTimeLeft = 180 - newElapsedTime;
+        const currentTime = Date.now();
+        
+        // body.info.startedAt의 시간과 현재 시간의 차이를 계산
+        const elapsedTime = Math.floor((currentTime - startTimeRef.current) / 1000);
+        const timeLeft = 180 - elapsedTime; // 180초에서 경과된 시간을 빼서 남은 시간 계산
 
-            setTimeLeft(newTimeLeft > 0 ? newTimeLeft : 0);
+        setTimeLeft(timeLeft > 0 ? timeLeft : 0); // 남은 시간 설정 (음수를 방지)
+
+        const updateTimer = () => {
+            const newElapsedTime = Math.floor((Date.now() - startTimeRef.current) / 1000);
+            const newTimeLeft = 180 - newElapsedTime; // 다시 남은 시간 계산
+
+            setTimeLeft(newTimeLeft > 0 ? newTimeLeft : 0); // 음수 방지, 0으로 설정
 
             if (newTimeLeft > 0) {
                 timerRef.current = requestAnimationFrame(updateTimer);
