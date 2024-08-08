@@ -34,7 +34,6 @@ public abstract class User {
 //    @Column(nullable = false, length = 20)
 //    private String gender;
 
-
     @Column(length = 10)
     private String type; //"general", "kakao", "naver"
 
@@ -43,6 +42,9 @@ public abstract class User {
 
     @Column(columnDefinition = "integer default 0")
     private Integer successCount;
+
+    @Column(length = 255)
+    private String refreshToken;
 
     public User(SignUpRequestDto dto){
         this.email = dto.getEmail();
@@ -67,4 +69,8 @@ public abstract class User {
         matchingCount++;
     }
     public void increaseSuccessCount(){ successCount++; }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
 }

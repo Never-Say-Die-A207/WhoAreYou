@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 public class KafkaConumerService {
     private final SimpMessagingTemplate messagingTemplate;
 
-    @KafkaListener(topics = "chat-topic", groupId = "chat-group")
-    public void listen(int roomId, SendingMessage message){
-        messagingTemplate.convertAndSend("/sub/rooms/" + roomId, message);
-    }
+//    @KafkaListener(topics = "chat-topic", groupId = "chat-group")
+//    public void listen(int roomId, SendingMessage message){
+//        messagingTemplate.convertAndSend("/sub/rooms/" + roomId, message);
+//    }
 }

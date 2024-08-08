@@ -9,6 +9,8 @@ public interface ResponseCode {
     String DUPLICATE_NICKNAME = "DN";
 
     String SIGN_IN_FAIL = "SF";
+    String LOGOUT_FAIL = "LF";
+    String INVALID_REFRESH_TOKEN = "IRT";
 
     String DATABASE_ERROR = "DBE";
 }

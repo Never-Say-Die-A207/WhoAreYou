@@ -9,6 +9,8 @@ public interface ResponseMessage {
     String DUPLICATE_NICKNAME = "Duplicate Nickname.";
 
     String SIGN_IN_FAIL = "Login information mismatch.";
+    String LOGOUT_FAIL = "Logout failed.";
+    String INVALID_REFRESH_TOKEN = "Invalid refresh token.";
 
     String DATABASE_ERROR = "Database error.";
 }

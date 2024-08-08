@@ -1,15 +1,9 @@
 package com.ssafy.whoareyou.user.service.implement;
 
-import com.ssafy.whoareyou.user.dto.request.auth.EmailCheckRequestDto;
-import com.ssafy.whoareyou.user.dto.request.auth.NicknameCheckRequestDto;
-import com.ssafy.whoareyou.user.dto.request.auth.SignInRequestDto;
-import com.ssafy.whoareyou.user.dto.request.auth.SignUpRequestDto;
+import com.ssafy.whoareyou.user.dto.request.auth.*;
 import com.ssafy.whoareyou.user.dto.response.ResponseDto;
 import com.ssafy.whoareyou.user.dto.response.UserResponseDto;
-import com.ssafy.whoareyou.user.dto.response.auth.EmailCheckResponseDto;
-import com.ssafy.whoareyou.user.dto.response.auth.NicknameCheckResponseDto;
-import com.ssafy.whoareyou.user.dto.response.auth.SignInResponseDto;
-import com.ssafy.whoareyou.user.dto.response.auth.SignUpResponseDto;
+import com.ssafy.whoareyou.user.dto.response.auth.*;
 import com.ssafy.whoareyou.provider.JwtProvider;
 import com.ssafy.whoareyou.user.entity.Female;
 import com.ssafy.whoareyou.user.entity.Male;
@@ -106,11 +100,10 @@ public class AuthServiceImplement implements AuthService {
 
     @Override
     public ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto) {
+        String accessToken = null;
+        String refreshToken = null;
 
-        String token = null;
-
-        try{
-
+        try {
             String email = dto.getEmail();
             Optional<User> userEntity = userRepository.findByEmail(email);
             if(userEntity.isEmpty()) return SignInResponseDto.signInFail();
@@ -121,13 +114,38 @@ public class AuthServiceImplement implements AuthService {
             if(!isMatched) return SignInResponseDto.signInFail();
 
             String userId = String.valueOf(userEntity.get().getId());
-            token = jwtProvider.create(userId);
-        } catch(Exception exception){
+            accessToken = jwtProvider.createAccessToken(userId);
+            refreshToken = jwtProvider.createRefreshToken(userId);
+
+            // refreshToken을 데이터베이스에 저장
+            userEntity.get().setRefreshToken(refreshToken);
+            userRepository.save(userEntity.get());
+
+        } catch(Exception exception) {
             exception.printStackTrace();
             return ResponseDto.databaseError();
         }
 
-        return SignInResponseDto.success(token);
+        return SignInResponseDto.success(accessToken, refreshToken);
+    }
+
+    @Override
+    public ResponseEntity<? super LogoutResponseDto> logout(LogoutRequestDto dto) {
+
+        try {
+            int userId = dto.getUserId();
+            Optional<User> userEntity = userRepository.findById(userId);
+            if(userEntity.isEmpty()) return LogoutResponseDto.logoutFail();
+
+            userEntity.get().setRefreshToken(null);
+            userRepository.save(userEntity.get());
+
+        } catch(Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        return LogoutResponseDto.success();
     }
 
     @Override

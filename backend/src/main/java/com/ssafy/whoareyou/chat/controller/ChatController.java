@@ -34,7 +34,7 @@ public class ChatController {
         log.info("소켓 시작");
         log.info("roomId" + message.getRoomId());
         SendingMessage result = service.send(message);
-        kafkaConumerService.listen(message.getRoomId(), result);
+//        kafkaConumerService.listen(message.getRoomId(), result);
 
         log.info("소켓 종료");
         return new ResponseEntity<>(result, HttpStatus.OK);
