@@ -120,9 +120,10 @@ function OpenVidu() {
     // 친구 추가 토글 상태
     const [isFriend, setIsFriend] = useState(false);
     const isFriendRef = useRef(isFriend);
-    const isFriend_axios = useRef(false)
-    const isFriend_axios2 = useRef(false)
+    const isFriend_axios = useRef(false);
+    const isFriend_axios2 = useRef(false);
     const gender = useRef('')
+
 
     const userId = localStorage.getItem('userId');
     const token = localStorage.getItem('token');
@@ -223,6 +224,7 @@ function OpenVidu() {
                 startTimeRef.current = new Date(body.info.startedAt).getTime(); // 시작 시간 설정
                 gender.current = body.info.myGender;
                 setLoading(false);
+                gender.current = body.info.myGender;
                 // 타이머 시작
                 startTimer(body.info.roomId, body.info.partnerId);
 
@@ -403,11 +405,35 @@ function OpenVidu() {
             //     }
             // }
 
+            if (gender.current == 'male') {
+                if (newTimeLeft == 10) {
+
+                    if (isFriend_axios.current == false) {
+                        handleTimerEnd(ri, pi);
+                        isFriend_axios.current = true;
+                    }
+                }
+            } else if (gender.current == 'female') {
+                if (newTimeLeft == 8) {
+
+                    if (isFriend_axios.current == false) {
+                        handleTimerEnd(ri, pi);
+                        isFriend_axios.current = true;
+                    }
+                }
+            }
+            // if (newTimeLeft == 7 ) {
+            //     if(isFriend_axios2.current == false) {
+
+            //         handleTimerEnd(ri, pi);
+            //         isFriend_axios2.current = true
+            //     }
+            // }
             if (newTimeLeft > 0) {
                 timerRef.current = requestAnimationFrame(updateTimer);
             } else {
-                // leaveRoom()
-                // 타이머가 끝났을 때 실행할 함수 호출
+                leaveRoom();
+                // handleTimerEnd(ri, pi); // 타이머가 끝났을 때 실행할 함수 호출
             }
         };
 
