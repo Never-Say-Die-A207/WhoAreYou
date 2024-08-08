@@ -5,13 +5,8 @@ import RedFoxRemote from "./RedFoxRemote";
 import FaceRecognition from './FaceRecognition';
 import './VideoComponent.css';
 import SpiderManRemote from './SpiderManRemote';
-<<<<<<< HEAD
-import SquidRemote from './SquidRemote';
-import SpiderManBlackRemote from './SpiderManBlackRemote';
-=======
 import SpiderManBlackRemote from './SpiderManBlackRemote';
 import SquidRemote from './SquidRemote';
->>>>>>> front
 import JokerRemote from './JokerRemote';
 
 function VideoComponent({ track, participantIdentity, setExpressionData, local = false, maskRemote, setEmotionCounts }) {
