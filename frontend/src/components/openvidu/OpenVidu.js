@@ -205,7 +205,16 @@ function OpenVidu() {
                 console.log(body.info.startedAt);
                 console.log('partnerId:', body.info.partnerId);
                 console.log('roomId:', body.info.roomId);
+    
+                // 서버의 현재 시간과 시작 시간을 통해 타이머 시작 시간 결정
+                const currentTime = new Date(body.currentServerTime).getTime();
                 startTimeRef.current = new Date(body.info.startedAt).getTime(); // 시작 시간 설정
+                
+                // 이제 현재 시간과 시작 시간을 기반으로 경과 시간을 계산
+                const elapsedTime = Math.floor((currentTime - startTimeRef.current) / 1000);
+                const timeLeft = 180 - elapsedTime; // 180초에서 경과된 시간을 빼서 남은 시간 계산
+                setTimeLeft(timeLeft > 0 ? timeLeft : 0); // 남은 시간 설정 (음수를 방지)
+    
                 setLoading(false);
     
                 // 타이머 시작
@@ -332,27 +341,19 @@ function OpenVidu() {
 
     // 타이머 시작 함수 수정
     const startTimer = (ri, pi) => {
-        const currentTime = Date.now();
-        
-        // body.info.startedAt의 시간과 현재 시간의 차이를 계산
-        const elapsedTime = Math.floor((currentTime - startTimeRef.current) / 1000);
-        const timeLeft = 180 - elapsedTime; // 180초에서 경과된 시간을 빼서 남은 시간 계산
-
-        setTimeLeft(timeLeft > 0 ? timeLeft : 0); // 남은 시간 설정 (음수를 방지)
-
         const updateTimer = () => {
-            const newElapsedTime = Math.floor((Date.now() - startTimeRef.current) / 1000);
-            const newTimeLeft = 180 - newElapsedTime; // 다시 남은 시간 계산
-
-            setTimeLeft(newTimeLeft > 0 ? newTimeLeft : 0); // 음수 방지, 0으로 설정
-
+            const newElapsedTime = Math.floor((Date.now() - startTimeRef.current) / 1000); // 타이머 경과 시간
+            const newTimeLeft = 180 - newElapsedTime;
+    
+            setTimeLeft(newTimeLeft > 0 ? newTimeLeft : 0);
+    
             if (newTimeLeft > 0) {
                 timerRef.current = requestAnimationFrame(updateTimer);
             } else {
                 handleTimerEnd(ri, pi); // 타이머가 끝났을 때 실행할 함수 호출
             }
         };
-
+    
         timerRef.current = requestAnimationFrame(updateTimer);
     };
 
