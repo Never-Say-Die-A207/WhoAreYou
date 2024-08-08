@@ -106,6 +106,7 @@ public class FaceChatController {
             if(roomId == null)
                 return new ResponseEntity<Void> (HttpStatus.BAD_REQUEST);
             int seconds = faceChatService.getSeconds(roomId);
+            log.info("getSeconds: seconds = " + seconds);
             if(seconds < 0)
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             return new ResponseEntity<Map<String, Integer>>(Map.of("seconds", seconds),HttpStatus.OK);

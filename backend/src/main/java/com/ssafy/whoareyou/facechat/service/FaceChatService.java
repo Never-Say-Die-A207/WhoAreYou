@@ -82,7 +82,7 @@ public class FaceChatService {
         return generateToken(user.getNickname(), user.getId(), String.valueOf(faceChat.getId()));
     }
 
-//    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.REPEATABLE_READ)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
     public Integer finishFaceChat(Integer faceChatId, Integer myId, Integer partnerId) {
         Male m;
         Female f;
