@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @RestController
@@ -69,7 +70,10 @@ public class FaceChatController {
     public ResponseEntity<?> getInfo(@PathVariable("userId") Integer userId){
         try{
             FaceChatInfoResponse infoResponse = faceChatService.getInfo(userId);
-            return new ResponseEntity<Map<String, Object>>(Map.of("info", infoResponse),HttpStatus.OK);
+            return new ResponseEntity<Map<String, Object>>(Map.of(
+                    "info", infoResponse,
+                    "currentServerTime", LocalDateTime.now()
+            ),HttpStatus.OK);
         } catch (UserNotFoundException e){
             log.info("Wrong user info");
             return new ResponseEntity<Void> (HttpStatus.BAD_REQUEST);
@@ -111,7 +115,7 @@ public class FaceChatController {
 
             faceChatService.updateWantsFriend(roomId, myId, partnerId, friend);
             try {
-                Thread.sleep(3000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

@@ -93,7 +93,7 @@ public class FaceChat {
     }
 
     public void setWantsFriend(User me, WantsFriendType wantsFriend) {
-        if(me instanceof Male m)
+        if(me instanceof Male)
             this.maleWantsFriend = wantsFriend;
         else
             this.femaleWantsFriend = wantsFriend;

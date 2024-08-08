@@ -45,6 +45,7 @@ public class FaceChatService {
     @Value("${livekit.api.secret}")
     private String LIVEKIT_API_SECRET;
 
+    //@Transactional(isolation = Isolation.SERIALIZABLE)
     public AccessToken getToken(Integer userId, String mask, boolean needsChange) {
         log.info("FaceChatService.getToken() : Get Token");
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
@@ -80,7 +81,7 @@ public class FaceChatService {
         return generateToken(user.getNickname(), user.getId(), String.valueOf(faceChat.getId()));
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_UNCOMMITTED)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.REPEATABLE_READ)
     public Integer finishFaceChat(Integer faceChatId, Integer myId, Integer partnerId) {
         Male m;
         Female f;
@@ -184,6 +185,7 @@ public class FaceChatService {
         return FaceChatInfoResponse.createResponse(user, currentFaceChat);
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void updateWantsFriend(Integer faceChatId, Integer myId, Integer partnerId, boolean friend){
         FaceChat faceChat = faceChatRepository.findById(faceChatId).orElseThrow(FaceChatNotFoundException::new);
         User me = userRepository.findById(myId).orElseThrow(() -> new UserNotFoundException(myId));
@@ -237,6 +239,7 @@ public class FaceChatService {
     }
 
     private AccessToken generateToken(String nickname, int id, String faceChatId){
+        //TODO: 싱글톤 패턴으로 바꿔보자
         AccessToken accessToken = new AccessToken(LIVEKIT_API_KEY, LIVEKIT_API_SECRET);
         accessToken.setName(nickname);
         accessToken.setIdentity(String.valueOf(id));
