@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -81,7 +82,7 @@ public class FaceChatService {
         return generateToken(user.getNickname(), user.getId(), String.valueOf(faceChat.getId()));
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.REPEATABLE_READ)
+//    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.REPEATABLE_READ)
     public Integer finishFaceChat(Integer faceChatId, Integer myId, Integer partnerId) {
         Male m;
         Female f;
@@ -245,5 +246,19 @@ public class FaceChatService {
         accessToken.setIdentity(String.valueOf(id));
         accessToken.addGrants(new RoomJoin(true), new RoomName(faceChatId));
         return accessToken;
+    }
+
+    public int getSeconds(Integer roomId) {
+        FaceChat faceChat = faceChatRepository.findById(roomId).orElseThrow(FaceChatNotFoundException::new);
+
+        int duration = 3;
+
+        LocalDateTime startedAt = faceChat.getStartedAt();
+        if(startedAt == null)
+            return -1;
+
+        LocalDateTime finishedAt = startedAt.plusMinutes(duration);
+        int secondDiff = (int)Duration.between(LocalDateTime.now(), finishedAt).getSeconds();
+        return Math.max(secondDiff, 0);
     }
 }

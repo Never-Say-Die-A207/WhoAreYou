@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor @NoArgsConstructor
 public class FaceChatInfoResponse {
     private int roomId;
+    private String myGender;
     private int partnerId;
     private String mask;
     private LocalDateTime startedAt;
@@ -26,12 +27,14 @@ public class FaceChatInfoResponse {
 
         if (user instanceof Male){
             infoResponse.setMask(currentFaceChat.getFemaleMask());
+            infoResponse.setMyGender("male");
 
             if(currentFaceChat.getFemale() != null)
                 infoResponse.setPartnerId(currentFaceChat.getFemale().getId());
         }
         else if (user instanceof Female){
             infoResponse.setMask(currentFaceChat.getMaleMask());
+            infoResponse.setMyGender("female");
 
             if(currentFaceChat.getFemale() != null)
                 infoResponse.setPartnerId(currentFaceChat.getMale().getId());

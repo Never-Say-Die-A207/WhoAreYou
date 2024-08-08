@@ -71,8 +71,7 @@ public class FaceChatController {
         try{
             FaceChatInfoResponse infoResponse = faceChatService.getInfo(userId);
             return new ResponseEntity<Map<String, Object>>(Map.of(
-                    "info", infoResponse,
-                    "currentServerTime", LocalDateTime.now()
+                    "info", infoResponse
             ),HttpStatus.OK);
         } catch (UserNotFoundException e){
             log.info("Wrong user info");
@@ -101,6 +100,37 @@ public class FaceChatController {
         }
     }
 
+    @GetMapping("/seconds/{roomId}")
+    public ResponseEntity<?> getSeconds(@PathVariable("roomId") Integer roomId){
+        try{
+            if(roomId == null)
+                return new ResponseEntity<Void> (HttpStatus.BAD_REQUEST);
+            int seconds = faceChatService.getSeconds(roomId);
+            if(seconds < 0)
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Map<String, Integer>>(Map.of("seconds", seconds),HttpStatus.OK);
+        } catch (Exception e){
+            log.info("FaceChatController.getSeconds : Room not found");
+            return new ResponseEntity<Void> (HttpStatus.NOT_FOUND);
+        }
+    }
+
+//    @PostMapping("/friend")
+//    public ResponseEntity<?> addFriend(@RequestBody FaceChatResultRequest params) {
+//            try {
+//                log.info("Finish face chat");
+//                Integer roomId = params.getRoomId();
+//                Integer myId = params.getMyId();
+//                Integer partnerId = params.getPartnerId();
+//                Boolean friend = params.getFriend();
+//
+//                if (friend == null)
+//                    friend = false;
+//
+//                faceChatService.updateWantsFriend(roomId, myId, partnerId, friend);
+//            }
+//    }
+
     @PostMapping("/result")
     public ResponseEntity<?> finish(@RequestBody FaceChatResultRequest params) {
         try{
@@ -115,7 +145,7 @@ public class FaceChatController {
 
             faceChatService.updateWantsFriend(roomId, myId, partnerId, friend);
             try {
-                Thread.sleep(5000);
+                Thread.sleep(7000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
