@@ -15,6 +15,7 @@ import VideoComponentLocal from './VideoComponentLocal';
 import AudioComponent from './AudioComponent';
 import RoomBottom from './RoomBottom';
 import FaceRecognition from './FaceRecognition';
+import EmotionBarChart from './EmotionBarChart';
 import Preview from './Preview';
 import { FaceMesh } from '@mediapipe/face_mesh';
 import * as cam from '@mediapipe/camera_utils';
@@ -74,6 +75,16 @@ function OpenVidu() {
     const [localTrack, setLocalTrack] = useState(undefined);
     const [remoteTracks, setRemoteTracks] = useState([]);
     const [expressionData, setExpressionData] = useState({ borderClass: '', imageSrc: null }); // New state for expression data
+    
+    const [emotionCounts, setEmotionCounts] = useState({
+        happy: 0,
+        sad: 0,
+        angry: 0,
+        disgusted: 0,
+        surprised: 0,
+        fear: 0,
+        neutral: 0,
+    });
 
     const [participantName, setParticipantName] = useState('Participant' + Math.floor(Math.random() * 100));
     const [roomName, setRoomName] = useState('Test Room');
@@ -217,6 +228,7 @@ function OpenVidu() {
                 console.error('getRoomInfo error:', error);
             });
     }
+    
 
 
     //마스크 이름 넣기 주석 
@@ -355,7 +367,6 @@ function OpenVidu() {
 
         timerRef.current = requestAnimationFrame(updateTimer);
     };
-
 
     // 타이머 끝나는 경우 코드 실행
     const handleTimerEnd = (roomId, partnerId) => {
@@ -623,6 +634,7 @@ function OpenVidu() {
                                                 track={remoteTrack.trackPublication.videoTrack}
                                                 participantIdentity={remoteTrack.participantIdentity}
                                                 setExpressionData={setExpressionData} // setExpressionData 전달
+                                                setEmotionCounts={setEmotionCounts}
                                                 maskRemote={maskRemote}
                                             />
 
@@ -636,7 +648,8 @@ function OpenVidu() {
                                 </div>
                             </div>
                             <div className='bottom'>
-                                <RoomBottom expressionData={expressionData} leaveRoom={leaveRoom} />
+                                {/* <RoomBottom expressionData={expressionData} leaveRoom={leaveRoom} /> */}
+                                <EmotionBarChart emotionCounts={emotionCounts} /> 
                                 {/* <button className='btn btn-danger' id='leave-room-button' onClick={leaveRoom}>
                                     Leave Room
                                 </button> */}

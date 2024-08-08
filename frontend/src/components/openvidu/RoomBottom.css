@@ -1,4 +1,3 @@
-RoomBottom.css
 
 .room-bottom-container {
   padding: 20px;
@@ -8,31 +7,31 @@ RoomBottom.css
   width: 100%;
 }
 
-.room-bottom-container.joy {
+.room-bottom-container.happy {
   background-color: yellow;
   width: 100%;
   height: 100%;
 }
 
-.room-bottom-container.sadness {
+.room-bottom-container.sad {
   background-color: blue;
   width: 100%;
   height: 100%;
 }
 
-.room-bottom-container.anger {
+.room-bottom-container.angry {
   background-color: red;
   width: 100%;
   height: 100%;
 }
 
-.room-bottom-container.disgust {
+.room-bottom-container.disgusted {
   background-color: green;
   width: 100%;
   height: 100%;
 }
 
-.room-bottom-container.embrassment {
+.room-bottom-container.surprised {
   background-color: pink;
   width: 100%;
   height: 100%;
@@ -44,8 +43,8 @@ RoomBottom.css
   height: 100%;
 }
 
-.room-bottom-container.ennui {
-  background-color: rgb(73, 12, 154);
+.room-bottom-container.neutral {
+  background-color: darkblue;
   width: 100%;
   height: 100%;
 }
@@ -84,4 +83,3 @@ RoomBottom.css
   max-height: 70%; /* 부모 div 높이를 초과하지 않도록 설정 */
   width: auto; /* 비율을 유지하며 너비 조정 */
 }
-
