@@ -404,24 +404,6 @@ function OpenVidu() {
             //         isFriend_axios2.current = true;
             //     }
             // }
-
-            if (gender.current == 'male') {
-                if (newTimeLeft == 10) {
-
-                    if (isFriend_axios.current == false) {
-                        handleTimerEnd(ri, pi);
-                        isFriend_axios.current = true;
-                    }
-                }
-            } else if (gender.current == 'female') {
-                if (newTimeLeft == 8) {
-
-                    if (isFriend_axios.current == false) {
-                        handleTimerEnd(ri, pi);
-                        isFriend_axios.current = true;
-                    }
-                }
-            }
             // if (newTimeLeft == 7 ) {
             //     if(isFriend_axios2.current == false) {
 
