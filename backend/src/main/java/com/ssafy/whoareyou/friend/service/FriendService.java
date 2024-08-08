@@ -14,6 +14,8 @@ import com.ssafy.whoareyou.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +63,7 @@ public class FriendService {
         return chatRoom.getId();
     }
 
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void setRelation(ChatRoom chatRoom, Male male, Female female) {
         boolean isPresent = friendJpaRepository.findByGenderId(male.getId(), female.getId()).isPresent();
 
@@ -80,27 +83,6 @@ public class FriendService {
     public List<FriendUserDto> getFriends(User user, boolean isMale) {
         log.info("getFriends 시작");
         List<FriendUserDto> friends = isMale ? friendJpaRepository.findFemaleByMaleId(user.getId()) : friendJpaRepository.findMaleByFemaleId(user.getId());
-
-//        List<FriendUserDto> friendUserDtos = new ArrayList<>();
-//        for (Friend friend : friends) {
-//            FriendUserDto dto;
-//            if (isMale) {
-//                log.info("id: " + friend.getFemale().getId() +", nickname: " + friend.getFemale().getNickname());
-//                dto = FriendUserDto.builder()
-//                        .nickname(friend.getFemale().getNickname())
-//                        .id(friend.getFemale().getId())
-//                        .build();
-//            }
-//            else {
-//                log.info("id: " + friend.getMale().getId() +", nickname: " + friend.getMale().getNickname());
-//                dto = FriendUserDto.builder()
-//                        .nickname(friend.getMale().getNickname())
-//                        .id(friend.getMale().getId())
-//                        .build();
-//            }
-//
-//            friendUserDtos.add(dto);
-//        }
 
         log.info("getFriends 종료");
         return friends;
