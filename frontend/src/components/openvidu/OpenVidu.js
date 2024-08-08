@@ -139,12 +139,14 @@ function OpenVidu() {
         room.on(
             RoomEvent.TrackSubscribed,
             (_track, publication, participant) => {
+                startTimeRef.current = Date.now();
+
                 setRemoteTracks((prev) => [
                     ...prev,
                     { trackPublication: publication, participantIdentity: participant.identity }
                 ]);
 
-                const body = getRoomInfo(userId)
+                const body = getRoomInfo(userId);
                 console.log(body);
             }
         );
@@ -205,7 +207,7 @@ function OpenVidu() {
                 console.log(body.info.startedAt);
                 console.log('partnerId:', body.info.partnerId);
                 console.log('roomId:', body.info.roomId);
-                startTimeRef.current = new Date(body.info.startedAt).getTime(); // 시작 시간 설정
+                //startTimeRef.current = new Date(body.info.startedAt).getTime(); // 시작 시간 설정
                 setLoading(false);
     
                 // 타이머 시작
@@ -217,6 +219,7 @@ function OpenVidu() {
                 console.error('getRoomInfo error:', error);
             });
     }
+
 
     //마스크 이름 넣기 주석 
     async function getToken(mask, participantName) {
