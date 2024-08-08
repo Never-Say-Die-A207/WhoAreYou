@@ -38,7 +38,10 @@ import { useMediaQuery, MediaQuery } from 'react-responsive';
 
 
 
-var APPLICATION_SERVER_URL = 'http://3.36.120.21:4040/api/';
+// var APPLICATION_SERVER_URL = 'http://3.36.120.21:4040/api/';
+// var LIVEKIT_URL = "wss://myapp-yqvsqxqi.livekit.cloud/";
+
+var APPLICATION_SERVER_URL = 'https://i11a207.p.ssafy.io/api/';
 var LIVEKIT_URL = "wss://myapp-yqvsqxqi.livekit.cloud/";
 
 // let APPLICATION_SERVER_URL = "";
@@ -75,7 +78,7 @@ function OpenVidu() {
     const [localTrack, setLocalTrack] = useState(undefined);
     const [remoteTracks, setRemoteTracks] = useState([]);
     const [expressionData, setExpressionData] = useState({ borderClass: '', imageSrc: null }); // New state for expression data
-    
+
     const [emotionCounts, setEmotionCounts] = useState({
         happy: 0,
         sad: 0,
@@ -109,7 +112,7 @@ function OpenVidu() {
 
 
     // 타이머
-    const [timeLeft, setTimeLeft] = useState(180); // 3분 = 180초로 변경
+    const [timeLeft, setTimeLeft] = useState(20); // 3분 = 180초로 변경
     const timerRef = useRef(null);
     const startTimeRef = useRef(null);
 
@@ -117,8 +120,9 @@ function OpenVidu() {
     // 친구 추가 토글 상태
     const [isFriend, setIsFriend] = useState(false);
     const isFriendRef = useRef(isFriend);
-
-
+    const isFriend_axios = useRef(false)
+    const isFriend_axios2 = useRef(false)
+    const gender = useRef('')
 
     const userId = localStorage.getItem('userId');
     const token = localStorage.getItem('token');
@@ -199,9 +203,9 @@ function OpenVidu() {
 
     function getRoomInfo(participantName) {
         setLoading(true);
-    
+
         var requestURL = APPLICATION_SERVER_URL + 'facechat/info/' + participantName;
-    
+
         fetch(requestURL, {
             headers: {
                 'ngrok-skip-browser-warning': 'skip-browser-warning'
@@ -217,18 +221,18 @@ function OpenVidu() {
                 console.log('partnerId:', body.info.partnerId);
                 console.log('roomId:', body.info.roomId);
                 startTimeRef.current = new Date(body.info.startedAt).getTime(); // 시작 시간 설정
+                gender.current = body.info.myGender;
                 setLoading(false);
-    
                 // 타이머 시작
                 startTimer(body.info.roomId, body.info.partnerId);
-    
+
                 return body;
             })
             .catch(error => {
                 console.error('getRoomInfo error:', error);
             });
     }
-    
+
 
 
     //마스크 이름 넣기 주석 
@@ -336,32 +340,74 @@ function OpenVidu() {
         const response = await fetch(APPLICATION_SERVER_URL + 'facechat/' + userId, {
             method: 'DELETE'
         }
-        );
-
+        )
         return response;
     }
 
 
     // 타이머 시작 함수 수정
-    const startTimer = (ri, pi) => {
+    async function startTimer(ri, pi) {
+        await fetch(APPLICATION_SERVER_URL + 'facechat/seconds/' + ri, {
+            method: 'GET',
+            // headers: {
+            //     "Content-Type": "application/json",
+            // },
+        }
+        ).then(response => response.json()
+        )
+            .then(seconds => {
+                console.log(seconds)
+            })
+            .catch(error => {
+                console.error('getRoomInfo error:', error);
+            });
+
+
+
         const currentTime = Date.now();
-        
+
         // body.info.startedAt의 시간과 현재 시간의 차이를 계산
         const elapsedTime = Math.floor((currentTime - startTimeRef.current) / 1000);
-        const timeLeft = 180 - elapsedTime; // 180초에서 경과된 시간을 빼서 남은 시간 계산
+        const timeLeft = 20 - elapsedTime; // 180초에서 경과된 시간을 빼서 남은 시간 계산
 
         setTimeLeft(timeLeft > 0 ? timeLeft : 0); // 남은 시간 설정 (음수를 방지)
 
         const updateTimer = () => {
             const newElapsedTime = Math.floor((Date.now() - startTimeRef.current) / 1000);
-            const newTimeLeft = 180 - newElapsedTime; // 다시 남은 시간 계산
+            const newTimeLeft = 20 - newElapsedTime; // 다시 남은 시간 계산
 
             setTimeLeft(newTimeLeft > 0 ? newTimeLeft : 0); // 음수 방지, 0으로 설정
+            // console.log(newTimeLeft)
+            if (gender.current == 'male') {
+                if (newTimeLeft == 10) {
+
+                    if (isFriend_axios.current == false) {
+                        handleTimerEnd(ri, pi);
+                        isFriend_axios.current = true;
+                    }
+                }
+            } else if (gender.current == 'female') {
+                if (newTimeLeft == 8) {
+
+                    if (isFriend_axios.current == false) {
+                        handleTimerEnd(ri, pi);
+                        isFriend_axios.current = true;
+                    }
+                }
+            }
+            // if (newTimeLeft == 9) {
+
+            //     if (isFriend_axios2.current == false) {
+            //         handleTimerEnd(ri, pi);
+            //         isFriend_axios2.current = true;
+            //     }
+            // }
 
             if (newTimeLeft > 0) {
                 timerRef.current = requestAnimationFrame(updateTimer);
             } else {
-                handleTimerEnd(ri, pi); // 타이머가 끝났을 때 실행할 함수 호출
+                // leaveRoom()
+                // 타이머가 끝났을 때 실행할 함수 호출
             }
         };
 
@@ -397,7 +443,7 @@ function OpenVidu() {
             .catch(error => {
                 console.log('handleTimerEnd error:', error);
             });
-            leaveRoom();
+        // leaveRoom();
     };
 
 
@@ -649,7 +695,7 @@ function OpenVidu() {
                             </div>
                             <div className='bottom'>
                                 {/* <RoomBottom expressionData={expressionData} leaveRoom={leaveRoom} /> */}
-                                <EmotionBarChart emotionCounts={emotionCounts} /> 
+                                <EmotionBarChart emotionCounts={emotionCounts} />
                                 {/* <button className='btn btn-danger' id='leave-room-button' onClick={leaveRoom}>
                                     Leave Room
                                 </button> */}
