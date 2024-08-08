@@ -206,18 +206,20 @@ function OpenVidu() {
                 console.log('partnerId:', body.info.partnerId);
                 console.log('roomId:', body.info.roomId);
     
-                // 서버의 현재 시간과 시작 시간을 통해 타이머 시작 시간 결정
-                const currentTime = new Date(body.currentServerTime).getTime();
-                startTimeRef.current = new Date(body.info.startedAt).getTime(); // 시작 시간 설정
-                
-                // 이제 현재 시간과 시작 시간을 기반으로 경과 시간을 계산
-                const elapsedTime = Math.floor((currentTime - startTimeRef.current) / 1000);
-                const timeLeft = 180 - elapsedTime; // 180초에서 경과된 시간을 빼서 남은 시간 계산
-                setTimeLeft(timeLeft > 0 ? timeLeft : 0); // 남은 시간 설정 (음수를 방지)
+                // Get the Korea Standard Time (KST)
+                const kstOffset = 9 * 60 * 60 * 1000; // 9 hours in milliseconds
+                const currentTimeKST = Date.now() + new Date().getTimezoneOffset() * 60 * 1000 + kstOffset;
+    
+                const startTimeKST = new Date(body.info.startedAt).getTime() + kstOffset;
+    
+                // Calculate elapsed time based on KST
+                const elapsedTime = Math.floor((currentTimeKST - startTimeKST) / 1000);
+                const timeLeft = 180 - elapsedTime; // 180 seconds countdown
+                setTimeLeft(timeLeft > 0 ? timeLeft : 0); // 초기 남은 시간 설정
     
                 setLoading(false);
     
-                // 타이머 시작
+                // Start timer based on KST
                 startTimer(body.info.roomId, body.info.partnerId);
     
                 return body;
@@ -226,7 +228,6 @@ function OpenVidu() {
                 console.error('getRoomInfo error:', error);
             });
     }
-
 
     //마스크 이름 넣기 주석 
     async function getToken(mask, participantName) {
@@ -339,21 +340,22 @@ function OpenVidu() {
     }
 
 
-    // 타이머 시작 함수 수정
+    // 타이머
     const startTimer = (ri, pi) => {
         const updateTimer = () => {
-            const newElapsedTime = Math.floor((Date.now() - startTimeRef.current) / 1000); // 타이머 경과 시간
+            const currentTimeKST = Date.now() + new Date().getTimezoneOffset() * 60 * 1000 + 9 * 60 * 60 * 1000;
+            const newElapsedTime = Math.floor((currentTimeKST - startTimeRef.current) / 1000); // KST 기준 경과 시간
             const newTimeLeft = 180 - newElapsedTime;
-    
+
             setTimeLeft(newTimeLeft > 0 ? newTimeLeft : 0);
-    
+
             if (newTimeLeft > 0) {
                 timerRef.current = requestAnimationFrame(updateTimer);
             } else {
                 handleTimerEnd(ri, pi); // 타이머가 끝났을 때 실행할 함수 호출
             }
         };
-    
+
         timerRef.current = requestAnimationFrame(updateTimer);
     };
 
