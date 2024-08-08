@@ -8,7 +8,7 @@ const Naver = () => {
     const navigate = useNavigate();
 
     const handleLogin = () => {
-        window.location.href = 'https://i11a207.p.ssafy.io/api/oauth2/authorization/naver';
+        window.location.href = 'http://3.36.120.21:4040/oauth2/authorization/naver';
     };
 
     useEffect(() => {
