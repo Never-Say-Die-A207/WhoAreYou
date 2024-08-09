@@ -597,40 +597,12 @@ function OpenVidu() {
     };
 
 
-    const getFriendResult = (pi) => {
+    const getFriendResult = async (pi) => {
 
         const myId = localStorage.getItem('userId')
         const partnerId = pi
-
-        const requestURL = APPLICATION_SERVER_URL + `friends/result?myId=${myId}&partnerId=${partnerId}`;
-
-        fetch(requestURL)
-            .then(response => response.json())
-            .then(body => {
-                console.log(body);
-                /*
-                    EXAMPLE
-
-                    THEY ARE FRIEND
-                    {
-                        result:true,
-                        chatRoomId:3
-                    }
-
-                    THEY ARE NOT FRIEND
-                    {
-                        result:false,
-                        chatRoomId:-1
-                    }
-                */
-                console.log(body.result);
-                console.log(body.chatRoomId);
-
-                //return ...
-            })
-            .catch(error => {
-                console.error('getFriendResult error:', error);
-            });
+        const response = await api.get(`/friends/result?myId=${myId}&partnerId=${partnerId}`);
+        console.log(response.data);
     }
 
 
