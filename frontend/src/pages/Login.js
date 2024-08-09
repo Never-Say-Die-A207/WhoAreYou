@@ -31,12 +31,12 @@ const Login = ({ onLoginSuccess }) => {
         e.preventDefault();
         try {
             const response = await api.post('/sign-in', form);
-            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('token', response.data.accessToken);
             localStorage.setItem('expirationTime', response.data.expirationTime);
             console.log('Login success:', response.data);
 
             // JWT 토큰 받아오기
-            const token = response.data.token;
+            const token = response.data.accessToken;
 
             // 토큰 디코딩
             const decodedToken = jwtDecode(token);

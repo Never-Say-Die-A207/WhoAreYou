@@ -12,54 +12,61 @@ import JokerRemote from './JokerRemote';
 function VideoComponent({ track, participantIdentity, setExpressionData, local = false, maskRemote, setEmotionCounts }) {
   const videoElement2 = useRef(null);
   const [landmarks, setLandmarks] = useState(null);
+  const [faceMeshErrRemote, setfaceMeshErrRemote] = useState(true)
 
   useEffect(() => {
-      if (videoElement2.current && track) {
-          track.attach(videoElement2.current);
-      }
+    if (videoElement2.current && track) {
+      track.attach(videoElement2.current);
+    }
 
-      return () => {
-        if (track) {
-          track.detach();
-        }
-      };
+    return () => {
+      if (track) {
+        track.detach();
+      }
+    };
   }, [track]);
 
   useEffect(() => {
-      const faceMesh = new FaceMesh({
-          locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
-      });
+
+    const faceMesh = new FaceMesh({
+      locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
+    });
+
+    if (faceMesh) {
 
       faceMesh.setOptions({
-          maxNumFaces: 1,
-          minDetectionConfidence: 0.5,
-          minTrackingConfidence: 0.5,
+        maxNumFaces: 1,
+        minDetectionConfidence: 0.5,
+        minTrackingConfidence: 0.5,
       });
 
       faceMesh.onResults((results) => {
-          if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
-              const landmarks = results.multiFaceLandmarks[0];
-              setLandmarks(landmarks);
-          }
+        if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
+          const landmarks = results.multiFaceLandmarks[0];
+          setLandmarks(landmarks);
+        }
       });
 
       const detectLandmarks = async () => {
-          if (videoElement2.current) {
-              await faceMesh.send({ image: videoElement2.current });
-              requestAnimationFrame(detectLandmarks);
-          }
+        if (videoElement2.current) {
+          await faceMesh.send({ image: videoElement2.current });
+          requestAnimationFrame(detectLandmarks);
+        }
       };
       if (videoElement2.current) {
-      videoElement2.current.addEventListener('loadeddata', () => {
+        videoElement2.current.addEventListener('loadeddata', () => {
           detectLandmarks();
-      });
+        });
+      }
+    } else {
+      setfaceMeshErrRemote(!faceMeshErrRemote)
     }
-      return () => {
-          if (faceMesh) {
-              faceMesh.close();
-          }
-      };
-  }, []);
+    return () => {
+      if (faceMesh) {
+        faceMesh.close();
+      }
+    };
+  }, [faceMeshErrRemote]);
 
   return (
     <div id={"camera-" + participantIdentity} className="video-container">
