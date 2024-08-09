@@ -125,7 +125,7 @@ function OpenVidu() {
     const isFriendRef = useRef(isFriend);
     const isFriend_axios = useRef(false);
     const getfriend_result = useRef(false)
-    
+
     const gender = useRef('')
 
     const userId = localStorage.getItem('userId');
@@ -520,7 +520,7 @@ function OpenVidu() {
             if (newTimeLeft > 0) {
                 timerRef.current = requestAnimationFrame(updateTimer);
             } else {
-                leaveRoom();
+                // leaveRoom();
                 // handleTimerEnd(ri, pi); // 타이머가 끝났을 때 실행할 함수 호출
             }
         };
