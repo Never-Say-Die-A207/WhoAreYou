@@ -115,15 +115,14 @@ function OpenVidu() {
     const [timeLeft, setTimeLeft] = useState(20); // 3분 = 180초로 변경
     const timerRef = useRef(null);
     const startTimeRef = useRef(null);
-
+    const servertime = useRef(null)
 
     // 친구 추가 토글 상태
     const [isFriend, setIsFriend] = useState(false);
     const isFriendRef = useRef(isFriend);
-    const isFriend_axios = useRef(false);
- 
+    const isFriend_axios = useRef(false)
+    const isFriend_axios2 = useRef(false)
     const gender = useRef('')
-
 
     const userId = localStorage.getItem('userId');
     const token = localStorage.getItem('token');
@@ -224,7 +223,6 @@ function OpenVidu() {
                 startTimeRef.current = new Date(body.info.startedAt).getTime(); // 시작 시간 설정
                 gender.current = body.info.myGender;
                 setLoading(false);
-                gender.current = body.info.myGender;
                 // 타이머 시작
                 startTimer(body.info.roomId, body.info.partnerId);
 
@@ -347,59 +345,79 @@ function OpenVidu() {
     }
 
 
-    // 타이머 시작 함수 수정
-    async function startTimer(ri, pi) {
-   
-            // 서버에서 seconds 값을 가져옴 (예: 180초)
-            const response = await fetch(APPLICATION_SERVER_URL + 'facechat/seconds/' + ri, {
-                method: 'GET',
+     // 타이머 시작 함수 수정
+     async function startTimer(ri, pi) {
+        await fetch(APPLICATION_SERVER_URL + 'facechat/seconds/' + ri, {
+            method: 'GET',
+            // headers: {
+            //     "Content-Type": "application/json",
+            // },
+        }
+        ).then(response => response.json()
+        )
+            .then(seconds => {
+                console.log('받아온 시간')
+                console.log(seconds.seconds)
+                servertime.current = seconds.seconds
+                console.log('서버타임')
+                console.log(servertime.current)
+            })
+            .catch(error => {
+                console.error('getRoomInfo error:', error);
             });
-            const seconds = await response.json();
-            console.log('Initial seconds:', seconds);
-    
-            // 타이머의 시작 시간을 현재 시각으로 설정
-            const startTime = Date.now();
-            startTimeRef.current = startTime;
-    
-            const updateTimer = () => {
-                // 경과된 시간 계산
-                const elapsedTime = Math.floor((Date.now() - startTimeRef.current) / 1000);
-                // 남은 시간 계산 (초기 seconds 값에서 경과된 시간 빼기)
-                const newTimeLeft = seconds - elapsedTime;
-    
-                // 남은 시간을 업데이트 (음수 방지)
-                setTimeLeft(newTimeLeft > 0 ? newTimeLeft : 0);
-    
-                // 남은 시간이 특정 조건에 도달하면 handleTimerEnd 호출
-                if (gender.current === 'male') {
-                    if (newTimeLeft === 10) {
-                        if (isFriend_axios.current === false) {
-                            handleTimerEnd(ri, pi);
-                            isFriend_axios.current = true;
-                        }
-                    }
-                } else if (gender.current === 'female') {
-                    if (newTimeLeft === 8) {
-                        if (isFriend_axios.current === false) {
-                            handleTimerEnd(ri, pi);
-                            isFriend_axios.current = true;
-                        }
+
+
+
+        const currentTime = Date.now();
+
+        const updateTimer = () => {
+            const newElapsedTime = Math.floor((Date.now() - currentTime) / 1000);
+            const newTimeLeft = servertime.current - newElapsedTime; // 다시 남은 시간 계산
+
+            setTimeLeft(newTimeLeft > 0 ? newTimeLeft : 0); // 음수 방지, 0으로 설정
+            // console.log(newTimeLeft)
+            if (gender.current == 'male') {
+                if (newTimeLeft == 10) {
+
+                    if (isFriend_axios.current == false) {
+                        handleTimerEnd(ri, pi);
+                        isFriend_axios.current = true;
                     }
                 }
-    
-                // 남은 시간이 0보다 크면 타이머 계속, 0이면 종료
-                if (newTimeLeft > 0) {
-                    timerRef.current = requestAnimationFrame(updateTimer);
-                } else {
-                    leaveRoom();
+            } else if (gender.current == 'female') {
+                if (newTimeLeft == 8) {
+
+                    if (isFriend_axios.current == false) {
+                        handleTimerEnd(ri, pi);
+                        isFriend_axios.current = true;
+                    }
                 }
-            };
-    
-            // 타이머 시작
-            timerRef.current = requestAnimationFrame(updateTimer);
-    
-    }
-    
+            }
+            // if (newTimeLeft == 9) {
+
+            //     if (isFriend_axios2.current == false) {
+            //         handleTimerEnd(ri, pi);
+            //         isFriend_axios2.current = true;
+            //     }
+            // }
+            // if (newTimeLeft == 7 ) {
+            //     if(isFriend_axios2.current == false) {
+
+            //         handleTimerEnd(ri, pi);
+            //         isFriend_axios2.current = true
+            //     }
+            // }
+            if (newTimeLeft > 0) {
+                timerRef.current = requestAnimationFrame(updateTimer);
+            } else {
+                // leaveRoom();
+                // handleTimerEnd(ri, pi); // 타이머가 끝났을 때 실행할 함수 호출
+            }
+        };
+
+        timerRef.current = requestAnimationFrame(updateTimer);
+    };
+
 
     // 타이머 끝나는 경우 코드 실행
     const handleTimerEnd = (roomId, partnerId) => {
