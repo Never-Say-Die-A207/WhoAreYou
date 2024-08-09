@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.Map;
 
 @RestController
@@ -116,48 +115,20 @@ public class FaceChatController {
         }
     }
 
-//    @PostMapping("/friend")
-//    public ResponseEntity<?> addFriend(@RequestBody FaceChatResultRequest params) {
-//            try {
-//                log.info("Finish face chat");
-//                Integer roomId = params.getRoomId();
-//                Integer myId = params.getMyId();
-//                Integer partnerId = params.getPartnerId();
-//                Boolean friend = params.getFriend();
-//
-//                if (friend == null)
-//                    friend = false;
-//
-//                faceChatService.updateWantsFriend(roomId, myId, partnerId, friend);
-//            }
-//    }
-
-    @PostMapping("/result")
-    public ResponseEntity<?> finish(@RequestBody FaceChatResultRequest params) {
-        try{
+    @PostMapping("/friend")
+    public ResponseEntity<?> addFriend(@RequestBody FaceChatResultRequest params) {
+        try {
             log.info("Finish face chat");
             Integer roomId = params.getRoomId();
             Integer myId = params.getMyId();
             Integer partnerId = params.getPartnerId();
             Boolean friend = params.getFriend();
 
-            if(friend == null)
+            if (friend == null)
                 friend = false;
 
             faceChatService.updateWantsFriend(roomId, myId, partnerId, friend);
-            try {
-                Thread.sleep(7000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            Integer result = faceChatService.finishFaceChat(roomId, myId, partnerId);
-            if(result != null){
-                log.info("Both Agreed!! Chat room created");
-                return new ResponseEntity<Map<String, String>> (Map.of("message", "OK"), HttpStatus.CREATED);
-            }
-
-            log.info("Someone Disagreed... Nothing happens");
-            return new ResponseEntity<Map<String, String>> (Map.of("message", "NO"), HttpStatus.OK);
+            return new ResponseEntity<Void> (HttpStatus.OK);
         } catch (UserNotFoundException e){
             log.info("Wrong user info");
             return new ResponseEntity<String> (HttpStatus.BAD_REQUEST);
@@ -166,4 +137,39 @@ public class FaceChatController {
             return new ResponseEntity<Void> (HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+//    @PostMapping("/friend")
+//    public ResponseEntity<?> finish(@RequestBody FaceChatResultRequest params) {
+//        try{
+//            log.info("Finish face chat");
+//            Integer roomId = params.getRoomId();
+//            Integer myId = params.getMyId();
+//            Integer partnerId = params.getPartnerId();
+//            Boolean friend = params.getFriend();
+//
+//            if(friend == null)
+//                friend = false;
+//
+//            faceChatService.updateWantsFriend(roomId, myId, partnerId, friend);
+//            try {
+//                Thread.sleep(7000);
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+//            Integer result = faceChatService.finishFaceChat(roomId, myId, partnerId);
+//            if(result != null){
+//                log.info("Both Agreed!! Chat room created");
+//                return new ResponseEntity<Map<String, String>> (Map.of("message", "OK"), HttpStatus.CREATED);
+//            }
+//
+//            log.info("Someone Disagreed... Nothing happens");
+//            return new ResponseEntity<Map<String, String>> (Map.of("message", "NO"), HttpStatus.OK);
+//        } catch (UserNotFoundException e){
+//            log.info("Wrong user info");
+//            return new ResponseEntity<String> (HttpStatus.BAD_REQUEST);
+//        } catch (Exception e) {
+//            log.info(e.getMessage());
+//            return new ResponseEntity<Void> (HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 }

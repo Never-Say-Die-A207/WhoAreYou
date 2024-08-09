@@ -17,10 +17,12 @@ import com.ssafy.whoareyou.user.repository.UserRepository;
 import io.livekit.server.AccessToken;
 import io.livekit.server.RoomJoin;
 import io.livekit.server.RoomName;
+import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -82,43 +84,43 @@ public class FaceChatService {
         return generateToken(user.getNickname(), user.getId(), String.valueOf(faceChat.getId()));
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
-    public Integer finishFaceChat(Integer faceChatId, Integer myId, Integer partnerId) {
-        Male m;
-        Female f;
-
-        User me = userRepository.findById(myId).orElseThrow(() -> new UserNotFoundException(myId));
-        User partner = userRepository.findById(partnerId).orElseThrow(() -> new UserNotFoundException(partnerId));
-
-        if(me instanceof Male){
-            m = (Male)me;
-            f = (Female)partner;
-        }
-        else if(me instanceof Female){
-            m = (Male)partner;
-            f = (Female)me;
-        }
-        else
-            throw new InvalidGenderException();
-
-        Integer result = null;
-
-        FaceChat updatedFaceChat = faceChatRepository.findById(faceChatId).orElseThrow(FaceChatNotFoundException::new);
-
-        WantsFriendType maleWantsFriend = updatedFaceChat.getMaleWantsFriend();
-        WantsFriendType femaleWantsFriend = updatedFaceChat.getFemaleWantsFriend();
-
-        if (maleWantsFriend != null && femaleWantsFriend != null) {
-            if (maleWantsFriend == WantsFriendType.YES && femaleWantsFriend == WantsFriendType.YES) {
-                me.increaseSuccessCount();
-
-                result = friendService.join(new SearchTargetDto(m.getId(), f.getId()));
-            }
-            quitUser(myId);
-        }
-
-        return result;
-    }
+//    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
+//    public Integer finishFaceChat(Integer faceChatId, Integer myId, Integer partnerId) {
+//        Male m;
+//        Female f;
+//
+//        User me = userRepository.findById(myId).orElseThrow(() -> new UserNotFoundException(myId));
+//        User partner = userRepository.findById(partnerId).orElseThrow(() -> new UserNotFoundException(partnerId));
+//
+//        if(me instanceof Male){
+//            m = (Male)me;
+//            f = (Female)partner;
+//        }
+//        else if(me instanceof Female){
+//            m = (Male)partner;
+//            f = (Female)me;
+//        }
+//        else
+//            throw new InvalidGenderException();
+//
+//        Integer result = null;
+//
+//        FaceChat updatedFaceChat = faceChatRepository.findById(faceChatId).orElseThrow(FaceChatNotFoundException::new);
+//
+//        WantsFriendType maleWantsFriend = updatedFaceChat.getMaleWantsFriend();
+//        WantsFriendType femaleWantsFriend = updatedFaceChat.getFemaleWantsFriend();
+//
+//        if (maleWantsFriend != null && femaleWantsFriend != null) {
+//            if (maleWantsFriend == WantsFriendType.YES && femaleWantsFriend == WantsFriendType.YES) {
+//                me.increaseSuccessCount();
+//
+//                result = friendService.join(new SearchTargetDto(m.getId(), f.getId()));
+//            }
+//            quitUser(myId);
+//        }
+//
+//        return result;
+//    }
 
     public void quitUser(Integer userId) {
         log.info("FaceChatService.quitUser() : Start to quit User " + userId);
@@ -186,7 +188,7 @@ public class FaceChatService {
         return FaceChatInfoResponse.createResponse(user, currentFaceChat);
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     public void updateWantsFriend(Integer faceChatId, Integer myId, Integer partnerId, boolean friend){
         FaceChat faceChat = faceChatRepository.findById(faceChatId).orElseThrow(FaceChatNotFoundException::new);
         User me = userRepository.findById(myId).orElseThrow(() -> new UserNotFoundException(myId));
@@ -196,6 +198,7 @@ public class FaceChatService {
         Male m;
         Female f;
 
+        //남녀가 해당 방에 제대로 있는 지 확인
         if(me instanceof Male){
             m = (Male)me;
             f = (Female)partner;
@@ -251,13 +254,14 @@ public class FaceChatService {
     public int getSeconds(Integer roomId) {
         FaceChat faceChat = faceChatRepository.findById(roomId).orElseThrow(FaceChatNotFoundException::new);
 
+        int additionalSeconds = 5;
         int duration = 3;
 
         LocalDateTime startedAt = faceChat.getStartedAt();
         if(startedAt == null)
             return -1;
 
-        LocalDateTime finishedAt = startedAt.plusMinutes(duration);
+        LocalDateTime finishedAt = startedAt.plusMinutes(duration).plusSeconds(additionalSeconds);
         int secondDiff = (int)Duration.between(LocalDateTime.now(), finishedAt).getSeconds();
         return Math.max(secondDiff, 0);
     }
