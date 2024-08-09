@@ -121,7 +121,7 @@ function OpenVidu() {
     const [isFriend, setIsFriend] = useState(false);
     const isFriendRef = useRef(isFriend);
     const isFriend_axios = useRef(false);
-    const isFriend_axios2 = useRef(false);
+ 
     const gender = useRef('')
 
 
@@ -347,25 +347,30 @@ function OpenVidu() {
     }
 
 
+    // 타이머 시작 함수 수정
     async function startTimer(ri, pi) {
-        try {
-            // 서버에서 seconds 값을 가져옴
+   
+            // 서버에서 seconds 값을 가져옴 (예: 180초)
             const response = await fetch(APPLICATION_SERVER_URL + 'facechat/seconds/' + ri, {
                 method: 'GET',
             });
             const seconds = await response.json();
             console.log('Initial seconds:', seconds);
     
-            // 타이머의 시작 시간을 seconds로 설정
-            const startTime = Date.now() - seconds * 1000;
+            // 타이머의 시작 시간을 현재 시각으로 설정
+            const startTime = Date.now();
             startTimeRef.current = startTime;
     
             const updateTimer = () => {
-                const newElapsedTime = Math.floor((Date.now() - startTimeRef.current) / 1000);
-                const newTimeLeft = seconds - newElapsedTime; // 남은 시간 계산
+                // 경과된 시간 계산
+                const elapsedTime = Math.floor((Date.now() - startTimeRef.current) / 1000);
+                // 남은 시간 계산 (초기 seconds 값에서 경과된 시간 빼기)
+                const newTimeLeft = seconds - elapsedTime;
     
-                setTimeLeft(newTimeLeft > 0 ? newTimeLeft : 0); // 음수 방지, 0으로 설정
+                // 남은 시간을 업데이트 (음수 방지)
+                setTimeLeft(newTimeLeft > 0 ? newTimeLeft : 0);
     
+                // 남은 시간이 특정 조건에 도달하면 handleTimerEnd 호출
                 if (gender.current === 'male') {
                     if (newTimeLeft === 10) {
                         if (isFriend_axios.current === false) {
@@ -382,6 +387,7 @@ function OpenVidu() {
                     }
                 }
     
+                // 남은 시간이 0보다 크면 타이머 계속, 0이면 종료
                 if (newTimeLeft > 0) {
                     timerRef.current = requestAnimationFrame(updateTimer);
                 } else {
@@ -392,9 +398,6 @@ function OpenVidu() {
             // 타이머 시작
             timerRef.current = requestAnimationFrame(updateTimer);
     
-        } catch (error) {
-            console.error('Error fetching seconds:', error);
-        }
     }
     
 
