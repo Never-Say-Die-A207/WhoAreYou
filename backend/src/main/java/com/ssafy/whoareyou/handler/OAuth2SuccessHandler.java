@@ -53,13 +53,13 @@ public class OAuth2SuccessHandler  extends SimpleUrlAuthenticationSuccessHandler
             String email = oAuth2User.getName();
             System.out.println("이메일: " + email);
             Optional<User> user = userRepository.findByEmail(email);
-            System.out.println("ㅇㅇㅇ");
+
             if (user.isPresent()) {
                 String userId = String.valueOf(user.get().getId());
                 System.out.println("사용자 ID: " + userId);
 
-                String token = jwtProvider.create(userId);
-                System.out.println("생성된 토큰: " + token);
+                String token = jwtProvider.createAccessToken(userId);
+                System.out.println("생성된 엑세스 토큰: " + token);
 
                 String redirectUrl = "http://localhost:3000/auth/oauth-response/" + token + "/3600";
                 System.out.println("리다이렉션 URL: " + redirectUrl);

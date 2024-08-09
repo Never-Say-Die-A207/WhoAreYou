@@ -1,15 +1,9 @@
 package com.ssafy.whoareyou.user.service.implement;
 
-import com.ssafy.whoareyou.user.dto.request.auth.EmailCheckRequestDto;
-import com.ssafy.whoareyou.user.dto.request.auth.NicknameCheckRequestDto;
-import com.ssafy.whoareyou.user.dto.request.auth.SignInRequestDto;
-import com.ssafy.whoareyou.user.dto.request.auth.SignUpRequestDto;
+import com.ssafy.whoareyou.user.dto.request.auth.*;
 import com.ssafy.whoareyou.user.dto.response.ResponseDto;
 import com.ssafy.whoareyou.user.dto.response.UserResponseDto;
-import com.ssafy.whoareyou.user.dto.response.auth.EmailCheckResponseDto;
-import com.ssafy.whoareyou.user.dto.response.auth.NicknameCheckResponseDto;
-import com.ssafy.whoareyou.user.dto.response.auth.SignInResponseDto;
-import com.ssafy.whoareyou.user.dto.response.auth.SignUpResponseDto;
+import com.ssafy.whoareyou.user.dto.response.auth.*;
 import com.ssafy.whoareyou.provider.JwtProvider;
 import com.ssafy.whoareyou.user.entity.Female;
 import com.ssafy.whoareyou.user.entity.Male;
@@ -106,28 +100,59 @@ public class AuthServiceImplement implements AuthService {
 
     @Override
     public ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto) {
+        String accessToken = null;
+        String refreshToken = null;
 
-        String token = null;
-
-        try{
-
+        try {
             String email = dto.getEmail();
             Optional<User> userEntity = userRepository.findByEmail(email);
             if(userEntity.isEmpty()) return SignInResponseDto.signInFail();
 
+            User user = userEntity.get();
+
+            // 이미 로그인한 사용자인지 확인 (refreshToken이 존재하는지 확인)
+            if (user.getRefreshToken() != null && !user.getRefreshToken().isEmpty()) {
+                return SignInResponseDto.alreadySignedIn();  // 이미 로그인한 사용자에 대한 새로운 응답
+            }
+
             String password = dto.getPassword();
-            String encodedPassword = userEntity.get().getPassword();
+            String encodedPassword = user.getPassword();
             boolean isMatched = passwordEncoder.matches(password, encodedPassword);
             if(!isMatched) return SignInResponseDto.signInFail();
 
-            String userId = String.valueOf(userEntity.get().getId());
-            token = jwtProvider.create(userId);
-        } catch(Exception exception){
+            String userId = String.valueOf(user.getId());
+            accessToken = jwtProvider.createAccessToken(userId);
+            refreshToken = jwtProvider.createRefreshToken(userId);
+
+            // refreshToken을 데이터베이스에 저장
+            user.setRefreshToken(refreshToken);
+            userRepository.save(user);
+
+        } catch(Exception exception) {
             exception.printStackTrace();
             return ResponseDto.databaseError();
         }
 
-        return SignInResponseDto.success(token);
+        return SignInResponseDto.success(accessToken, refreshToken);
+    }
+
+    @Override
+    public ResponseEntity<? super LogoutResponseDto> logout(LogoutRequestDto dto) {
+
+        try {
+            int userId = dto.getUserId();
+            Optional<User> userEntity = userRepository.findById(userId);
+            if(userEntity.isEmpty()) return LogoutResponseDto.logoutFail();
+
+            userEntity.get().setRefreshToken(null);
+            userRepository.save(userEntity.get());
+
+        } catch(Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        return LogoutResponseDto.success();
     }
 
     @Override

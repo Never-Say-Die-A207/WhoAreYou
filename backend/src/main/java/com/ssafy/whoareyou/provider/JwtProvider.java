@@ -20,21 +20,39 @@ public class JwtProvider {
     @Value("${secret-key}")
     private String secretKey;
 
-    public String create (String userId){ // Jwt 생성
+//    public String create (String userId){ // Jwt 생성
+//
+//        Date expiredDate = Date.from(Instant.now().plus(1, ChronoUnit.HOURS));
+//        Key key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+//
+//        String jwt = Jwts.builder()
+//                .signWith(key, SignatureAlgorithm.HS256)
+//                .setSubject(userId)
+//                .setIssuedAt(new Date()).setExpiration(expiredDate)
+//                .compact();
+//        return jwt;
+//
+//    }
 
-        Date expiredDate = Date.from(Instant.now().plus(1, ChronoUnit.HOURS));
-        Key key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
-
-        String jwt = Jwts.builder()
-                .signWith(key, SignatureAlgorithm.HS256)
-                .setSubject(userId)
-                .setIssuedAt(new Date()).setExpiration(expiredDate)
-                .compact();
-        return jwt;
-
+    public String createAccessToken(String userId){
+        return createToken(userId, 1, ChronoUnit.HOURS);
     }
 
+    public String createRefreshToken(String userId){
+        return createToken(userId, 14, ChronoUnit.DAYS);
+    }
 
+    private String createToken(String userId, long amount, ChronoUnit unit){
+        Date expiredDate = Date.from(Instant.now().plus(amount, unit));
+        Key key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+
+        return Jwts.builder()
+                .signWith(key, SignatureAlgorithm.HS256)
+                .setSubject(userId)
+                .setIssuedAt(new Date())
+                .setExpiration(expiredDate)
+                .compact();
+    }
 
     public String validate (String jwt) {
 
