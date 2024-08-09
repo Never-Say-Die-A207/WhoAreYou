@@ -115,7 +115,7 @@ function OpenVidu() {
     const [timeLeft, setTimeLeft] = useState(20); // 3분 = 180초로 변경
     const timerRef = useRef(null);
     const startTimeRef = useRef(null);
-
+    const servertime = useRef(null)
 
     // 친구 추가 토글 상태
     const [isFriend, setIsFriend] = useState(false);
@@ -123,7 +123,6 @@ function OpenVidu() {
     const isFriend_axios = useRef(false);
  
     const gender = useRef('')
-
 
     const userId = localStorage.getItem('userId');
     const token = localStorage.getItem('token');
@@ -224,7 +223,6 @@ function OpenVidu() {
                 startTimeRef.current = new Date(body.info.startedAt).getTime(); // 시작 시간 설정
                 gender.current = body.info.myGender;
                 setLoading(false);
-                gender.current = body.info.myGender;
                 // 타이머 시작
                 startTimer(body.info.roomId, body.info.partnerId);
 
@@ -347,8 +345,8 @@ function OpenVidu() {
     }
 
 
-    // 타이머 시작 함수 수정
-    async function startTimer(ri, pi) {
+     // 타이머 시작 함수 수정
+     async function startTimer(ri, pi) {
         await fetch(APPLICATION_SERVER_URL + 'facechat/seconds/' + ri, {
             method: 'GET',
             // headers: {
@@ -358,7 +356,11 @@ function OpenVidu() {
         ).then(response => response.json()
         )
             .then(seconds => {
-                console.log(seconds)
+                console.log('받아온 시간')
+                console.log(seconds.seconds)
+                servertime.current = seconds.seconds
+                console.log('서버타임')
+                console.log(servertime.current)
             })
             .catch(error => {
                 console.error('getRoomInfo error:', error);
@@ -368,20 +370,14 @@ function OpenVidu() {
 
         const currentTime = Date.now();
 
-        // body.info.startedAt의 시간과 현재 시간의 차이를 계산
-        const elapsedTime = Math.floor((currentTime - startTimeRef.current) / 1000);
-        const timeLeft = 20 - elapsedTime; // 180초에서 경과된 시간을 빼서 남은 시간 계산
-
-        setTimeLeft(timeLeft > 0 ? timeLeft : 0); // 남은 시간 설정 (음수를 방지)
-
         const updateTimer = () => {
-            const newElapsedTime = Math.floor((Date.now() - startTimeRef.current) / 1000);
-            const newTimeLeft = 20 - newElapsedTime; // 다시 남은 시간 계산
+            const newElapsedTime = Math.floor((Date.now() - currentTime) / 1000);
+            const newTimeLeft = servertime.current - newElapsedTime; // 다시 남은 시간 계산
 
             setTimeLeft(newTimeLeft > 0 ? newTimeLeft : 0); // 음수 방지, 0으로 설정
             // console.log(newTimeLeft)
             if (gender.current == 'male') {
-                if (newTimeLeft == 10) {
+                if (newTimeLeft == 9) {
 
                     if (isFriend_axios.current == false) {
                         handleTimerEnd(ri, pi);
@@ -389,7 +385,7 @@ function OpenVidu() {
                     }
                 }
             } else if (gender.current == 'female') {
-                if (newTimeLeft == 8) {
+                if (newTimeLeft == 7) {
 
                     if (isFriend_axios.current == false) {
                         handleTimerEnd(ri, pi);
@@ -421,6 +417,7 @@ function OpenVidu() {
 
         timerRef.current = requestAnimationFrame(updateTimer);
     };
+
 
     // 타이머 끝나는 경우 코드 실행
     const handleTimerEnd = (roomId, partnerId) => {
