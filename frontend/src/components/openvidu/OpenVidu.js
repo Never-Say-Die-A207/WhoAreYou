@@ -124,7 +124,8 @@ function OpenVidu() {
     const [isFriend, setIsFriend] = useState(false);
     const isFriendRef = useRef(isFriend);
     const isFriend_axios = useRef(false);
- 
+    const getfriend_result = useRef(false)
+    
     const gender = useRef('')
 
     const userId = localStorage.getItem('userId');
@@ -274,7 +275,7 @@ function OpenVidu() {
 
 
 
-//미리보기 코드
+    //미리보기 코드
 
     useEffect(() => {
         const setup = async () => {
@@ -311,16 +312,16 @@ function OpenVidu() {
         const startPrediction = () => {
             const predict = async () => {
                 if (videoPreviewRef.current) {
-                const nowInMs = Date.now();
-                if (lastVideoTimeRef.current !== videoPreviewRef.current.currentTime) {
-                    lastVideoTimeRef.current = videoPreviewRef.current.currentTime;
-                    if (faceLandmarkerRef.current) {
-                        const faceLandmarkerResult = await faceLandmarkerRef.current.detectForVideo(videoPreviewRef.current, nowInMs);
-                        // console.log(faceLandmarkerResult.faceLandmarks[0]);
-                        setLandmarks(faceLandmarkerResult.faceLandmarks[0])
+                    const nowInMs = Date.now();
+                    if (lastVideoTimeRef.current !== videoPreviewRef.current.currentTime) {
+                        lastVideoTimeRef.current = videoPreviewRef.current.currentTime;
+                        if (faceLandmarkerRef.current) {
+                            const faceLandmarkerResult = await faceLandmarkerRef.current.detectForVideo(videoPreviewRef.current, nowInMs);
+                            // console.log(faceLandmarkerResult.faceLandmarks[0]);
+                            setLandmarks(faceLandmarkerResult.faceLandmarks[0])
+                        }
                     }
                 }
-            }
                 // 예측을 계속하기 위해 requestAnimationFrame을 사용합니다.
                 window.requestAnimationFrame(predict);
             };
@@ -412,7 +413,7 @@ function OpenVidu() {
 
 
 
-//미리보기 코드 끝
+    //미리보기 코드 끝
 
 
 
@@ -479,7 +480,10 @@ function OpenVidu() {
                     }
                 }
                 if (newTimeLeft == 5) {
-                    getFriendResult(pi)
+                    if (getfriend_result.current == false) {
+                        getFriendResult(pi)
+                        getfriend_result.current = true;
+                    }
                 }
             } else if (gender.current == 'female') {
                 if (newTimeLeft == 7) {
@@ -490,11 +494,14 @@ function OpenVidu() {
                     }
                 }
                 if (newTimeLeft == 3) {
-                    getFriendResult(pi)
+                    if (getfriend_result.current == false) {
+                        getFriendResult(pi)
+                        getfriend_result.current = true;
+                    }
                 }
             }
-            
-           
+
+
 
             // if (newTimeLeft == 9) {
 
@@ -589,7 +596,7 @@ function OpenVidu() {
         window.location.reload();
     };
 
-    
+
     const getFriendResult = (pi) => {
 
         const myId = localStorage.getItem('userId')
@@ -714,7 +721,7 @@ function OpenVidu() {
                             {mask === 'Joker' && <JokerLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
                             {/* {mask === 'PinkFox' && <PinkFoxLocal landmarks={landmarks} videoElement3={videoPreviewRef} />} */}
                             {mask === 'SpiderManBlack' && <SpiderManBlackLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
-                            {mask === 'Squid' && <SquidLocal landmarks={landmarks} videoElement={videoPreviewRef} />} 
+                            {mask === 'Squid' && <SquidLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
                             {isSmallScreen ? (
                                 // 모바일 꾸미기
                                 <form
