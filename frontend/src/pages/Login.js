@@ -31,6 +31,7 @@ const Login = ({ onLoginSuccess }) => {
         e.preventDefault();
         try {
             const response = await api.post('/sign-in', form);
+<<<<<<< HEAD
             localStorage.setItem('accessToken', response.data.accessToken);
             localStorage.setItem('accessTokenExpirationTime', response.data.accessTokenExpirationTime);
 
@@ -41,6 +42,14 @@ const Login = ({ onLoginSuccess }) => {
             // JWT 토큰 받아오기
             const accessToken = response.data.accessToken;
             const refreshToken = response.data.refreshToken;
+=======
+            localStorage.setItem('token', response.data.accessToken);
+            localStorage.setItem('expirationTime', response.data.expirationTime);
+            console.log('Login success:', response.data);
+
+            // JWT 토큰 받아오기
+            const token = response.data.accessToken;
+>>>>>>> front
 
             // 토큰 디코딩
             const decodedAccessToken = jwtDecode(accessToken);

@@ -22,7 +22,7 @@ import * as cam from '@mediapipe/camera_utils';
 import api from '../../api/api';
 import { PropagateLoader } from 'react-spinners';
 import { CiLogout } from "react-icons/ci";
-
+import { FaceLandmarker, FilesetResolver } from '@mediapipe/tasks-vision';
 import RedFoxLocal from './RedFoxLocal';
 import SpiderManLocal from './SpiderManLocal';
 import VerticalCarousel from './VerticalCarousel';
@@ -100,7 +100,9 @@ function OpenVidu() {
     const videoPreviewRef = useRef(null);
     const [landmarks, setLandmarks] = useState(null);
     const [loading, setLoading] = useState(true);
-    // const loading = false
+    const videoRef = useRef(null);
+    const faceLandmarkerRef = useRef(null);
+    const lastVideoTimeRef = useRef(-1);
 
     //반응형
     const isSmallScreen = useMediaQuery({ maxWidth: 576 });
@@ -116,6 +118,7 @@ function OpenVidu() {
     const timerRef = useRef(null);
     const startTimeRef = useRef(null);
     const servertime = useRef(null)
+    const [isFriend10second, setisFriend10second] = useState(false)
 
     // 친구 추가 토글 상태
     const [isFriend, setIsFriend] = useState(false);
@@ -268,72 +271,160 @@ function OpenVidu() {
 
 
 
-    //미리보기 코드
-    useEffect(() => {
-        startPreview();
-        return () => stopPreview();
-    }, []);
 
 
 
+//미리보기 코드
 
     useEffect(() => {
-        if (videoPreviewRef.current && previewStream) {
-            videoPreviewRef.current.srcObject = previewStream;
-            const faceMesh = new FaceMesh({
-                locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
-            });
-
-            faceMesh.setOptions({
-                maxNumFaces: 1,
-                minDetectionConfidence: 0.5,
-                minTrackingConfidence: 0.5,
-            });
-
-            faceMesh.onResults((results) => {
-                if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
-                    const landmarks = results.multiFaceLandmarks[0];
-                    setLandmarks(landmarks);
-                }
-            });
-
-
-            const camera = new cam.Camera(videoPreviewRef.current, {
-                onFrame: async () => {
-                    if (videoPreviewRef.current) {
-                        await faceMesh.send({ image: videoPreviewRef.current });
-                    }
+        const setup = async () => {
+            const vision = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0/wasm");
+            faceLandmarkerRef.current = await FaceLandmarker.createFromOptions(vision, {
+                baseOptions: {
+                    modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task`,
+                    delegate: "GPU"
                 },
-                width: 1280,
-                height: 720,
+                numFaces: 1,
+                runningMode: "VIDEO",
+                // outputFaceBlendshapes: true,
+                // outputFacialTransformationMatrixes: true,
             });
-            camera.start();
-            // videoPreviewRef.current = camera
-        }
-    }, [previewStream, videoPreviewRef]);  // videoPreviewRef도 의존성 배열에 추가
 
+            if (videoPreviewRef.current) {
+                navigator.mediaDevices.getUserMedia({
+                    video: { width: 1280, height: 720 },
+                    audio: false,
+                }).then(stream => {
+                    videoPreviewRef.current.srcObject = stream;
+                    videoPreviewRef.current.addEventListener('loadeddata', () => {
+                        // 비디오 로드 완료 후 예측 시작
+                        if (videoPreviewRef.current) {
+                            startPrediction();
+                        }
+                    });
+                }).catch(error => {
+                    console.error("Error accessing media devices.", error);
+                });
+            }
+        };
 
-    const startPreview = async () => {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({
-                video: {
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 },
-                    aspectRatio: 16 / 9
+        const startPrediction = () => {
+            const predict = async () => {
+                if (videoPreviewRef.current) {
+                const nowInMs = Date.now();
+                if (lastVideoTimeRef.current !== videoPreviewRef.current.currentTime) {
+                    lastVideoTimeRef.current = videoPreviewRef.current.currentTime;
+                    if (faceLandmarkerRef.current) {
+                        const faceLandmarkerResult = await faceLandmarkerRef.current.detectForVideo(videoPreviewRef.current, nowInMs);
+                        // console.log(faceLandmarkerResult.faceLandmarks[0]);
+                        setLandmarks(faceLandmarkerResult.faceLandmarks[0])
+                    }
                 }
-            });
-            setPreviewStream(stream);
-        } catch (error) {
-            console.error('Error accessing webcam: ', error);
-        }
-    };
+            }
+                // 예측을 계속하기 위해 requestAnimationFrame을 사용합니다.
+                window.requestAnimationFrame(predict);
+            };
 
-    const stopPreview = () => {
-        if (previewStream) {
-            previewStream.getTracks().forEach(track => track.stop());
-            setPreviewStream(null);
-        }
-    };
+            predict(); // 예측 함수 시작
+        };
+
+        setup();
+
+        // 컴포넌트가 언마운트될 때 비디오 스트림을 중지하고 자원을 해제합니다.
+        return () => {
+            if (videoPreviewRef.current && videoPreviewRef.current.srcObject) {
+                const stream = videoPreviewRef.current.srcObject;
+                const tracks = stream.getTracks();
+                tracks.forEach(track => track.stop());
+                videoPreviewRef.current.srcObject = null;
+            }
+        };
+    }, []); // 빈 배열을 사용하여 컴포넌트가 마운트될 때만 실행합니다.
+
+
+
+
+    // 미리보기 코드
+    // useEffect(() => {
+    //     startPreview();
+    //     return () => stopPreview();
+    // }, []);
+
+    // useEffect(() => {
+    //     if (videoPreviewRef.current && previewStream) {
+    //         videoPreviewRef.current.srcObject = previewStream;
+    //         const faceMesh = new FaceMesh({
+    //             locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
+    //         });
+    //         console.log(faceMesh)
+
+    //         faceMesh.setOptions({
+    //             maxNumFaces: 1,
+    //             minDetectionConfidence: 0.5,
+    //             minTrackingConfidence: 0.5,
+    //         });
+
+    //         faceMesh.onResults((results) => {
+    //             if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
+    //                 const landmarks = results.multiFaceLandmarks[0];
+    //                 setLandmarks(landmarks);
+    //                 console.log(landmarks)
+    //             }
+    //         });
+
+
+    //         const camera = new cam.Camera(videoPreviewRef.current, {
+    //             onFrame: async () => {
+    //                 if (videoPreviewRef.current) {
+    //                     await faceMesh.send({ image: videoPreviewRef.current });
+    //                 }
+    //             },
+    //             width: 1280,
+    //             height: 720,
+    //         });
+    //         camera.start();
+    //         // videoPreviewRef.current = camera
+    //     }
+    // }, [previewStream, videoPreviewRef]);  // videoPreviewRef도 의존성 배열에 추가
+
+
+    // const startPreview = async () => {
+    //     try {
+    //         const stream = await navigator.mediaDevices.getUserMedia({
+    //             video: {
+    //                 width: { ideal: 1280 },
+    //                 height: { ideal: 720 },
+    //                 aspectRatio: 16 / 9
+    //             }
+    //         });
+    //         setPreviewStream(stream);
+    //     } catch (error) {
+    //         console.error('Error accessing webcam: ', error);
+    //     }
+    // };
+
+    // const stopPreview = () => {
+    //     if (previewStream) {
+    //         previewStream.getTracks().forEach(track => track.stop());
+    //         setPreviewStream(null);
+    //     }
+    // };
+
+
+
+//미리보기 코드 끝
+
+
+
+
+
+
+
+
+
+
+
+
 
     async function quit() {
         const userId = localStorage.getItem('userId');
@@ -345,8 +436,8 @@ function OpenVidu() {
     }
 
 
-     // 타이머 시작 함수 수정
-     async function startTimer(ri, pi) {
+    // 타이머 시작 함수 수정
+    async function startTimer(ri, pi) {
         await fetch(APPLICATION_SERVER_URL + 'facechat/seconds/' + ri, {
             method: 'GET',
             // headers: {
@@ -376,6 +467,9 @@ function OpenVidu() {
 
             setTimeLeft(newTimeLeft > 0 ? newTimeLeft : 0); // 음수 방지, 0으로 설정
             // console.log(newTimeLeft)
+            if (newTimeLeft == 10) {
+                setisFriend10second(true)
+            }
             if (gender.current == 'male') {
                 if (newTimeLeft == 9) {
 
@@ -383,6 +477,9 @@ function OpenVidu() {
                         handleTimerEnd(ri, pi);
                         isFriend_axios.current = true;
                     }
+                }
+                if (newTimeLeft == 5) {
+                    getFriendResult(pi)
                 }
             } else if (gender.current == 'female') {
                 if (newTimeLeft == 7) {
@@ -392,7 +489,13 @@ function OpenVidu() {
                         isFriend_axios.current = true;
                     }
                 }
+                if (newTimeLeft == 3) {
+                    getFriendResult(pi)
+                }
             }
+            
+           
+
             // if (newTimeLeft == 9) {
 
             //     if (isFriend_axios2.current == false) {
@@ -430,7 +533,7 @@ function OpenVidu() {
         };
         console.log(finalResult);
 
-        fetch(APPLICATION_SERVER_URL + 'facechat/result', {
+        fetch(APPLICATION_SERVER_URL + 'facechat/friend', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -485,6 +588,43 @@ function OpenVidu() {
     const CancelMatching = () => {
         window.location.reload();
     };
+
+    
+    const getFriendResult = (pi) => {
+
+        const myId = localStorage.getItem('userId')
+        const partnerId = pi
+
+        const requestURL = APPLICATION_SERVER_URL + `friends/result?myId=${myId}&partnerId=${partnerId}`;
+
+        fetch(requestURL)
+            .then(response => response.json())
+            .then(body => {
+                console.log(body);
+                /*
+                    EXAMPLE
+
+                    THEY ARE FRIEND
+                    {
+                        result:true,
+                        chatRoomId:3
+                    }
+
+                    THEY ARE NOT FRIEND
+                    {
+                        result:false,
+                        chatRoomId:-1
+                    }
+                */
+                console.log(body.result);
+                console.log(body.chatRoomId);
+
+                //return ...
+            })
+            .catch(error => {
+                console.error('getFriendResult error:', error);
+            });
+    }
 
 
     return (
@@ -563,7 +703,7 @@ function OpenVidu() {
                             ) : (
                                 <VerticalCarousel setMask={setMask} />
                             )}
-
+                            {/* <video className='camera-feed' id="video" ref={videoRef} autoPlay></video> */}
                             <video ref={videoPreviewRef} autoPlay muted style={{
                                 width: '100%', height: '100%', transform: 'scaleX(-1)', visibility: 'hidden',
                             }}></video>
@@ -574,7 +714,7 @@ function OpenVidu() {
                             {mask === 'Joker' && <JokerLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
                             {/* {mask === 'PinkFox' && <PinkFoxLocal landmarks={landmarks} videoElement3={videoPreviewRef} />} */}
                             {mask === 'SpiderManBlack' && <SpiderManBlackLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
-                            {mask === 'Squid' && <SquidLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
+                            {mask === 'Squid' && <SquidLocal landmarks={landmarks} videoElement={videoPreviewRef} />} 
                             {isSmallScreen ? (
                                 // 모바일 꾸미기
                                 <form
@@ -709,10 +849,14 @@ function OpenVidu() {
 
                         </div>
                         <div className='friend-toggle'>
-                            <label>
-                                <input type='checkbox' onClick={toggleIsFriend} />
-                                친구 추가
-                            </label>
+                            {isFriend10second ? (
+                                <label>친구 여부 10초 후에 공개!</label>
+                            ) : (
+                                <label>
+                                    <input type='checkbox' onClick={toggleIsFriend} />
+                                    친구 추가
+                                </label>
+                            )}
                         </div>
                     </div>
 
