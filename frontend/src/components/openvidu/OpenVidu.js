@@ -377,7 +377,7 @@ function OpenVidu() {
             setTimeLeft(newTimeLeft > 0 ? newTimeLeft : 0); // 음수 방지, 0으로 설정
             // console.log(newTimeLeft)
             if (gender.current == 'male') {
-                if (newTimeLeft == 10) {
+                if (newTimeLeft == 9) {
 
                     if (isFriend_axios.current == false) {
                         handleTimerEnd(ri, pi);
@@ -385,7 +385,7 @@ function OpenVidu() {
                     }
                 }
             } else if (gender.current == 'female') {
-                if (newTimeLeft == 8) {
+                if (newTimeLeft == 7) {
 
                     if (isFriend_axios.current == false) {
                         handleTimerEnd(ri, pi);
@@ -410,7 +410,7 @@ function OpenVidu() {
             if (newTimeLeft > 0) {
                 timerRef.current = requestAnimationFrame(updateTimer);
             } else {
-                // leaveRoom();
+                leaveRoom();
                 // handleTimerEnd(ri, pi); // 타이머가 끝났을 때 실행할 함수 호출
             }
         };
