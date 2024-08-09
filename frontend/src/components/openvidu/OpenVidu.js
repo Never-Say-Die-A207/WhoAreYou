@@ -116,6 +116,7 @@ function OpenVidu() {
     const timerRef = useRef(null);
     const startTimeRef = useRef(null);
     const servertime = useRef(null)
+    const [isFriend10second, setisFriend10second] = useState(false)
 
     // 친구 추가 토글 상태
     const [isFriend, setIsFriend] = useState(false);
@@ -345,8 +346,8 @@ function OpenVidu() {
     }
 
 
-     // 타이머 시작 함수 수정
-     async function startTimer(ri, pi) {
+    // 타이머 시작 함수 수정
+    async function startTimer(ri, pi) {
         await fetch(APPLICATION_SERVER_URL + 'facechat/seconds/' + ri, {
             method: 'GET',
             // headers: {
@@ -376,6 +377,9 @@ function OpenVidu() {
 
             setTimeLeft(newTimeLeft > 0 ? newTimeLeft : 0); // 음수 방지, 0으로 설정
             // console.log(newTimeLeft)
+            if (newTimeLeft == 10) {
+                setisFriend10second(true)
+            }
             if (gender.current == 'male') {
                 if (newTimeLeft == 9) {
 
@@ -393,6 +397,13 @@ function OpenVidu() {
                     }
                 }
             }
+            if (newTimeLeft == 5) {
+                // 친구 추가 했어요?
+            }
+            if (newTimeLeft == 3) {
+                // 친구 추가 했어요?
+            }
+
             // if (newTimeLeft == 9) {
 
             //     if (isFriend_axios2.current == false) {
@@ -709,10 +720,14 @@ function OpenVidu() {
 
                         </div>
                         <div className='friend-toggle'>
+                            {isFriend10second ? (
+                            <label>친구 여부 10초 후에 공개</label>
+                            ) : (
                             <label>
                                 <input type='checkbox' onClick={toggleIsFriend} />
                                 친구 추가
                             </label>
+                            )}
                         </div>
                     </div>
 
