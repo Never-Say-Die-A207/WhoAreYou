@@ -31,21 +31,25 @@ const Login = ({ onLoginSuccess }) => {
         e.preventDefault();
         try {
             const response = await api.post('/sign-in', form);
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('expirationTime', response.data.expirationTime);
+            localStorage.setItem('accessToken', response.data.accessToken);
+            localStorage.setItem('accessTokenExpirationTime', response.data.accessTokenExpirationTime);
+
+            localStorage.setItem('refreshToken', response.data.refreshToken);
+            localStorage.setItem('refreshTokenExpirationTime', response.data.refreshTokenExpirationTime);
             console.log('Login success:', response.data);
 
             // JWT 토큰 받아오기
-            const token = response.data.token;
+            const accessToken = response.data.accessToken;
+            const refreshToken = response.data.refreshToken;
 
             // 토큰 디코딩
-            const decodedToken = jwtDecode(token);
+            const decodedAccessToken = jwtDecode(accessToken);
 
             // userId 추출
-            const userId = decodedToken.sub;
+            const userId = decodedAccessToken.sub;
 
             localStorage.setItem('userId', userId);
-            localStorage.setItem('token', token);
+            //localStorage.setItem('accessToken', accessToken);
 
             // 사용자 정보를 가져오기
             const userResponse = await api.get(`/user/${userId}`);
@@ -54,7 +58,12 @@ const Login = ({ onLoginSuccess }) => {
             navigate('/matching');
         } catch (error) {
             console.error('Login error:', error);
-            setModalMessage('아이디와 비밀번호를 확인해 주세요.');
+            if(error.response.data.code === "ASI"){
+                setModalMessage('이미 로그인 중인 사용자입니다.');
+            }
+            else{
+                setModalMessage('아이디와 비밀번호를 확인해 주세요.');
+            }
             setShowModal(true); // 로그인 실패 시 모달을 표시
         }
     };

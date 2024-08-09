@@ -1,4 +1,5 @@
 import React from 'react';
+import api from '../api/api';
 import { useNavigate } from 'react-router-dom';
 
 const Logout = ({ onLogout }) => {
@@ -6,13 +7,22 @@ const Logout = ({ onLogout }) => {
     
     const onClick = async () => {
         // 로컬 스토리지 정보 삭제
-        localStorage.clear();
+        const userId = localStorage.getItem('userId');
+        const response = await api.post('/logout', {userId})
         
-        // 상위 컴포넌트에 onLogout 콜백 호출
-        onLogout();
         
-        // 홈 페이지 리디렉션
-        navigate('/');
+        if(response.data.code === "SU"){
+            localStorage.clear();
+            
+            // 상위 컴포넌트에 onLogout 콜백 호출
+            onLogout();
+            
+            // 홈 페이지 리디렉션
+            navigate('/');
+        } else{
+            console.log("로그아웃에 실패했습니다.");
+        };
+
     };
 
     return (

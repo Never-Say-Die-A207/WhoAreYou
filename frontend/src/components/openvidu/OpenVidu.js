@@ -125,13 +125,13 @@ function OpenVidu() {
     const gender = useRef('')
 
     const userId = localStorage.getItem('userId');
-    const token = localStorage.getItem('token');
+    const refreshToken = localStorage.getItem('refreshToken');
     const navigate = useNavigate();
 
     //매칭 시작 시간
 
     async function joinRoom() {
-        if (!token) {
+        if (!refreshToken) {
             alert('로그인을 해주세요.');
             navigate('/');
         }
@@ -502,7 +502,7 @@ function OpenVidu() {
                                     <li className="nav-item">
                                         <Link to='/matching' className='nav-link' onClick={leaveRoom}>매칭하기</Link>
                                     </li>
-                                    {token &&
+                                    {refreshToken &&
                                         <li className="nav-item">
                                             <Link to='/mypage' className='nav-link' onClick={leaveRoom}>채팅하기</Link>
                                         </li>
@@ -511,7 +511,7 @@ function OpenVidu() {
                                 </ul>
                             </div>
                             <div>
-                                {!token && <ul className="navbar-nav ml-auto">
+                                {!refreshToken && <ul className="navbar-nav ml-auto">
                                     <li className="nav-item">
                                         <Link to='/signup' className='nav-link' id='nav-signup'>회원가입</Link>
                                     </li>

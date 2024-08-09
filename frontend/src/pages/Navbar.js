@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import './Navbar.css';
 
 const Navbar = ({ userId, onLogout }) => {
-    const token = localStorage.getItem('token');
+    const refreshToken = localStorage.getItem('refreshToken');
+    console.log("refreshToken : " + refreshToken);
 
     return (
         <header>
@@ -19,7 +20,7 @@ const Navbar = ({ userId, onLogout }) => {
                             <li className="nav-item">
                                 <Link to='/matching' className='nav-link'>매칭하기</Link>
                             </li>
-                            {token &&
+                            {refreshToken &&
                             <li className="nav-item">
                                 <Link to='/mypage' className='nav-link'>채팅하기</Link>
                             </li>
@@ -28,7 +29,8 @@ const Navbar = ({ userId, onLogout }) => {
                         </ul>
                         </div>
                         <div>
-                        {!token && <ul className="navbar-nav ml-auto">
+                        {/* refreshToken && 로그아웃 버튼 */}
+                        {!refreshToken && <ul className="navbar-nav ml-auto">
                             <li className="nav-item">
                                 <Link to='/signup' className='nav-link' id='nav-signup'>회원가입</Link>
                             </li>
