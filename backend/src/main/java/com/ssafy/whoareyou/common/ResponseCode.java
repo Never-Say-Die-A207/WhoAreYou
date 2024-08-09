@@ -11,6 +11,7 @@ public interface ResponseCode {
     String SIGN_IN_FAIL = "SF";
     String LOGOUT_FAIL = "LF";
     String INVALID_REFRESH_TOKEN = "IRT";
+    String ALREADY_SIGNED_IN = "ASI";
 
     String DATABASE_ERROR = "DBE";
 }

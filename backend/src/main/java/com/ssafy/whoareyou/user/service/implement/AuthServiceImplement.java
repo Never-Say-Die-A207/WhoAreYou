@@ -108,18 +108,25 @@ public class AuthServiceImplement implements AuthService {
             Optional<User> userEntity = userRepository.findByEmail(email);
             if(userEntity.isEmpty()) return SignInResponseDto.signInFail();
 
+            User user = userEntity.get();
+
+            // 이미 로그인한 사용자인지 확인 (refreshToken이 존재하는지 확인)
+            if (user.getRefreshToken() != null && !user.getRefreshToken().isEmpty()) {
+                return SignInResponseDto.alreadySignedIn();  // 이미 로그인한 사용자에 대한 새로운 응답
+            }
+
             String password = dto.getPassword();
-            String encodedPassword = userEntity.get().getPassword();
+            String encodedPassword = user.getPassword();
             boolean isMatched = passwordEncoder.matches(password, encodedPassword);
             if(!isMatched) return SignInResponseDto.signInFail();
 
-            String userId = String.valueOf(userEntity.get().getId());
+            String userId = String.valueOf(user.getId());
             accessToken = jwtProvider.createAccessToken(userId);
             refreshToken = jwtProvider.createRefreshToken(userId);
 
             // refreshToken을 데이터베이스에 저장
-            userEntity.get().setRefreshToken(refreshToken);
-            userRepository.save(userEntity.get());
+            user.setRefreshToken(refreshToken);
+            userRepository.save(user);
 
         } catch(Exception exception) {
             exception.printStackTrace();

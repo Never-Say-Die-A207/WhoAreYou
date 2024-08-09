@@ -42,4 +42,9 @@ public class SignInResponseDto extends ResponseDto {
         ResponseDto responseBody = new ResponseDto(ResponseCode.INVALID_REFRESH_TOKEN, ResponseMessage.INVALID_REFRESH_TOKEN);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
     }
+
+    public static ResponseEntity<ResponseDto> alreadySignedIn() {
+        ResponseDto responseBody = new ResponseDto(ResponseCode.ALREADY_SIGNED_IN, ResponseMessage.ALREADY_SIGNED_IN);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(responseBody);
+    }
 }
