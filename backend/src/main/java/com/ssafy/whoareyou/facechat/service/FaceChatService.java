@@ -75,7 +75,7 @@ public class FaceChatService {
                 faceChat.joinUser(user, mask);
                 createHistoryForBoth(faceChat);
             }
-            faceChatRepository.saveFaceChatOrHistory(faceChat);
+            faceChatRepository.saveFaceChat(faceChat);
         }
         else{
             log.info("FaceChatService.getToken() : User " + userId + " is Already in face chat.");
@@ -145,7 +145,7 @@ public class FaceChatService {
     public FaceChat createFaceChat(User user, String mask) {
         FaceChat faceChat = new FaceChat();
         faceChat.joinUser(user, mask);
-        faceChatRepository.saveFaceChatOrHistory(faceChat);
+        faceChatRepository.saveFaceChat(faceChat);
 
         return faceChat;
     }
@@ -161,7 +161,7 @@ public class FaceChatService {
 
         female.getHistoriesAsFemale().add(history);
         userRepository.save(female);
-        faceChatRepository.saveFaceChatOrHistory(history);
+        faceChatRepository.saveHistory(history);
     }
 
     private FaceChat getFirstAvailableFaceChat(User user, String gender) {
@@ -188,7 +188,7 @@ public class FaceChatService {
         return FaceChatInfoResponse.createResponse(user, currentFaceChat);
     }
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updateWantsFriend(Integer faceChatId, Integer myId, Integer partnerId, boolean friend){
         FaceChat faceChat = faceChatRepository.findById(faceChatId).orElseThrow(FaceChatNotFoundException::new);
         User me = userRepository.findById(myId).orElseThrow(() -> new UserNotFoundException(myId));
@@ -215,7 +215,11 @@ public class FaceChatService {
         }
 
         faceChat.setWantsFriend(me, wantsFriend);
-        faceChatRepository.saveAndFlush(faceChat);
+        if(faceChat.getMaleWantsFriend() == WantsFriendType.YES && faceChat.getFemaleWantsFriend() == WantsFriendType.YES){
+            friendService.join(new SearchTargetDto(m.getId(), f.getId()));
+        }
+
+        faceChatRepository.saveFaceChat(faceChat);
     }
 
     @Transactional(readOnly = true)
@@ -265,4 +269,7 @@ public class FaceChatService {
         int secondDiff = (int)Duration.between(LocalDateTime.now(), finishedAt).getSeconds();
         return Math.max(secondDiff, 0);
     }
+    
+    //TODO 유저 유효성, 화상채팅 유효성 검사하는 메소드를 별도로 분리하기
+    //TODO 로그 깔끔하게 달기
 }

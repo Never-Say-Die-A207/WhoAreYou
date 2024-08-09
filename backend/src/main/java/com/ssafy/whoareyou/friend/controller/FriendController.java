@@ -1,7 +1,10 @@
 package com.ssafy.whoareyou.friend.controller;
 
+import com.ssafy.whoareyou.friend.dto.FriendResultDto;
 import com.ssafy.whoareyou.friend.dto.SearchTargetDto;
 import com.ssafy.whoareyou.friend.service.FriendService;
+import com.ssafy.whoareyou.user.exception.InvalidGenderException;
+import com.ssafy.whoareyou.user.exception.UserNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,5 +42,18 @@ public class FriendController {
     ResponseEntity<?> delete(@RequestBody SearchTargetDto dto){
         service.delete(dto);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/result")
+    public ResponseEntity<?> getResult(@RequestParam("myId") Integer myId, @RequestParam("partnerId") Integer partnerId){
+        try{
+            Integer chatRoomId = service.find(myId, partnerId);
+            boolean result = chatRoomId != -1;
+            return new ResponseEntity<FriendResultDto>(new FriendResultDto(chatRoomId, result), HttpStatus.OK);
+        } catch (UserNotFoundException | InvalidGenderException e){
+            return new ResponseEntity<Void> (HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<Void> (HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

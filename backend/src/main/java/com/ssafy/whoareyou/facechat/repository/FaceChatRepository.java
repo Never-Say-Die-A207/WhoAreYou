@@ -4,10 +4,12 @@ import com.ssafy.whoareyou.facechat.entity.FaceChat;
 import com.ssafy.whoareyou.facechat.entity.History;
 import com.ssafy.whoareyou.user.entity.User;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,22 +23,16 @@ public class FaceChatRepository {
     //private final int timeLimit = 10;
     private final int timeLimit = -1;
 
-    public void saveFaceChatOrHistory(Object object) {
-        if(object instanceof FaceChat faceChat) {
-            if(faceChat.getId() == null)
-                em.persist(faceChat);
-            else
-                em.merge(faceChat);
-        }
-        else if(object instanceof History history) {
-            em.persist(history);
-        }
+    public void saveHistory(History history) {
+        em.persist(history);
     }
 
-    public void saveAndFlush(FaceChat faceChat) {
-        saveFaceChatOrHistory(faceChat);
-        em.flush();
-        em.clear();
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    public void saveFaceChat(FaceChat faceChat) {
+        if(faceChat.getId() == null)
+            em.persist(faceChat);
+        else
+            em.merge(faceChat);
     }
 
     public void deleteFaceChat(FaceChat faceChat) {

@@ -10,6 +10,8 @@ import com.ssafy.whoareyou.friend.repository.FriendJpaRepository;
 import com.ssafy.whoareyou.user.entity.Female;
 import com.ssafy.whoareyou.user.entity.Male;
 import com.ssafy.whoareyou.user.entity.User;
+import com.ssafy.whoareyou.user.exception.InvalidGenderException;
+import com.ssafy.whoareyou.user.exception.UserNotFoundException;
 import com.ssafy.whoareyou.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -94,5 +96,30 @@ public class FriendService {
 
         chatMongoRepository.deleteByChatRoomId(friend.getChatRoom().getId());
         friendJpaRepository.delete(friend);
+    }
+
+    public Integer find(Integer myId, Integer partnerId) {
+        User me = userRepository.findById(myId).orElseThrow(() -> new UserNotFoundException(myId));
+        User partner = userRepository.findById(partnerId).orElseThrow(() -> new UserNotFoundException(partnerId));
+
+        Male m;
+        Female f;
+
+        //남녀가 해당 방에 제대로 있는 지 확인
+        if(me instanceof Male){
+            m = (Male)me;
+            f = (Female)partner;
+        }
+        else if(me instanceof Female){
+            m = (Male)partner;
+            f = (Female)me;
+        }
+        else
+            throw new InvalidGenderException();
+
+        Friend friend = friendJpaRepository.findByGenderId(m.getId(), f.getId()).orElse(null);
+        if(friend == null)
+            return -1;
+        return friend.getChatRoom().getId();
     }
 }

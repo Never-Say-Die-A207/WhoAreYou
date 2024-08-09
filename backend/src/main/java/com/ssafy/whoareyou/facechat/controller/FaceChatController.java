@@ -117,12 +117,13 @@ public class FaceChatController {
 
     @PostMapping("/friend")
     public ResponseEntity<?> addFriend(@RequestBody FaceChatResultRequest params) {
+        Integer roomId = params.getRoomId();
+        Integer myId = params.getMyId();
+        Integer partnerId = params.getPartnerId();
+        Boolean friend = params.getFriend();
+
         try {
             log.info("Finish face chat");
-            Integer roomId = params.getRoomId();
-            Integer myId = params.getMyId();
-            Integer partnerId = params.getPartnerId();
-            Boolean friend = params.getFriend();
 
             if (friend == null)
                 friend = false;
