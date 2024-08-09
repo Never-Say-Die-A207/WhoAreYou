@@ -101,7 +101,6 @@ function OpenVidu() {
     const [landmarks, setLandmarks] = useState(null);
     const [loading, setLoading] = useState(true);
     // const loading = false
-
     //반응형
     const isSmallScreen = useMediaQuery({ maxWidth: 576 });
 
@@ -721,7 +720,7 @@ function OpenVidu() {
                         </div>
                         <div className='friend-toggle'>
                             {isFriend10second ? (
-                            <label>친구 여부 10초 후에 공개</label>
+                            <label>친구 여부 10초 후에 공개!</label>
                             ) : (
                             <label>
                                 <input type='checkbox' onClick={toggleIsFriend} />
