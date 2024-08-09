@@ -101,6 +101,7 @@ function OpenVidu() {
     const [landmarks, setLandmarks] = useState(null);
     const [loading, setLoading] = useState(true);
     // const loading = false
+    const [faceMeshErr, setfaceMeshErr] = useState(true)
     //반응형
     const isSmallScreen = useMediaQuery({ maxWidth: 576 });
 
@@ -283,34 +284,38 @@ function OpenVidu() {
             const faceMesh = new FaceMesh({
                 locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
             });
+            if (faceMesh) {
 
-            faceMesh.setOptions({
-                maxNumFaces: 1,
-                minDetectionConfidence: 0.5,
-                minTrackingConfidence: 0.5,
-            });
+                faceMesh.setOptions({
+                    maxNumFaces: 1,
+                    minDetectionConfidence: 0.5,
+                    minTrackingConfidence: 0.5,
+                });
 
-            faceMesh.onResults((results) => {
-                if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
-                    const landmarks = results.multiFaceLandmarks[0];
-                    setLandmarks(landmarks);
-                }
-            });
-
-
-            const camera = new cam.Camera(videoPreviewRef.current, {
-                onFrame: async () => {
-                    if (videoPreviewRef.current) {
-                        await faceMesh.send({ image: videoPreviewRef.current });
+                faceMesh.onResults((results) => {
+                    if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
+                        const landmarks = results.multiFaceLandmarks[0];
+                        setLandmarks(landmarks);
                     }
-                },
-                width: 1280,
-                height: 720,
-            });
-            camera.start();
+                });
+
+
+                const camera = new cam.Camera(videoPreviewRef.current, {
+                    onFrame: async () => {
+                        if (videoPreviewRef.current) {
+                            await faceMesh.send({ image: videoPreviewRef.current });
+                        }
+                    },
+                    width: 1280,
+                    height: 720,
+                });
+                camera.start();
+            } else {
+                setfaceMeshErr(!faceMeshErr)
+            }
             // videoPreviewRef.current = camera
         }
-    }, [previewStream, videoPreviewRef]);  // videoPreviewRef도 의존성 배열에 추가
+    }, [previewStream, videoPreviewRef, faceMeshErr]);  // videoPreviewRef도 의존성 배열에 추가
 
 
     const startPreview = async () => {
@@ -720,12 +725,12 @@ function OpenVidu() {
                         </div>
                         <div className='friend-toggle'>
                             {isFriend10second ? (
-                            <label>친구 여부 10초 후에 공개!</label>
+                                <label>친구 여부 10초 후에 공개!</label>
                             ) : (
-                            <label>
-                                <input type='checkbox' onClick={toggleIsFriend} />
-                                친구 추가
-                            </label>
+                                <label>
+                                    <input type='checkbox' onClick={toggleIsFriend} />
+                                    친구 추가
+                                </label>
                             )}
                         </div>
                     </div>

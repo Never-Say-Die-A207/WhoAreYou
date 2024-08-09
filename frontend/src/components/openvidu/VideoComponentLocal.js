@@ -12,6 +12,7 @@ import SquidLocal from "./SquidLocal";
 function VideoComponentLocal({ track, participantIdentity, local = false, mask }) {
     const videoElement = useRef(null);
     const [landmarks, setLandmarks] = useState(null);
+    const [faceMeshErrLoacl, setfaceMeshErrLocal] = useState(true)
 
     useEffect(() => {
         if (videoElement.current && track) {
@@ -29,31 +30,35 @@ function VideoComponentLocal({ track, participantIdentity, local = false, mask }
         const faceMesh = new FaceMesh({
             locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
         });
+        if (faceMesh) {
 
-        faceMesh.setOptions({
-            maxNumFaces: 1,
-            minDetectionConfidence: 0.5,
-            minTrackingConfidence: 0.5,
-        });
-
-        faceMesh.onResults((results) => {
-            if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
-                const landmarks = results.multiFaceLandmarks[0];
-                setLandmarks(landmarks);
-            }
-        });
-
-        const detectLandmarks = async () => {
-            if (videoElement.current) {
-                await faceMesh.send({ image: videoElement.current });
-                requestAnimationFrame(detectLandmarks);
-            }
-        };
-
-        if (videoElement.current) {
-            videoElement.current.addEventListener('loadeddata', () => {
-                detectLandmarks();
+            faceMesh.setOptions({
+                maxNumFaces: 1,
+                minDetectionConfidence: 0.5,
+                minTrackingConfidence: 0.5,
             });
+
+            faceMesh.onResults((results) => {
+                if (results.multiFaceLandmarks && results.multiFaceLandmarks.length > 0) {
+                    const landmarks = results.multiFaceLandmarks[0];
+                    setLandmarks(landmarks);
+                }
+            });
+
+            const detectLandmarks = async () => {
+                if (videoElement.current) {
+                    await faceMesh.send({ image: videoElement.current });
+                    requestAnimationFrame(detectLandmarks);
+                }
+            };
+
+            if (videoElement.current) {
+                videoElement.current.addEventListener('loadeddata', () => {
+                    detectLandmarks();
+                });
+            }
+        } else {
+            setfaceMeshErrLocal(!faceMeshErrLoacl)
         }
 
         return () => {
@@ -61,7 +66,7 @@ function VideoComponentLocal({ track, participantIdentity, local = false, mask }
                 faceMesh.close();
             }
         };
-    }, []);
+    }, [faceMeshErrLoacl]);
 
     return (
         <div id={"camera-" + participantIdentity} className="video-container-local">
