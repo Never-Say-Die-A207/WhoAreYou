@@ -15,7 +15,7 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
     const accessToken = localStorage.getItem('accessToken');
-    const expirationTime = localStorage.getItem('expirationTime');
+    const accessTokenexpirationTime = localStorage.getItem('accessTokenexpirationTime');
     config.headers.Authorization = `Bearer ${accessToken}`;
     return config;
 });
