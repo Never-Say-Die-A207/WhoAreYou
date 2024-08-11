@@ -410,6 +410,7 @@ function OpenVidu() {
             if (newTimeLeft > 0) {
                 timerRef.current = requestAnimationFrame(updateTimer);
             } else {
+                //친구 결과 확인해서 화면에 표시
                 leaveRoom();
                 // handleTimerEnd(ri, pi); // 타이머가 끝났을 때 실행할 함수 호출
             }
@@ -430,7 +431,7 @@ function OpenVidu() {
         };
         console.log(finalResult);
 
-        fetch(APPLICATION_SERVER_URL + 'facechat/result', {
+        fetch(APPLICATION_SERVER_URL + 'facechat/friend', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -485,6 +486,15 @@ function OpenVidu() {
     const CancelMatching = () => {
         window.location.reload();
     };
+
+    const getFriendResult = async () => {
+
+        //const myId = ...
+        //const partnerId = ...
+
+        const response = await api.get(`/friends/result?myId=${myId}&partnerId=${partnerId}`);
+        console.log(response.data);
+    }
 
 
     return (

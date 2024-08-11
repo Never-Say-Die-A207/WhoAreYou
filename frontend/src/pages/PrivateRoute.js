@@ -2,9 +2,9 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 
 const PrivateRoute = ({ children }) => {
-  const token = localStorage.getItem('token');
+  const refreshToken = localStorage.getItem('refreshToken');
 
-  if (!token) {
+  if (!refreshToken) {
     alert('로그인을 해주세요.');
     return <Navigate to="/" />;
   }
