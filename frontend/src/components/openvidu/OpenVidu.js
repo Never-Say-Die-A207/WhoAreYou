@@ -620,7 +620,7 @@ function OpenVidu() {
             .catch(error => {
                 console.log('handleTimerEnd error:', error);
             });
-        leaveRoom();
+        // leaveRoom();
     };
 
 
