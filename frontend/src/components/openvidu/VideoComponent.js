@@ -140,7 +140,13 @@ function VideoComponent({ track, participantIdentity, setExpressionData, local =
       {maskRemote === 'SpiderManBlack' && <SpiderManBlackRemote landmarks={landmarks} videoElement={videoElement2} />}
       {maskRemote === 'Squid' && <SquidRemote landmarks={landmarks} videoElement={videoElement2} />}
       {maskRemote === 'Joker' && <JokerRemote landmarks={landmarks} videoElement={videoElement2} />}
-      <FaceRecognition videoElement={videoElement2} setExpressionData={setExpressionData} setEmotionCounts={setEmotionCounts} />
+      {videoElement2.current && (
+          <FaceRecognition 
+              videoElement={videoElement2} 
+              setExpressionData={setExpressionData} 
+              setEmotionCounts={setEmotionCounts} 
+          />
+      )}
     </div>
   );
 }
