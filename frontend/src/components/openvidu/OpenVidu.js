@@ -32,7 +32,9 @@ import PinkFoxLocal from './PinkFoxLocal';
 import SpiderManBlackLocal from './SpiderManBlackLocal';
 import SquidLocal from './SquidLocal';
 import RedFoxRemote from './RedFoxRemote';
-
+import {
+    isMobile
+} from "react-device-detect";
 // 반응형
 import { useMediaQuery, MediaQuery } from 'react-responsive';
 
@@ -300,21 +302,41 @@ function OpenVidu() {
                 // outputFacialTransformationMatrixes: true,
             });
 
-            if (videoPreviewRef.current) {
-                navigator.mediaDevices.getUserMedia({
-                    video: { width: 1280, height: 720 },
-                    audio: false,
-                }).then(stream => {
-                    videoPreviewRef.current.srcObject = stream;
-                    videoPreviewRef.current.addEventListener('loadeddata', () => {
-                        // 비디오 로드 완료 후 예측 시작
-                        if (videoPreviewRef.current) {
-                            startPrediction();
-                        }
+            if (isMobile) {
+                if (videoPreviewRef.current) {
+                    navigator.mediaDevices.getUserMedia({
+                        video: { width: 1080, height: 1920 },
+                        audio: false,
+                        aspectRatio: 9 / 16,
+                    }).then(stream => {
+                        videoPreviewRef.current.srcObject = stream;
+                        videoPreviewRef.current.addEventListener('loadeddata', () => {
+                            // 비디오 로드 완료 후 예측 시작
+                            if (videoPreviewRef.current) {
+                                startPrediction();
+                            }
+                        });
+                    }).catch(error => {
+                        console.error("Error accessing media devices.", error);
                     });
-                }).catch(error => {
-                    console.error("Error accessing media devices.", error);
-                });
+                }
+            } else {
+                if (videoPreviewRef.current) {
+                    navigator.mediaDevices.getUserMedia({
+                        video: { width: 1280, height: 720 },
+                        audio: false,
+                    }).then(stream => {
+                        videoPreviewRef.current.srcObject = stream;
+                        videoPreviewRef.current.addEventListener('loadeddata', () => {
+                            // 비디오 로드 완료 후 예측 시작
+                            if (videoPreviewRef.current) {
+                                startPrediction();
+                            }
+                        });
+                    }).catch(error => {
+                        console.error("Error accessing media devices.", error);
+                    });
+                }
             }
         };
 
