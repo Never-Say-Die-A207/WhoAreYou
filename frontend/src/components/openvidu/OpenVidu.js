@@ -32,12 +32,10 @@ import PinkFoxLocal from './PinkFoxLocal';
 import SpiderManBlackLocal from './SpiderManBlackLocal';
 import SquidLocal from './SquidLocal';
 import RedFoxRemote from './RedFoxRemote';
-import {
-    isMobile
-} from "react-device-detect";
+
 // 반응형
 import { useMediaQuery, MediaQuery } from 'react-responsive';
-
+import Webcam from "react-webcam";
 
 
 // var APPLICATION_SERVER_URL = 'http://3.36.120.21:4040/api/';
@@ -302,29 +300,12 @@ function OpenVidu() {
                 // outputFacialTransformationMatrixes: true,
             });
 
-            if (isMobile) {
-                if (videoPreviewRef.current) {
-                    navigator.mediaDevices.getUserMedia({
-                        video: { width: 1080, height: 1920 },
-                        audio: false,
-                        aspectRatio: 9 / 16,
-                    }).then(stream => {
-                        videoPreviewRef.current.srcObject = stream;
-                        videoPreviewRef.current.addEventListener('loadeddata', () => {
-                            // 비디오 로드 완료 후 예측 시작
-                            if (videoPreviewRef.current) {
-                                startPrediction();
-                            }
-                        });
-                    }).catch(error => {
-                        console.error("Error accessing media devices.", error);
-                    });
-                }
-            } else {
+           
                 if (videoPreviewRef.current) {
                     navigator.mediaDevices.getUserMedia({
                         video: { width: 1280, height: 720 },
                         audio: false,
+                        aspectRatio: 16 / 9,
                     }).then(stream => {
                         videoPreviewRef.current.srcObject = stream;
                         videoPreviewRef.current.addEventListener('loadeddata', () => {
@@ -337,7 +318,7 @@ function OpenVidu() {
                         console.error("Error accessing media devices.", error);
                     });
                 }
-            }
+           
         };
 
         const startPrediction = () => {
@@ -765,7 +746,8 @@ function OpenVidu() {
                                 <VerticalCarousel setMask={setMask} />
                             )}
                             {/* <video className='camera-feed' id="video" ref={videoRef} autoPlay></video> */}
-                            <video ref={videoPreviewRef} autoPlay muted style={{
+                            {/* <Webcam ref={videoPreviewRef}/> */}
+                            <video ref={videoPreviewRef} autoPlay muted style={{ 
                                 width: '100%', height: '100%', transform: 'scaleX(-1)', visibility: 'hidden',
                             }}></video>
                             {/* <RedFoxRemote landmarks={landmarks} videoElement={videoPreviewRef} /> */}
