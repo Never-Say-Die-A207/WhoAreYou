@@ -120,6 +120,8 @@ public class FriendService {
         Friend friend = friendJpaRepository.findByGenderId(m.getId(), f.getId()).orElse(null);
         if(friend == null)
             return -1;
+        me.increaseSuccessCount();
+        userRepository.save(me);
         return friend.getChatRoom().getId();
     }
 }
