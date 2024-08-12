@@ -1,4 +1,4 @@
-body {
+/* body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -10,4 +10,30 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+} */
+
+
+@font-face {
+  font-family: "CookieRun";
+  font-style: normal;
+  font-weight: 700;
+  src: url("./font/CookieRun-Bold.ttf") 
+}
+
+@font-face {
+  font-family: "CookieRun";
+  font-style: normal;
+  font-weight: 500;
+  src: url("./font/CookieRun-Regular.ttf") 
+}
+
+@font-face {
+  font-family: "CookieRun";
+  font-style: normal;
+  font-weight: 900;
+  src: url("./font/CookieRun-Black.ttf") 
+}
+
+body {
+  font-family: "CookieRun" !important;
 }

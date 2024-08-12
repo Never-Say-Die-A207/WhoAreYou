@@ -12,8 +12,7 @@
   .navbar-brand {
     margin-right: 2rem;
     color: white !important;
-    font-family: 'Arial', sans-serif;
-    font-weight: bold;
+    font-weight: 700;
     font-size: 1.8rem;
     transition: color 0.3s;
   }
