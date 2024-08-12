@@ -120,6 +120,15 @@ function OpenVidu() {
     const servertime = useRef(null)
     const [isFriend10second, setisFriend10second] = useState(false)
 
+    const [stage1, setstage1] = useState(false);
+    const stage1_ref = useRef(false);
+    const [stage2, setstage2] = useState(false);
+    const stage2_ref = useRef(false);
+    const [stage3, setstage3] = useState(false);
+    const stage3_ref = useRef(false);
+    const [fadeOut, setFadeOut] = useState(false);
+
+
     // 친구 추가 토글 상태
     const [isFriend, setIsFriend] = useState(false);
     const isFriendRef = useRef(isFriend);
@@ -418,15 +427,6 @@ function OpenVidu() {
 
 
 
-
-
-
-
-
-
-
-
-
     async function quit() {
         const userId = localStorage.getItem('userId');
         const response = await fetch(APPLICATION_SERVER_URL + 'facechat/' + userId, {
@@ -468,6 +468,26 @@ function OpenVidu() {
 
             setTimeLeft(newTimeLeft > 0 ? newTimeLeft : 0); // 음수 방지, 0으로 설정
             // console.log(newTimeLeft)
+
+            if (newTimeLeft == 25) {
+                if (stage1_ref.current == false) {
+                    showNotification();
+                    stage1_ref.current = true;
+                }
+            }
+            if (newTimeLeft == 10) {
+                if (stage2_ref.current == false) {
+                    showNotification2();
+                    stage2_ref.current = true;
+                }
+            }
+            // if (newTimeLeft == 30) {
+            //     if (stage3_ref.current == false) {
+            //         showNotification3();
+            //         stage3_ref.current = true;
+            //     }
+            // }
+
             if (newTimeLeft == 10) {
                 setisFriend10second(true)
             }
@@ -529,6 +549,47 @@ function OpenVidu() {
     };
 
 
+    // 안내 문구
+    // const [showMessage, setShowMessage] = useState(false);
+
+
+
+
+    const showNotification = () => {
+        setstage1(true);  // 안내 문구 표시
+        setFadeOut(false);  // fade-out 리셋
+        setTimeout(() => {
+            setFadeOut(true);  // 2.5초 후 fade-out 시작
+            setTimeout(() => {
+                setstage1(false);  // 애니메이션 후 안내 문구 숨김
+            }, 500);  // 애니메이션이 끝날 때까지 0.5초 대기
+        }, 5000);  // 2.5초 동안 문구 표시 후 fade-out 시작
+    };
+
+    const showNotification2 = () => {
+        setstage2(true);  // 안내 문구 표시
+        setFadeOut(false);  // fade-out 리셋
+        setTimeout(() => {
+            setFadeOut(true);  // 2.5초 후 fade-out 시작
+            setTimeout(() => {
+                setstage2(false);  // 애니메이션 후 안내 문구 숨김
+            }, 500);  // 애니메이션이 끝날 때까지 0.5초 대기
+        }, 3000);  // 2.5초 동안 문구 표시 후 fade-out 시작
+    };
+
+    const showNotification3 = () => {
+        setstage3(true);  // 안내 문구 표시
+        setFadeOut(false);  // fade-out 리셋
+        setTimeout(() => {
+            setFadeOut(true);  // 2.5초 후 fade-out 시작
+            setTimeout(() => {
+                setstage3(false);  // 애니메이션 후 안내 문구 숨김
+            }, 500);  // 애니메이션이 끝날 때까지 0.5초 대기
+        }, 3000);  // 2.5초 동안 문구 표시 후 fade-out 시작
+    };
+
+
+
     // 타이머 끝나는 경우 코드 실행
     const handleTimerEnd = (roomId, partnerId) => {
         console.log("Final isFriend value:", isFriendRef.current); // C
@@ -558,7 +619,7 @@ function OpenVidu() {
             .catch(error => {
                 console.log('handleTimerEnd error:', error);
             });
-        // leaveRoom();
+        leaveRoom();
     };
 
 
@@ -598,7 +659,6 @@ function OpenVidu() {
 
 
     const getFriendResult = async (pi) => {
-
         const myId = localStorage.getItem('userId')
         const partnerId = pi
         const response = await api.get(`/friends/result?myId=${myId}&partnerId=${partnerId}`);
@@ -787,6 +847,35 @@ function OpenVidu() {
                 ) : (
                     <div>
                         <div style={{ position: 'relative' }}>
+                            {/* 안내문구 */}
+                            <div className="stage-container">
+                                {stage1 && (
+                                    <div className={`stage-notification ${fadeOut ? 'fade-out' : 'fade-in'}`}>
+                                        <div className="stage-title">친구 선택</div>
+                                        <div className="stage-description">10초 동안 친구 여부를 고르세요</div>
+                                        <div className='stage-alert'>*이후에는 선택 불가*</div>
+
+                                    </div>
+                                )}
+                                {/* <button className="show-button" onClick={showNotification}>Show Stage Again</button> */}
+                            </div>
+                            <div className="stage-container">
+                                {stage2 && (
+                                    <div className={`stage-notification ${fadeOut ? 'fade-out' : 'fade-in'}`}>
+                                        <div className="stage-title">친구 결과</div>
+                                        <div className="stage-description">10초 후에 공개 됩니다</div>
+                                    </div>
+                                )}
+
+                            </div>
+                            {/* <div className="stage-container">
+                                {stage3 && (
+                                    <div className={`stage-notification ${fadeOut ? 'fade-out' : 'fade-in'}`}>
+                                        <div className="stage-title">Stage 3</div>
+                                        <div className="stage-description">20초 동안 선택의 시간</div>
+                                    </div>
+                                )}
+                            </div> */}
                             <div id='timer'>남은 시간 : {formatTime(timeLeft)}</div>
                             <div id='room'>
                                 <div id='room-header'>
@@ -827,16 +916,18 @@ function OpenVidu() {
 
 
                         </div>
-                        <div className='friend-toggle'>
-                            {isFriend10second ? (
-                                <label>친구 여부 10초 후에 공개!</label>
-                            ) : (
+
+                        {isFriend10second ? (
+                            <></>
+                            // <label>친구 여부 10초 후에 공개!</label>
+                        ) : (
+                            <div className='friend-toggle'>
                                 <label>
                                     <input type='checkbox' onClick={toggleIsFriend} />
                                     친구 추가
                                 </label>
-                            )}
-                        </div>
+                            </div>
+                        )}
                     </div>
 
                 )
