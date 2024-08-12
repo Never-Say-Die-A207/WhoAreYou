@@ -258,7 +258,7 @@ public class FaceChatService {
     public int getSeconds(Integer roomId) {
         FaceChat faceChat = faceChatRepository.findById(roomId).orElseThrow(FaceChatNotFoundException::new);
 
-        int additionalSeconds = 5;
+        int additionalSeconds = 3;
         int duration = 3;
 
         LocalDateTime startedAt = faceChat.getStartedAt();

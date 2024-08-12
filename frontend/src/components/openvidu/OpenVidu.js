@@ -540,7 +540,8 @@ function OpenVidu() {
             if (newTimeLeft > 0) {
                 timerRef.current = requestAnimationFrame(updateTimer);
             } else {
-                // leaveRoom();
+                //친구 결과 확인해서 화면에 표시
+                leaveRoom();
                 // handleTimerEnd(ri, pi); // 타이머가 끝났을 때 실행할 함수 호출
             }
         };
@@ -657,10 +658,9 @@ function OpenVidu() {
         window.location.reload();
     };
 
-
     const getFriendResult = async (pi) => {
         const myId = localStorage.getItem('userId')
-        const partnerId = pi
+        const partnerId = pi;
         const response = await api.get(`/friends/result?myId=${myId}&partnerId=${partnerId}`);
         console.log(response.data);
     }

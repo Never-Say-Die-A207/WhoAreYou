@@ -8,8 +8,7 @@ const Logout = ({ onLogout }) => {
     const onClick = async () => {
         // 로컬 스토리지 정보 삭제
         const userId = localStorage.getItem('userId');
-        const response = await api.post('/logout', {userId})
-        
+        const response = await api.post('/logout', {userId});
         
         if(response.data.code === "SU"){
             localStorage.clear();
