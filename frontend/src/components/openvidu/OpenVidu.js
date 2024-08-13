@@ -32,7 +32,8 @@ import PinkFoxLocal from './PinkFoxLocal';
 import SpiderManBlackLocal from './SpiderManBlackLocal';
 import SquidLocal from './SquidLocal';
 import RedFoxRemote from './RedFoxRemote';
-
+import ModalComponent from './ModalComponent';
+import '../../pages/Modal.css';
 // 반응형
 import { useMediaQuery, MediaQuery } from 'react-responsive';
 import Webcam from "react-webcam";
@@ -140,7 +141,15 @@ function OpenVidu() {
     const userId = localStorage.getItem('userId');
     const refreshToken = localStorage.getItem('refreshToken');
     const navigate = useNavigate();
+    const friendResultRef = useRef(false);
 
+
+
+    //모달
+    const [showModal, setShowModal] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
+    const [modalTF, setModalTF] = useState(false);
+    const leavemodal = useRef(false);
     //매칭 시작 시간
 
     async function joinRoom() {
@@ -300,25 +309,25 @@ function OpenVidu() {
                 // outputFacialTransformationMatrixes: true,
             });
 
-           
-                if (videoPreviewRef.current) {
-                    navigator.mediaDevices.getUserMedia({
-                        video: { width: 1280, height: 720 },
-                        audio: false,
-                        aspectRatio: 16 / 9,
-                    }).then(stream => {
-                        videoPreviewRef.current.srcObject = stream;
-                        videoPreviewRef.current.addEventListener('loadeddata', () => {
-                            // 비디오 로드 완료 후 예측 시작
-                            if (videoPreviewRef.current) {
-                                startPrediction();
-                            }
-                        });
-                    }).catch(error => {
-                        console.error("Error accessing media devices.", error);
+
+            if (videoPreviewRef.current) {
+                navigator.mediaDevices.getUserMedia({
+                    video: { width: 1280, height: 720 },
+                    audio: false,
+                    aspectRatio: 16 / 9,
+                }).then(stream => {
+                    videoPreviewRef.current.srcObject = stream;
+                    videoPreviewRef.current.addEventListener('loadeddata', () => {
+                        // 비디오 로드 완료 후 예측 시작
+                        if (videoPreviewRef.current) {
+                            startPrediction();
+                        }
                     });
-                }
-           
+                }).catch(error => {
+                    console.error("Error accessing media devices.", error);
+                });
+            }
+
         };
 
         const startPrediction = () => {
@@ -543,9 +552,16 @@ function OpenVidu() {
             if (newTimeLeft > 0) {
                 timerRef.current = requestAnimationFrame(updateTimer);
             } else {
+                localStorage.setItem('showModelSt', 'true');
+                if (friendResultRef.current == true) {
+                    localStorage.setItem('isfriendSt', 'true')
+                } else {
+                    localStorage.setItem('isfriendSt', 'false')
+                }
                 //친구 결과 확인해서 화면에 표시
                 leaveRoom();
                 // handleTimerEnd(ri, pi); // 타이머가 끝났을 때 실행할 함수 호출
+                // 1초 후에 실행
             }
         };
 
@@ -556,7 +572,27 @@ function OpenVidu() {
     // 안내 문구
     // const [showMessage, setShowMessage] = useState(false);
 
-
+    useEffect(() => {
+        // 로컬 스토리지에서 방을 떠났는지 확인
+        const showModelSt = localStorage.getItem('showModelSt');
+        const isfriendSt = localStorage.getItem('isfriendSt');
+        console.log('로컬')
+        console.log(isfriendSt)
+        console.log(showModelSt)
+        if (showModelSt === 'true') {
+            if (isfriendSt === 'true') {
+                setModalMessage('친구 성공!!');
+                setShowModal(true);
+                setModalTF(true);
+            } else {
+                setModalMessage('친구 실패 ㅜㅜ');
+                setShowModal(true);
+                setModalTF(false);
+            }
+            localStorage.removeItem('showModelSt'); // 모달을 띄운 후 상태 초기화
+            localStorage.removeItem('isfriendSt'); // 모달을 띄운 후 상태 초기화
+        }
+    }, []);
 
 
     const showNotification = () => {
@@ -665,8 +701,24 @@ function OpenVidu() {
         const myId = localStorage.getItem('userId')
         const partnerId = pi;
         const response = await api.get(`/friends/result?myId=${myId}&partnerId=${partnerId}`);
+        if (response.data.result == true) {
+            friendResultRef.current = true
+        } else {
+            friendResultRef.current = false
+        }
+        console.log('친구 여부')
+        console.log(friendResultRef.current)
         console.log(response.data);
     }
+
+    const RematchModal = () => {
+        setShowModal(false);
+        joinRoom();
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+    };
 
 
     return (
@@ -730,44 +782,46 @@ function OpenVidu() {
                     </div>
                 </nav>
             </header>
-            {!room ? (
-                <div id='join'>
-                    {/* <JokerLocal landmarks={landmarks} videoElement3={videoPreviewRef} /> */}
-                    {/* <RedFoxLocal landmarks={landmarks} videoElement3={videoPreviewRef}/> */}
-                    {/* 슬라이더 만들기 */}
 
-                    {/* 방 입장 시작 */}
-                    <div id='join-dialog'>
-                        {/* 가면 미리보기 보는 화면 */}
-                        <div style={{ position: 'relative', height: '92vh' }}>
-                            {isSmallScreen ? (
-                                <MobileCarousel setMask={setMask} />
-                            ) : (
-                                <VerticalCarousel setMask={setMask} />
-                            )}
-                            {/* <video className='camera-feed' id="video" ref={videoRef} autoPlay></video> */}
-                            {/* <Webcam ref={videoPreviewRef}/> */}
-                            <video ref={videoPreviewRef} autoPlay muted style={{ 
-                                width: '100%', height: '100%', transform: 'scaleX(-1)', visibility: 'hidden',
-                            }}></video>
-                            {/* <RedFoxRemote landmarks={landmarks} videoElement={videoPreviewRef} /> */}
-                            {/* <canvas ref={canvasRef} className="output_canvas" width="1280" height="720" style={{ position: 'absolute', top: 0, left: 0 }}></canvas> */}
-                            {mask === 'RedFox' && <RedFoxLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
-                            {mask === 'SpiderMan' && <SpiderManLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
-                            {mask === 'Joker' && <JokerLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
-                            {/* {mask === 'PinkFox' && <PinkFoxLocal landmarks={landmarks} videoElement3={videoPreviewRef} />} */}
-                            {mask === 'SpiderManBlack' && <SpiderManBlackLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
-                            {mask === 'Squid' && <SquidLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
-                            {isSmallScreen ? (
-                                // 모바일 꾸미기
-                                <form
-                                    onSubmit={(e) => {
-                                        e.preventDefault();
-                                        joinRoom();
-                                        // stopPreview();
-                                    }}
-                                    className='video-form-mobile'>
-                                    {/* <div>
+            {!room ? (
+                <div>
+                    <div id='join'>
+                        {/* <JokerLocal landmarks={landmarks} videoElement3={videoPreviewRef} /> */}
+                        {/* <RedFoxLocal landmarks={landmarks} videoElement3={videoPreviewRef}/> */}
+                        {/* 슬라이더 만들기 */}
+
+                        {/* 방 입장 시작 */}
+                        <div id='join-dialog'>
+                            {/* 가면 미리보기 보는 화면 */}
+                            <div style={{ position: 'relative', height: '92vh' }}>
+                                {isSmallScreen ? (
+                                    <MobileCarousel setMask={setMask} />
+                                ) : (
+                                    <VerticalCarousel setMask={setMask} />
+                                )}
+                                {/* <video className='camera-feed' id="video" ref={videoRef} autoPlay></video> */}
+                                {/* <Webcam ref={videoPreviewRef}/> */}
+                                <video ref={videoPreviewRef} autoPlay muted style={{
+                                    width: '100%', height: '100%', transform: 'scaleX(-1)', visibility: 'hidden',
+                                }}></video>
+                                {/* <RedFoxRemote landmarks={landmarks} videoElement={videoPreviewRef} /> */}
+                                {/* <canvas ref={canvasRef} className="output_canvas" width="1280" height="720" style={{ position: 'absolute', top: 0, left: 0 }}></canvas> */}
+                                {mask === 'RedFox' && <RedFoxLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
+                                {mask === 'SpiderMan' && <SpiderManLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
+                                {mask === 'Joker' && <JokerLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
+                                {/* {mask === 'PinkFox' && <PinkFoxLocal landmarks={landmarks} videoElement3={videoPreviewRef} />} */}
+                                {mask === 'SpiderManBlack' && <SpiderManBlackLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
+                                {mask === 'Squid' && <SquidLocal landmarks={landmarks} videoElement={videoPreviewRef} />}
+                                {isSmallScreen ? (
+                                    // 모바일 꾸미기
+                                    <form
+                                        onSubmit={(e) => {
+                                            e.preventDefault();
+                                            joinRoom();
+                                            // stopPreview();
+                                        }}
+                                        className='video-form-mobile'>
+                                        {/* <div>
                             <label htmlFor='mask-name'>마스크 변경</label>
                             <select
                                 id='mask-name'
@@ -775,12 +829,12 @@ function OpenVidu() {
                                 value={mask}
                                 onChange={changeLoaclMaskValue}
                             > */}
-                                    {/* <option value='' defaultValue='마스크 선택'>마스크 선택</option> */}
-                                    {/* <option value='RedFox'>RedFox</option>
+                                        {/* <option value='' defaultValue='마스크 선택'>마스크 선택</option> */}
+                                        {/* <option value='RedFox'>RedFox</option>
                                 <option value="SpiderMan">SpiderMan</option>
                             </select>
                             </div> */}
-                                    {/* <div>
+                                        {/* <div>
                                         <label htmlFor='participant-name'>Participant</label>
                                         <input
                                             id='participant-name'
@@ -791,7 +845,7 @@ function OpenVidu() {
                                             required
                                         />
                                     </div> */}
-                                    {/* <div>
+                                        {/* <div>
                                         <label htmlFor='room-name'>Room</label>
                                         <input
                                             id='room-name'
@@ -803,36 +857,64 @@ function OpenVidu() {
                                         />
                                     </div> */}
 
-                                    <button
-                                        className='btn-mobile btn-lg-mobile btn-success-mobile'
-                                        type='submit'
-                                        disabled={!roomName || !participantName}
-                                    >
-                                        매칭!
-                                    </button>
-                                </form>
-                            ) : (
-                                <form
-                                    onSubmit={(e) => {
-                                        e.preventDefault();
-                                        joinRoom();
-                                        // stopPreview();
-                                    }}
-                                    className='video-form'>
-                                    <button
-                                        className='btn btn-lg btn-success'
-                                        type='submit'
-                                        disabled={!roomName || !participantName}
-                                    >
-                                        상대방 찾기
-                                    </button>
+                                        <button
+                                            className='btn-mobile btn-lg-mobile btn-success-mobile'
+                                            type='submit'
+                                            disabled={!roomName || !participantName}
+                                        >
+                                            매칭!
+                                        </button>
+                                    </form>
+                                ) : (
+                                    <form
+                                        onSubmit={(e) => {
+                                            e.preventDefault();
+                                            joinRoom();
+                                            // stopPreview();
+                                        }}
+                                        className='video-form'>
+                                        <button
+                                            className='btn btn-lg btn-success'
+                                            type='submit'
+                                            disabled={!roomName || !participantName}
+                                        >
+                                            상대방 찾기
+                                        </button>
 
-                                </form>
-                            )}
+                                    </form>
+                                )}
+
+                            </div>
 
                         </div>
-
                     </div>
+                    {showModal && (
+                        <div className="my-overlay" style={{ zIndex: '100' }}>
+                            <div className="my-modal" style={{ position: 'relative' }}>
+                                <button className="close-x-button" onClick={closeModal}>×</button>
+                                <h2 style={{ color: 'white', marginBottom: '20px', marginTop: '20px' }}><strong>{modalMessage}</strong></h2>
+                                {/* <div className="my-info-content">
+                                    <div className="info-box" style={{ justifyContent: 'center' }}>
+                                        <p>{modalMessage}</p>
+                                    </div>
+                                </div> */}
+                                {/* <button className="close" onClick={closeModal}>확인</button> */}
+                                <div className='modalbutton'>
+                                    {modalTF ? (
+                                        <div>
+                                            <button className="close">
+                                                <Link to='/mypage' className='nav-link'>채팅하기</Link>
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            <button className="close" onClick={RematchModal}>매칭하기</button>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             ) : (
                 loading ? (
