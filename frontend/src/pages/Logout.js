@@ -17,7 +17,7 @@ const Logout = ({ onLogout }) => {
             onLogout();
             
             // 홈 페이지 리디렉션
-            navigate('/');
+            window.location.reload();
         } else{
             console.log("로그아웃에 실패했습니다.");
         };

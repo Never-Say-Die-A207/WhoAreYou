@@ -42,9 +42,7 @@ const Home = () => {
     };
 
     const onLogout = () => {
-        setUserId(null);
-        localStorage.removeItem('userId'); // 로그아웃할 때 로컬스토리지에서 제거
-        navigate('/'); // 로그아웃 시 홈으로 리디렉션
+        console.log('로그아웃 성공');
     };
 
     const onLogin = () => {
