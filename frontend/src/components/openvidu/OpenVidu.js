@@ -585,7 +585,7 @@ function OpenVidu() {
                 setShowModal(true);
                 setModalTF(true);
             } else {
-                setModalMessage('친구 실패 ㅜㅜ');
+                setModalMessage('친구 실패 ㅠㅠ');
                 setShowModal(true);
                 setModalTF(false);
             }
