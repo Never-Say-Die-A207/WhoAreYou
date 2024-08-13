@@ -1,35 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './RoomBottom.css';
+import FaceRecognition from './FaceRecognition';
+import EmotionBarChart from './EmotionBarChart';
 
 function RoomBottom({ expressionData, leaveRoom }) {
   const { borderClass, imageSrc, count } = expressionData;
+  const [emotionCounts, setEmotionCounts] = useState({
+    happy: 0,
+    sad: 0,
+    angry: 0,
+    disgusted: 0,
+    surprised: 0,
+    fear: 0,
+    neutral: 0,
+});
+
 
   return (
     <div className='room-bottom'>
-      <div className={`room-bottom-container ${borderClass}`}>
-        {imageSrc && (
-          <div style={{ position: 'relative' }}>
-            <img src={imageSrc} alt="expression" className="bottom-image" />
-            {/* 카운트를 표현하는 요소 추가 */}
-            {count > 0 && (
-              <div 
-                className="emotion-count" 
-                style={{
-                  position: 'absolute',
-                  top: '0',
-                  right: '0',
-                  zIndex: '1',
-                  backgroundColor: 'rgba(255, 255, 255, 0.7)',
-                  borderRadius: '5px',
-                  padding: '5px',
-                }}
-              >
-                {count}
-              </div>
-            )}
-          </div>
-        )}
-      </div>
+      
+      
       <div>
         <button className="bottom-button" onClick={leaveRoom}>
           나가기

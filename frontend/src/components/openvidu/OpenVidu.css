@@ -261,7 +261,7 @@
 .stage-notification {
     position: fixed;
     width: 50%;
-    height: 20%;
+    height: 200px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -292,13 +292,12 @@
 }
 
 .stage-description {
-    font-size: 2rem; /* 작은 설명 문구 크기 */
+    font-size: 2.2rem; /* 작은 설명 문구 크기 */
     font-weight: 600;
     color: #333; /* 설명 문구 색상 */
-    margin-top: 3rem;
+    margin-top: 2.5rem;
 
 }
-
 
 .stage-alert {
     color: red;
