@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import './RoomBottom.css';
 import FaceRecognition from './FaceRecognition';
 import EmotionBarChart from './EmotionBarChart';
@@ -18,6 +18,7 @@ function RoomBottom({ expressionData, leaveRoom }) {
 
   return (
     <div className='room-bottom'>
+      
       <div>
         <EmotionBarChart emotionCounts={emotionCounts} />
       </div>
