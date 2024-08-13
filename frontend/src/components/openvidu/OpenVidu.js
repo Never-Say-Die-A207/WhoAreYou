@@ -150,7 +150,9 @@ function OpenVidu() {
     const [modalMessage, setModalMessage] = useState('');
     const [modalTF, setModalTF] = useState(false);
     const leavemodal = useRef(false);
-    //매칭 시작 시간
+    const checkRoom = false;
+    
+
 
     async function joinRoom() {
         if (!refreshToken) {
@@ -187,6 +189,9 @@ function OpenVidu() {
         );
         console.log(room.remoteParticipants.size);
         room.on(RoomEvent.TrackUnsubscribed, (_track, publication) => {
+            if (!checkRoom) {
+                leaveRoom();
+            }
             setRemoteTracks((prev) => prev.filter((track) => track.trackPublication.trackSid !== publication.trackSid));
         });
 
