@@ -25,8 +25,12 @@ const MyInfo = ({ onClose }) => {
     };
 
     const matchingCal = async (mc, sc) => {
-        const cal = (sc/mc).toFixed(2)*100;
-        setRate(cal);
+        if (!mc) {
+            setRate(0);
+        } else {
+            const cal = (sc/mc).toFixed(2)*100;
+            setRate(cal);
+        }
     }
 
     useEffect(() => {
