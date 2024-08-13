@@ -481,7 +481,7 @@ function OpenVidu() {
             setTimeLeft(newTimeLeft > 0 ? newTimeLeft : 0); // 음수 방지, 0으로 설정
             // console.log(newTimeLeft)
 
-            if (newTimeLeft == 25) {
+            if (newTimeLeft == 170) {
                 if (stage1_ref.current == false) {
                     showNotification();
                     stage1_ref.current = true;
@@ -603,7 +603,7 @@ function OpenVidu() {
             setTimeout(() => {
                 setstage1(false);  // 애니메이션 후 안내 문구 숨김
             }, 500);  // 애니메이션이 끝날 때까지 0.5초 대기
-        }, 5000);  // 2.5초 동안 문구 표시 후 fade-out 시작
+        }, 10000);  // 2.5초 동안 문구 표시 후 fade-out 시작
     };
 
     const showNotification2 = () => {
@@ -938,9 +938,8 @@ function OpenVidu() {
                                 {stage1 && (
                                     <div className={`stage-notification ${fadeOut ? 'fade-out' : 'fade-in'}`}>
                                         <div className="stage-title">친구 선택</div>
-                                        <div className="stage-description">10초 동안 친구 여부를 고르세요</div>
-                                        <div className='stage-alert'>*이후에는 선택 불가*</div>
-
+                                        <h2 className="stage-description">10초 동안 친구 여부를 고르세요</h2>
+                                        <p className='stage-alert'>*이후에는 선택 불가*</p>
                                     </div>
                                 )}
                                 {/* <button className="show-button" onClick={showNotification}>Show Stage Again</button> */}
@@ -952,7 +951,6 @@ function OpenVidu() {
                                         <div className="stage-description">10초 후에 공개 됩니다</div>
                                     </div>
                                 )}
-
                             </div>
                             {/* <div className="stage-container">
                                 {stage3 && (
