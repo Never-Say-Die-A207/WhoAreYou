@@ -938,6 +938,11 @@ function OpenVidu() {
                 ) : (
                     <div>
                         <div style={{ position: 'relative' }}>
+                        <div style={{ position: 'absolute', top: '2%', right: '1%' , zIndex: '500', backgroundColor:'white', borderRadius:'50px', padding:'5px'}}>
+                            <button onClick={leaveRoom} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                                <CiLogout style={{ fontSize: '30px', transform: 'scaleX(-1)' }} />
+                            </button>
+                        </div>
                             {/* 안내문구 */}
                             <div className="stage-container">
                                 {stage1 && (
@@ -1000,11 +1005,7 @@ function OpenVidu() {
                                     <EmotionBarChart emotionCounts={emotionCounts} />
 
                                 </div>
-                                <div>
-
-                                    <RoomBottom expressionData={expressionData} leaveRoom={leaveRoom} />
-                                </div>
-                                
+                               
                                 {/* <button className='btn btn-danger' id='leave-room-button' onClick={leaveRoom}>
                                     Leave Room
                                 </button> */}
