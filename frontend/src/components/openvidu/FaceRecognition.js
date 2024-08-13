@@ -83,7 +83,7 @@ const FaceRecognition = ({ videoElement, setExpressionData, setEmotionCounts }) 
         loadModels().then(() => {
             const interval = setInterval(() => {
                 detectFace();
-            }, 500);
+            }, 2000);
             return () => clearInterval(interval);
         });
     }, [videoElement, setExpressionData, setEmotionCounts]);
