@@ -67,7 +67,7 @@ const Home = () => {
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingTop: '15px', gap: '10px' }}>
                     {nickname ? (
                         <div>
-                            <h2 style={{ fontSize: '3rem' }}>안녕하세요 {nickname}님 반갑습니다.</h2>
+                            <h2 style={{ fontSize: '3rem' }}>안녕하세요<br/> {nickname}님<br/> 반갑습니다.</h2>
                             <Logout onLogout={onLogout} />
                         </div>
                     ) : (
