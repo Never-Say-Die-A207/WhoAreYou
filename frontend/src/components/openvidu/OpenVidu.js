@@ -481,7 +481,7 @@ function OpenVidu() {
             setTimeLeft(newTimeLeft > 0 ? newTimeLeft : 0); // 음수 방지, 0으로 설정
             // console.log(newTimeLeft)
 
-            if (newTimeLeft == 170) {
+            if (newTimeLeft == 25) {
                 if (stage1_ref.current == false) {
                     showNotification();
                     stage1_ref.current = true;
