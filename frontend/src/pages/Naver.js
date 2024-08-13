@@ -13,8 +13,7 @@ const Naver = () => {
     };
 
     useEffect(async () => {
-        //const currentUrl = window.location.href;
-        const currentUrl = "http://localhost:3000/auth/oauth-response/";
+        const currentUrl = window.location.href;
 
         if (currentUrl.includes('/auth/oauth-response/')) {
             const url = new URL(currentUrl);
