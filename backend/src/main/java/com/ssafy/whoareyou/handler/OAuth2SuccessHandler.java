@@ -64,6 +64,9 @@ public class OAuth2SuccessHandler  extends SimpleUrlAuthenticationSuccessHandler
                 String redirectUrl = "http://i11a207.p.ssafy.io/auth/oauth-response/" + token + "/3600";
                 System.out.println("리다이렉션 URL: " + redirectUrl);
 
+                user.get().setRefreshToken(token);
+                userRepository.save(user.get());
+
                 response.sendRedirect(redirectUrl);
             } else {
                 System.out.println("사용자를 찾을 수 없습니다.");
