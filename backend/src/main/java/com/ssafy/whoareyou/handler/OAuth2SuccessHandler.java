@@ -61,7 +61,7 @@ public class OAuth2SuccessHandler  extends SimpleUrlAuthenticationSuccessHandler
                 String token = jwtProvider.createAccessToken(userId);
                 System.out.println("생성된 엑세스 토큰: " + token);
 
-                String redirectUrl = "http://localhost:3000/auth/oauth-response/" + token + "/3600";
+                String redirectUrl = "http://i11a207.p.ssafy.io/auth/oauth-response/" + token + "/3600";
                 System.out.println("리다이렉션 URL: " + redirectUrl);
 
                 response.sendRedirect(redirectUrl);
