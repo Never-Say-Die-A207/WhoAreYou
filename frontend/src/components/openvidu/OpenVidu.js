@@ -486,7 +486,7 @@ function OpenVidu() {
             setTimeLeft(newTimeLeft > 0 ? newTimeLeft : 0); // 음수 방지, 0으로 설정
             // console.log(newTimeLeft)
 
-            if (newTimeLeft == 170) {
+            if (newTimeLeft == 25) {
                 if (stage1_ref.current == false) {
                     showNotification();
                     stage1_ref.current = true;
@@ -996,8 +996,15 @@ function OpenVidu() {
                                 </div>
                             </div>
                             <div className='bottom'>
-                                {/* <RoomBottom expressionData={expressionData} leaveRoom={leaveRoom} /> */}
-                                <EmotionBarChart emotionCounts={emotionCounts} />
+                                <div>
+                                    <EmotionBarChart emotionCounts={emotionCounts} />
+
+                                </div>
+                                <div>
+
+                                    <RoomBottom expressionData={expressionData} leaveRoom={leaveRoom} />
+                                </div>
+                                
                                 {/* <button className='btn btn-danger' id='leave-room-button' onClick={leaveRoom}>
                                     Leave Room
                                 </button> */}
