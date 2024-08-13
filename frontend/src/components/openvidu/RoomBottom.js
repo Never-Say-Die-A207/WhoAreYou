@@ -19,9 +19,7 @@ function RoomBottom({ expressionData, leaveRoom }) {
   return (
     <div className='room-bottom'>
       
-      <div>
-        <EmotionBarChart emotionCounts={emotionCounts} />
-      </div>
+      
       <div>
         <button className="bottom-button" onClick={leaveRoom}>
           나가기
