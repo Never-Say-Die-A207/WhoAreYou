@@ -993,8 +993,8 @@ function OpenVidu() {
                                 </div>
                             </div>
                             <div className='bottom'>
-                                {/* <RoomBottom expressionData={expressionData} leaveRoom={leaveRoom} /> */}
-                                <EmotionBarChart emotionCounts={emotionCounts} />
+                                <RoomBottom expressionData={expressionData} leaveRoom={leaveRoom} />
+                                
                                 {/* <button className='btn btn-danger' id='leave-room-button' onClick={leaveRoom}>
                                     Leave Room
                                 </button> */}
