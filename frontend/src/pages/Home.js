@@ -31,6 +31,7 @@ const Home = () => {
     // };
 
     const [userId, setUserId] = useState(() => localStorage.getItem('userId')); // 초기값을 로컬스토리지에서 가져옵니다.
+    const [nickname, setNickname] = useState(() => localStorage.getItem('nickname'));
     const navigate = useNavigate();
 
     const onLoginSuccess = (userId) => {
@@ -66,9 +67,9 @@ const Home = () => {
                     <img src={mainimg} alt="Main" className='mainpage-pic'/>
                 </div>
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingTop: '15px', gap: '10px' }}>
-                    {userId ? (
+                    {nickname ? (
                         <div>
-                            <h2 style={{ fontSize: '3rem' }}>안녕하세요 {userId}님 반갑습니다.</h2>
+                            <h2 style={{ fontSize: '3rem' }}>안녕하세요 {nickname}님 반갑습니다.</h2>
                             <Logout onLogout={onLogout} />
                         </div>
                     ) : (
