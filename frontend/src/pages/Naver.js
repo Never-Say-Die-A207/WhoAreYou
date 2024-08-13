@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import naverimg from '../assets/naver.ico';
 import { jwtDecode } from 'jwt-decode';
+import api from '../api/api';
 import './Naver.css';
 
 const Naver = () => {
@@ -11,8 +12,9 @@ const Naver = () => {
         window.location.href = 'http://3.36.120.21:4040/oauth2/authorization/naver';
     };
 
-    useEffect(() => {
-        const currentUrl = window.location.href;
+    useEffect(async () => {
+        //const currentUrl = window.location.href;
+        const currentUrl = "http://localhost:3000/auth/oauth-response/";
 
         if (currentUrl.includes('/auth/oauth-response/')) {
             const url = new URL(currentUrl);
@@ -21,13 +23,34 @@ const Naver = () => {
             
             if (tokenMatch && tokenMatch[1]) {
                 const token = tokenMatch[1];
-                localStorage.setItem('token', token);
+                // localStorage.setItem('token', token);
+
+                //임시..
+                localStorage.setItem('accessToken', token);
+                localStorage.setItem('accessTokenExpirationTime', 3600);
+                localStorage.setItem('refreshToken', token);
+                localStorage.setItem('refreshTokenExpirationTime', 1209600);
 
                 try {
-                    const decodedToken = jwtDecode(token);
-                    const userId = decodedToken.sub;
-                    console.log(decodedToken)
+                    //임시..
+
+                    // const decodedToken = jwtDecode(token);
+                    // const userId = decodedToken.sub;
+                    // console.log(decodedToken)
+                    // localStorage.setItem('userId', userId);
+
+                    // 토큰 디코딩
+                    const decodedAccessToken = jwtDecode(token);
+
+                    // userId 추출
+                    const userId = decodedAccessToken.sub;
+
                     localStorage.setItem('userId', userId);
+                    //localStorage.setItem('accessToken', accessToken);
+
+                    // 사용자 정보를 가져오기
+                    const userResponse = await api.get(`/user/${userId}`);
+                    localStorage.setItem('nickname', userResponse.data['nickname']);
                     navigate('/matching');
                 } catch (error) {
                     console.error('Naver token:', error);
