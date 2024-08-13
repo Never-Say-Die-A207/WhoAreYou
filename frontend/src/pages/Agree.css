@@ -183,3 +183,16 @@ button {
     font: inherit;
     margin: 0;
 }
+
+.g-terms-checkbox .icon {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background-size: cover;
+    background-repeat: no-repeat;
+    outline: none;
+}
+
+.c-checkbox-item .icon-right-arrow {
+    cursor: pointer;
+}

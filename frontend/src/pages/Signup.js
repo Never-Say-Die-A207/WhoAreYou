@@ -256,13 +256,13 @@ const Signup = () => {
                                             </label>
                                         </div>
                                     </div>
+                                </form>
                                     <Agree className="zm-form-item is-no-asterisk" onAgreeChange={(agreedStatus) => setAgreements(agreedStatus)} />
                                     <div className="mgt-sm" style={{ display: 'flex', justifyContent: 'center' }}>
-                                        <button style={{ cursor: 'pointer', color: 'white', backgroundColor: '#aa4dcb', fontSize: '1.5rem', width: '100%', height: '50px', border: 'none', borderRadius: '5px', textAlign: 'center' }} onMouseOver={(e) => (e.target.style.backgroundColor = '#8530e9')} onMouseOut={(e) => (e.target.style.backgroundColor = '#aa4dcb')} type="submit">
+                                        <button onClick={onSubmit} style={{ cursor: 'pointer', color: 'white', backgroundColor: '#aa4dcb', fontSize: '1.5rem', width: '100%', height: '50px', border: 'none', borderRadius: '5px', textAlign: 'center' }} onMouseOver={(e) => (e.target.style.backgroundColor = '#8530e9')} onMouseOut={(e) => (e.target.style.backgroundColor = '#aa4dcb')} type="submit">
                                             회원가입
                                         </button>
                                     </div>
-                                </form>
                             </div>
                             <div className="form-width-sm form-group re-captcha" style={{ fontSize: '14px' }}></div>
                         </div>
