@@ -36,7 +36,7 @@ const Login = ({ onLoginSuccess }) => {
 
             localStorage.setItem('refreshToken', response.data.refreshToken);
             localStorage.setItem('refreshTokenExpirationTime', response.data.refreshTokenExpirationTime);
-            console.log('Login success:', response.data);
+            //console.log('Login success:', response.data);
 
             // JWT 토큰 받아오기
             const accessToken = response.data.accessToken;

@@ -35,14 +35,14 @@ const Home = () => {
     const navigate = useNavigate();
 
     const onLoginSuccess = (userId) => {
-        console.log('Login successful, userId:', userId);
+        // console.log('Login successful, userId:', userId);
         setUserId(userId);
         localStorage.setItem('userId', userId);  // 로컬스토리지에도 저장
         navigate('/matching'); // 로그인 성공 후 매칭 페이지로 이동
     };
 
     const onLogout = () => {
-        console.log('로그아웃 성공');
+        // console.log('로그아웃 성공');
     };
 
     const onLogin = () => {

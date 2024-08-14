@@ -52,14 +52,14 @@ const Mypage = () => {
                 try {
                     const chatRoomIdResponse = await api.get(`/chat-rooms/${selectedFriendNickname}`);
                     const chatRoomId = chatRoomIdResponse.data;
-                    console.log('Chat room id:', chatRoomId);
+                    //console.log('Chat room id:', chatRoomId);
 
                     const chatHistoryResponse = await api.post('/chat-rooms/historys', {
                         'maleId': userId,
                         'femaleId': selectedFriendId
                     });
                     const chatHistory = chatHistoryResponse.data;
-                    console.log('chat history:', chatHistory);
+                    //console.log('chat history:', chatHistory);
                     setRoomId(chatRoomId);
                     setMessages(chatHistory);
                 } catch (error) {
@@ -77,10 +77,10 @@ const Mypage = () => {
             const client = new Client({
                 webSocketFactory: () => socket,
                 debug: function (str) {
-                    console.log(str);
+                    //console.log(str);
                 },
                 onConnect: () => {
-                    console.log('Connected');
+                    //console.log('Connected');
                     setStompClient(client);
 
                     client.subscribe(`/sub/rooms/${roomId}`, (messageOutput) => {

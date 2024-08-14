@@ -170,7 +170,7 @@ const Signup = () => {
             setShowModal(true);
             navigate('/');
         } catch (error) {
-            console.error('Signup error:', error);
+            // console.error('Signup error:', error);
             setModalMessage('회원가입에 실패했습니다.');
             setShowModal(true);
         }

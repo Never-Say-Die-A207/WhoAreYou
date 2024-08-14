@@ -4,7 +4,7 @@ import './Navbar.css';
 
 const Navbar = ({ userId, onLogout }) => {
     const refreshToken = localStorage.getItem('refreshToken');
-    console.log("refreshToken : " + refreshToken);
+    //console.log("refreshToken : " + refreshToken);
 
     return (
         <header>

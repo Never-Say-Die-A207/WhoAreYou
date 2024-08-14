@@ -184,10 +184,10 @@ function OpenVidu() {
                 ]);
 
                 const body = getRoomInfo(userId)
-                console.log(body);
+                // console.log(body);
             }
         );
-        console.log(room.remoteParticipants.size);
+        // console.log(room.remoteParticipants.size);
         room.on(RoomEvent.TrackUnsubscribed, (_track, publication) => {
             if (!checkRoom) {
                 leaveRoom();
@@ -200,7 +200,7 @@ function OpenVidu() {
             await room.connect(LIVEKIT_URL, token);
             await room.localParticipant.enableCameraAndMicrophone();
             setLocalTrack(room.localParticipant.videoTrackPublications.values().next().value.videoTrack);
-            console.log(room.remoteParticipants);
+            // console.log(room.remoteParticipants);
             // setLoading(room.remoteParticipants.size)
             // if (room.remoteParticipants.size > 0) {
             //     setLoading(false)
@@ -240,13 +240,13 @@ function OpenVidu() {
         })
             .then(response => response.json())
             .then(body => {
-                console.log('상대방 마스크 정보');
-                console.log(body.info.mask);
+                // console.log('상대방 마스크 정보');
+                // console.log(body.info.mask);
                 setMaskRemote(body.info.mask);
-                console.log('매칭 시작 시간');
-                console.log(body.info.startedAt);
-                console.log('partnerId:', body.info.partnerId);
-                console.log('roomId:', body.info.roomId);
+                // console.log('매칭 시작 시간');
+                // console.log(body.info.startedAt);
+                // console.log('partnerId:', body.info.partnerId);
+                // console.log('roomId:', body.info.roomId);
                 startTimeRef.current = new Date(body.info.startedAt).getTime(); // 시작 시간 설정
                 gender.current = body.info.myGender;
                 setLoading(false);
@@ -265,8 +265,8 @@ function OpenVidu() {
     //마스크 이름 넣기 주석 
     async function getToken(mask, participantName) {
         const userId = localStorage.getItem('userId')
-        console.log('내 마스크 정보')
-        console.log(mask)
+        // console.log('내 마스크 정보')
+        // console.log(mask)
         // // // 다른 사람 통신 주석
         const mask_data = {
             'userId': userId,
@@ -465,11 +465,11 @@ function OpenVidu() {
         ).then(response => response.json()
         )
             .then(seconds => {
-                console.log('받아온 시간')
-                console.log(seconds.seconds)
+                // console.log('받아온 시간')
+                // console.log(seconds.seconds)
                 servertime.current = seconds.seconds
-                console.log('서버타임')
-                console.log(servertime.current)
+                // console.log('서버타임')
+                // console.log(servertime.current)
             })
             .catch(error => {
                 console.error('getRoomInfo error:', error);
@@ -581,9 +581,9 @@ function OpenVidu() {
         // 로컬 스토리지에서 방을 떠났는지 확인
         const showModelSt = localStorage.getItem('showModelSt');
         const isfriendSt = localStorage.getItem('isfriendSt');
-        console.log('로컬')
-        console.log(isfriendSt)
-        console.log(showModelSt)
+        // console.log('로컬')
+        // console.log(isfriendSt)
+        // console.log(showModelSt)
         if (showModelSt === 'true') {
             if (isfriendSt === 'true') {
                 setModalMessage('친구 성공!!');
@@ -644,7 +644,7 @@ function OpenVidu() {
             'roomId': roomId,
             'friend': isFriendRef.current,
         };
-        console.log(finalResult);
+        // console.log(finalResult);
 
         fetch(APPLICATION_SERVER_URL + 'facechat/friend', {
             method: 'POST',
@@ -656,9 +656,9 @@ function OpenVidu() {
             .then(response => response.json())
             .then(result => {
                 if (result.message === 'OK') {
-                    console.log('OK');
+                    // console.log('OK');
                 } else if (result.message === 'NO') {
-                    console.log('NO');
+                    // console.log('NO');
                 }
             })
             .catch(error => {
@@ -711,9 +711,9 @@ function OpenVidu() {
         } else {
             friendResultRef.current = false
         }
-        console.log('친구 여부')
-        console.log(friendResultRef.current)
-        console.log(response.data);
+        // console.log('친구 여부')
+        // console.log(friendResultRef.current)
+        // console.log(response.data);
     }
 
     const RematchModal = () => {

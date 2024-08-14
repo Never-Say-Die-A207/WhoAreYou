@@ -15,7 +15,7 @@ const FaceRecognition = ({ videoElement, setExpressionData, setEmotionCounts }) 
             await faceapi.loadTinyFaceDetectorModel(MODEL_URL);
             await faceapi.loadFaceLandmarkModel(MODEL_URL);
             await faceapi.loadFaceExpressionModel(MODEL_URL);
-            console.log("Models loaded");
+            // console.log("Models loaded");
         };
 
         const detectFace = async () => {
@@ -62,7 +62,7 @@ const FaceRecognition = ({ videoElement, setExpressionData, setEmotionCounts }) 
                     if (detectedEmotion) {
                         setEmotionCounts((prev) => {
                             const newCount = prev[detectedEmotion] + 1; // 감정 카운트 증가
-                            console.log(`${detectedEmotion} 감정 카운트: ${newCount}`); // 카운트 출력
+                            // console.log(`${detectedEmotion} 감정 카운트: ${newCount}`); 
                             
                             setExpressionData((prevExpressionData) => ({
                                 ...prevExpressionData,
