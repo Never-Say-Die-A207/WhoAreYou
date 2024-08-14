@@ -33,6 +33,7 @@ import SpiderManBlackLocal from './SpiderManBlackLocal';
 import SquidLocal from './SquidLocal';
 import RedFoxRemote from './RedFoxRemote';
 import ModalComponent from './ModalComponent';
+import PictureSeven from './PictureSeven';
 import '../../pages/Modal.css';
 // 반응형
 import { useMediaQuery, MediaQuery } from 'react-responsive';
@@ -1001,11 +1002,13 @@ function OpenVidu() {
                                 </div>
                             </div>
                             <div className='bottom'>
+                            <div>
+                                    <PictureSeven expressionData={expressionData} emotionCounts={emotionCounts} />
+                                </div>
                                 <div>
                                     <EmotionBarChart emotionCounts={emotionCounts} />
-
                                 </div>
-                               
+                                
                                 {/* <button className='btn btn-danger' id='leave-room-button' onClick={leaveRoom}>
                                     Leave Room
                                 </button> */}
