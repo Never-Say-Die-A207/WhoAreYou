@@ -654,6 +654,10 @@ function OpenVidu() {
             },
             body: JSON.stringify(finalResult)
         })
+            .then(response => {
+                console.log(response);
+                return response;
+            })
             .then(response => response.json())
             .then(result => {
                 if (result.message === 'OK') {
