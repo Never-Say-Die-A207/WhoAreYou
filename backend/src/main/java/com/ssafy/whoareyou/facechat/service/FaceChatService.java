@@ -84,44 +84,6 @@ public class FaceChatService {
         return generateToken(user.getNickname(), user.getId(), String.valueOf(faceChat.getId()));
     }
 
-//    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
-//    public Integer finishFaceChat(Integer faceChatId, Integer myId, Integer partnerId) {
-//        Male m;
-//        Female f;
-//
-//        User me = userRepository.findById(myId).orElseThrow(() -> new UserNotFoundException(myId));
-//        User partner = userRepository.findById(partnerId).orElseThrow(() -> new UserNotFoundException(partnerId));
-//
-//        if(me instanceof Male){
-//            m = (Male)me;
-//            f = (Female)partner;
-//        }
-//        else if(me instanceof Female){
-//            m = (Male)partner;
-//            f = (Female)me;
-//        }
-//        else
-//            throw new InvalidGenderException();
-//
-//        Integer result = null;
-//
-//        FaceChat updatedFaceChat = faceChatRepository.findById(faceChatId).orElseThrow(FaceChatNotFoundException::new);
-//
-//        WantsFriendType maleWantsFriend = updatedFaceChat.getMaleWantsFriend();
-//        WantsFriendType femaleWantsFriend = updatedFaceChat.getFemaleWantsFriend();
-//
-//        if (maleWantsFriend != null && femaleWantsFriend != null) {
-//            if (maleWantsFriend == WantsFriendType.YES && femaleWantsFriend == WantsFriendType.YES) {
-//                me.increaseSuccessCount();
-//
-//                result = friendService.join(new SearchTargetDto(m.getId(), f.getId()));
-//            }
-//            quitUser(myId);
-//        }
-//
-//        return result;
-//    }
-
     public void quitUser(Integer userId) {
         log.info("FaceChatService.quitUser() : Start to quit User " + userId);
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
@@ -188,7 +150,7 @@ public class FaceChatService {
         return FaceChatInfoResponse.createResponse(user, currentFaceChat);
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
     public void updateWantsFriend(Integer faceChatId, Integer myId, Integer partnerId, boolean friend){
         FaceChat faceChat = faceChatRepository.findById(faceChatId).orElseThrow(FaceChatNotFoundException::new);
         User me = userRepository.findById(myId).orElseThrow(() -> new UserNotFoundException(myId));
