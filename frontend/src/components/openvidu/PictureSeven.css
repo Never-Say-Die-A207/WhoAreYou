@@ -11,13 +11,14 @@
     justify-content: space-around; /* 사진들을 가로로 배열하고 균등한 간격을 줍니다 */
     align-items: center;
     margin: 2rem 0;
+    gap: 10px;
 }
 
 .emotion-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    cursor: pointer;
+    /* cursor: pointer; */
     transition: opacity 0.3s ease;
 }
 
@@ -48,31 +49,10 @@
 }
 
 
-
-.top3-container {
-    margin-top: 2rem;
+.top1-message {
+    margin-top: 3rem;
+    /* margin-bottom: 1rem; */
     text-align: center;
-}
-
-.top3-emotions {
-    display: flex;
-    justify-content: center;
-    margin-top: 1rem;
-}
-
-.top3-item {
-    margin: 0 1rem;
-    text-align: center;
-}
-
-.top3-image {
-    /* width: 80px; */
-    max-height: 100px;
-    object-fit: cover;
-}
-
-.top3-label {
-    margin-top: 0.5rem;
-    font-size: 1rem;
+    font-size: 1.5rem;
     color: #333;
 }
