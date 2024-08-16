@@ -35,7 +35,7 @@ public class JwtProvider {
 //    }
 
     public String createAccessToken(String userId){
-        return createToken(userId, 1, ChronoUnit.HOURS);
+        return createToken(userId, 1, ChronoUnit.DAYS);
     }
 
     public String createRefreshToken(String userId){
