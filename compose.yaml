@@ -1,0 +1,8 @@
+services:
+  backend:
+    build: ./backend
+    image: taegun1011/whoareyou_backend
+
+  frontend:
+    build: ./frontend
+    image: taegun1011/whoareyou_frontend

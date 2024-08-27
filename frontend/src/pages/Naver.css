@@ -1,0 +1,53 @@
+/* 공통 네비게이션 스타일 */
+.navbar {
+    padding: 0.8rem 1.5rem;
+    background-color: rgb(170, 77, 203);
+    transition: background-color 0.3s;
+  }
+  
+  .navbar:hover {
+    background-color: rgb(150, 60, 180);
+  }
+  
+  .navbar-brand {
+    margin-right: 2rem;
+    color: white !important;
+    font-weight: 700;
+    font-size: 1.8rem;
+    transition: color 0.3s;
+  }
+  
+  .navbar-brand:hover {
+    color: #ddd !important;
+  }
+  
+  .navbar-nav .nav-link {
+    margin-right: 1rem;
+    font-size: 1.2rem;
+    color: white !important;
+    transition: color 0.3s, transform 0.3s;
+  }
+  
+  .navbar-nav .nav-link:hover {
+    color: #ddd !important;
+    transform: scale(1.1);
+  }
+  
+  .navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+  
+  .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(255, 255, 255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  }
+  
+  .shadow-sm {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  }
+
+
+  .naver-img {
+    width: 50px; /* 원하는 너비로 설정 */
+    height: auto; /* 비율을 유지하며 높이를 자동으로 설정 */
+    cursor: pointer; /* 포인터가 손 모양으로 바뀌도록 설정 */
+}

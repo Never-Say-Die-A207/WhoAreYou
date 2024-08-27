@@ -1,0 +1,383 @@
+#join {
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* justify-content: space-between;
+    align-items: center; */
+    /* height: 100% */
+}
+
+#join-dialog {
+    /* display: flex;
+    flex-direction: column; */
+    /* width: 80%; */
+    /* max-width: 900px; */
+    /* padding-left: 30px; */
+    /* padding-bottom: 30px; */
+    /* margin-left:30px; */
+    border-radius: 6px;
+    /* background-color: #f0f0f0; */
+}
+
+#join-dialog h2 {
+    color: #4d4d4d;
+    font-size: 60px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#join-dialog form {
+    text-align: left;
+}
+
+#join-dialog label {
+    display: block;
+    margin-bottom: 10px;
+    color: #0088aa;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    color: #0088aa;
+    font-weight: bold;
+}
+
+.form-control:focus {
+    color: #0088aa;
+    border-color: #0088aa;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(0, 136, 170, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(0, 136, 170, 0.6);
+}
+
+#join-dialog button {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    padding: 15px;
+    border: 0px solid;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.btn {
+    font-weight: bold;
+}
+
+.btn-success {
+    background-color: #aa4dcb !important;
+    border-color: #aa4dcb !important;
+    color: white;
+
+}
+
+.btn-success:hover {
+    background-color: rgb(150, 60, 180) !important;
+    border-color: rgb(150, 60, 180) !important;
+    cursor: pointer;
+}
+
+/* 매칭 시작 버튼 모바일 */
+.btn-mobile {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    padding: 15px;
+    border: 0px solid;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.btn-success-mobile {
+    background-color: #aa4dcb !important;
+    border-color: #aa4dcb !important;
+    color: white;
+
+}
+
+.btn-success-mobile:hover {
+    background-color: rgb(150, 60, 180) !important;
+    border-color:rgb(150, 60, 180) !important;
+    cursor: pointer;
+}
+
+
+#room {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#room-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1000px;
+    /* padding: 0 20px; */
+    /* margin-bottom: 20px; */
+}
+
+#room-title {
+    font-size: 2em;
+    font-weight: bold;
+    margin: 0;
+}
+
+#layout-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    /* margin-left: 50px;
+    margin-right: 50px; */
+    width: 100%;
+    height: 100%;
+    /* width: 640px; */
+    /* max-width: 1000px; */
+    /* height: 480px; */
+    /* padding: 10px;  */
+}
+
+/* Add these styles to your OpenVidu.css */
+
+
+.bottom {
+    width: 100%;
+}
+
+.video-form {
+    position: absolute;
+    bottom: 5%;
+    left: 45%;
+    z-index: 101;
+}
+
+
+.video-form-mobile {
+    position: absolute;
+    bottom: 20%;
+    right: 5%;
+    z-index: 101;
+    width: 20%;
+}
+
+
+/* OpenVidu.css */
+
+/* 로딩 애니메이션 */
+.loading-text {
+    color: black;
+    font-size: 1.5rem;
+    margin-top: 40px;
+}
+
+
+#loading {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modalbutton {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.close-x-button {
+    position: absolute;
+    top: 0;
+    right: 3%;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
+
+
+/* 타이머 */
+#timer {
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
+    border-radius: 5px;
+    z-index: 1000;
+}
+
+.friend-toggle {
+    position: absolute;
+    bottom: 2%;
+    right: 2%;
+    font-size: 18px;
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 1000;
+}
+
+.friend-toggle label {
+    display: flex;
+    align-items: center;
+}
+
+.friend-toggle input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+
+/* 안내 문구 */
+.stage-container {
+    position: relative;
+    text-align: center;
+    /* margin: 2rem; */
+}
+
+
+
+.stage-notification {
+    position: fixed;
+    width: 50%;
+    height: 200px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 2rem;
+    border-radius: 12px;
+    background: #fff; /* 배경색을 흰색으로 설정 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 부드러운 그림자 추가 */
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+    z-index: 300;
+    border: 2px solid #aa4dcb; /* 보라색 테두리 */
+}
+
+
+
+.stage-title {
+    position: absolute;
+    top: -28%;
+    left: 25%;
+    font-size: 2.5rem; /* 큰 제목 크기 */
+    font-weight: 900;
+    background-color: #aa4dcb;
+    color: white; /* 제목 색상 */
+    border-radius: 50px;
+    width: 50%;
+    padding: 1rem 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.stage-description {
+    font-size: 2.2rem; /* 작은 설명 문구 크기 */
+    font-weight: 600;
+    color: #333; /* 설명 문구 색상 */
+    margin-top: 2.5rem;
+
+}
+
+.stage-alert {
+    color: red;
+    margin-top: 0.3rem;
+}
+
+.fade-in {
+    animation: fadeIn 0.5s forwards;
+}
+
+.fade-out {
+    animation: fadeOut 0.5s forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+    to {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
+}
+
+.show-button {
+    /* margin-top: 1rem; */
+    padding: 0.5rem 1.5rem;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #aa4dcb; /* 버튼 배경색 */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.show-button:hover {
+    background-color: #8a2be2; /* 버튼 호버시 색상 변화 */
+}
+
+
+/* Media Queries */
+@media screen and (max-width: 768px) {
+    /* #join-dialog {
+        width: 90%;
+        padding: 30px;
+    } */
+
+    #join-dialog h2 {
+        font-size: 50px;
+    }
+
+    #layout-container {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+}
+
+@media screen and (max-width: 480px) {
+    /* #join-dialog {
+        width: 100%;
+        padding: 20px;
+    } */
+
+    #join-dialog h2 {
+        font-size: 40px;
+    }
+
+    #layout-container {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+}
